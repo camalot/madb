@@ -2,5 +2,5 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0" DefaultTargets="CoreBuild">
 	<Import Project="$(MSBuildProjectDirectory)\SharedProperties.msbuild"
 					Condition="Exists('$(MSBuildProjectDirectory)\SharedProperties.msbuild') AND '$(SharedProperties)' != 'SharedProperties' " />
-
+ 
 </Project>
