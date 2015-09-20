@@ -17,7 +17,7 @@ namespace MadBee.Console {
 
 		static void Main( string[] arguments ) {
 			var args = new Arguments ( arguments );
-			AndroidDebugBridge bridge = AndroidDebugBridge.CreateBridge(Path.Combine ( Environment.GetEnvironmentVariable ( "ANDROID_SDK_HOME" ), "platform-tools\\adb.exe" ),true);
+			AndroidDebugBridge bridge = AndroidDebugBridge.CreateBridge(Path.Combine ( Environment.GetEnvironmentVariable ( "ANDROID_SDK" ), "platform-tools\\adb.exe" ),true);
 			foreach ( var item in Enum.GetNames ( typeof ( Actions ) ) ) {
 				var actionName = item.Replace ( '_', '-' ).ToLower().Trim();
 				if ( args.ContainsKey ( actionName ) ) {

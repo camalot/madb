@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Managed.Adb", "Managed.AndroidDebugBridge\Managed.Adb.csproj", "{65473257-E70F-410B-9269-D0C0F771EA87}"
 EndProject
@@ -17,8 +17,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{49EA5373-6CDB-45BE-A763-80F421B8A22E}"
 	ProjectSection(SolutionItems) = preProject
 		Build\BuildAll.msbuild = Build\BuildAll.msbuild
+		BuildMadBee.msbuild = BuildMadBee.msbuild
 		Build\madbee.nuspec = Build\madbee.nuspec
-		Build\NuGetPublish.msbuild = Build\NuGetPublish.msbuild
 		Build\publish-changelog.txt = Build\publish-changelog.txt
 		Build\SharedProperties.msbuild = Build\SharedProperties.msbuild
 		Build\WebPublish.msbuild = Build\WebPublish.msbuild
@@ -27,6 +27,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{9AA331B1-1F41-41B7-B04A-95E8656E560A}"
 	ProjectSection(SolutionItems) = preProject
 		Shared\SharedAssemblyInfo.cs = Shared\SharedAssemblyInfo.cs
+		Shared\VersionAssemblyInfo.txt = Shared\VersionAssemblyInfo.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MadBee.Console", "MadBee.Console\MadBee.Console.csproj", "{F9A436F4-0606-4326-8607-9EA4D9E6AF18}"
@@ -62,6 +63,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{9A4671AA-B66
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Madb.Site", "Madb.Site\Madb.Site.csproj", "{A3BA455F-4829-4412-9ACC-DEFBC1BC84FC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".git", ".git", "{D7A1978C-D781-439B-A122-4AEABCDB5BA6}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\.gitattributes = ..\..\.gitattributes
+		..\..\.gitignore = ..\..\.gitignore
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,8 +89,8 @@ Global
 		{65473257-E70F-410B-9269-D0C0F771EA87}.Debug|x64.Build.0 = Debug|x64
 		{65473257-E70F-410B-9269-D0C0F771EA87}.Debug|x86.ActiveCfg = Release|x86
 		{65473257-E70F-410B-9269-D0C0F771EA87}.Debug|x86.Build.0 = Release|x86
-		{65473257-E70F-410B-9269-D0C0F771EA87}.Release|Any CPU.ActiveCfg = Release|x86
-		{65473257-E70F-410B-9269-D0C0F771EA87}.Release|Any CPU.Build.0 = Release|x86
+		{65473257-E70F-410B-9269-D0C0F771EA87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65473257-E70F-410B-9269-D0C0F771EA87}.Release|Any CPU.Build.0 = Release|Any CPU
 		{65473257-E70F-410B-9269-D0C0F771EA87}.Release|Mixed Platforms.ActiveCfg = Release|x86
 		{65473257-E70F-410B-9269-D0C0F771EA87}.Release|Mixed Platforms.Build.0 = Release|x86
 		{65473257-E70F-410B-9269-D0C0F771EA87}.Release|x64.ActiveCfg = Release|x64
@@ -107,6 +114,7 @@ Global
 		{2C43B828-BE5E-47B6-93BB-A624B6B36633}.Release|x86.ActiveCfg = Release|Any CPU
 		{2C43B828-BE5E-47B6-93BB-A624B6B36633}.Release|x86.Build.0 = Release|Any CPU
 		{F9A436F4-0606-4326-8607-9EA4D9E6AF18}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{F9A436F4-0606-4326-8607-9EA4D9E6AF18}.Debug|Any CPU.Build.0 = Debug|x86
 		{F9A436F4-0606-4326-8607-9EA4D9E6AF18}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{F9A436F4-0606-4326-8607-9EA4D9E6AF18}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{F9A436F4-0606-4326-8607-9EA4D9E6AF18}.Debug|x64.ActiveCfg = Debug|x64

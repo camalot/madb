@@ -7,10 +7,14 @@
 		<owners>Ryan Conrad</owners>
 		<title>Managed Android Debug Bridge (MadBee)</title>
 		<description>A managed library for communicating with the Android Debug Bridge. See more info @ http://madb.codeplex.com/</description>
+		<summary></summary>
 		<projectUrl>http://madb.codeplex.com</projectUrl>
 		<licenseUrl>http://madb.codeplex.com/license</licenseUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<iconUrl>http://download.codeplex.com/Project/Download/FileDownload.aspx?ProjectName=madb&amp;DownloadId=235792</iconUrl>
-		<tags>.net20 .net35 .net40 android adb</tags>
+		<tags>android adb library</tags>
 		<language>en-US</language>
+		<releaseNotes />
+		<copyright />
 	</metadata>
 </package>

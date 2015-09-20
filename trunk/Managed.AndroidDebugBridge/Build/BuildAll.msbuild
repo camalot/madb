@@ -1,24 +1,20 @@
 <?xml version="1.0"?>
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5" DefaultTargets="Build">
-	<Import Project="$(MSBuildProjectDirectory)\SharedProperties.msbuild" 
-					Condition="Exists('$(MSBuildProjectDirectory)\SharedProperties.msbuild') AND '$(SharedProperties)' != 'SharedProperties' " />
-
-	<Import Project="$(MSBuildProjectDirectory)\NuGetPublish.msbuild" 
-					Condition="Exists('$(MSBuildProjectDirectory)\NuGetPublish.msbuild') AND '$(PublishNuGet)' != 'PublishNuGet' " />
-
-	<ItemGroup>
-		<ProjectsToBuild Include="$(CCNetWorkingDirectory)**\*.csproj" Exclude="$(CCNetWorkingDirectory)**\*Tests*.csproj;$(CCNetWorkingDirectory)**\.localhistory\**"/>
-	</ItemGroup>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0" DefaultTargets="BuildAll">
 
 
-	<Target Name="CoreBuild" DependsOnTargets="AssemblyInfo;">
-		<MSBuild Projects ="@(ProjectsToBuild)" ContinueOnError="false"
-						 Properties="$(MSBuildProperties)">
+	<Target Name="BuildAll">
+		<MSBuild Projects="$(MSBuildProjectDirectory)\BuildMadBee.msbuild" ContinueOnError="false"
+				 Properties="Platform=x86;PublishMode=Nuget">
 			<Output ItemName="OutputFiles" TaskParameter="TargetOutputs"/>
 		</MSBuild>
+
+		<MSBuild Projects="$(MSBuildProjectDirectory)\BuildMadBee.msbuild" ContinueOnError="false"
+						 Properties="Platform=x64;PublishMode=Nuget;SkipIncrementAssemblyVersion=True">
+			<Output ItemName="OutputFiles" TaskParameter="TargetOutputs"/>
+		</MSBuild>
+
+
+
 	</Target>
 
-	
-	<Target Name="Build" DependsOnTargets="CleanBuild;CoreBuild;Publish;ReleaseCleanup;">
-	</Target>
 </Project>
