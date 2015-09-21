@@ -216,7 +216,7 @@
 		<MakeDir Directories="$(ReleasesPath)" Condition="!Exists('$(ReleasesPath)')" />
 		<Copy SourceFiles="$(OutputPath)\$(NugetPackage)" DestinationFiles="$(ReleasesPath)\$(NugetPackage)" />
 
-		<MakeDir Directories="$(LocalDeploy)" Condition=" '$(LocalDeploy)' != '' AND !Exists('$(LocalDeploy)')" />
+		<MakeDir Directories="$(LocalDeploy)" Condition=" '$(LocalDeploy)' != '' AND !Exists('$(LocalDeploy)')" ContinueOnError="true" />
 		<Copy SourceFiles="$(ReleasesPath)\$(NugetPackage)" DestinationFolder="$(LocalDeploy)" Condition=" '$(LocalDeploy)' != '' AND Exists('$(LocalDeploy)') " />
 
 		<Delete Files="$(OutputPath)\$(NugetPackage)" />
