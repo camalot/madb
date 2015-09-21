@@ -186,6 +186,8 @@
 		
 		<MakeDir Directories="$(OutputPath)Temp\" />
 
+		<Message Text="InputAssemblies: @(InputAssemblies)" />
+		
 		<ILMerge
 			InputAssemblies="@(InputAssemblies)"
 			DebugInfo="True"
