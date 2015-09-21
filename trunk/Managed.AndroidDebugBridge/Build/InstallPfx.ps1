@@ -15,6 +15,8 @@ $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 
 $scriptPath
 $PWD
+$password
+
 $cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2
 $cert.Import($pfx, $password, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::Exportable)
 $exportPrivateKeyInformation = $true
