@@ -761,7 +761,7 @@ namespace Managed.Adb {
 						totalRead += count;
 					}
 				} catch ( SocketException sex ) {
-					if ( sex.Message.Contains ( "connection was aborted" ) ) {
+					if (!IsRunning || sex.Message.Contains ( "connection was aborted" ) ) {
 						// ignore this?
 						return String.Empty;
 					} else {

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0" DefaultTargets="BuildMadBee;ReleaseCleanup">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0" DefaultTargets="Build">
 	<Import Project="$(MSBuildProjectDirectory)\..\.build\MSBuild.Community.Tasks.targets" Condition="'$(MSBuildCommunityTasksPath)' == ''"/>
 
 	<Import Project="$(MSBuildProjectDirectory)\NuGetPublish.msbuild"
@@ -25,7 +25,7 @@
 		<!--Catch-all - handles .NET 2.0/3.5 non-AMD64 and .NET 2.0 on x86 -->
 		<ProgramFiles32 Condition=" '$(ProgramFiles32)' == '' ">$(ProgramFiles)</ProgramFiles32>
 		<CCNetProject Condition="'$(CCNetProject)' == ''">Managed.Adb</CCNetProject>
-		
+		<OriginalAssemblyName>Managed.AndroidDebugBridge</OriginalAssemblyName>
 		
 		<GIT_HOME Condition=" '$(GIT_HOME)' == '' ">$(ProgramFiles32)\Git\bin</GIT_HOME>
 
@@ -44,19 +44,15 @@
 		<SignAssemblies Condition=" '$(SignAssemblies)' == '' ">false</SignAssemblies>
 		<CCNetArtifactDirectory Condition=" '$(CCNetArtifactDirectory)' == '' ">$(MSBuildProjectDirectory)\..\bin\</CCNetArtifactDirectory>
 		<CCNetWorkingDirectory Condition=" '$(CCNetWorkingDirectory)' == '' ">$(MSBuildProjectDirectory)\..\</CCNetWorkingDirectory>
+		<CCNetBuildDate Condition=" '$(CCNetBuildDate)' == '' ">$([System.DateTime]::UtcNow.ToString("MM-dd-yyyy"))</CCNetBuildDate>
+		<CCNetBuildTime Condition=" '$(CCNetBuildTime)' == '' ">$([System.DateTime]::UtcNow.ToString("hh:mm:ss"))</CCNetBuildTime>
 
 		<CleanBuildOutput>True</CleanBuildOutput>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<BuildMadbeeDependsOn>BuildMadBee;ReleaseCleanup</BuildMadbeeDependsOn>
 		<CompileDependsOn>$(CompileDependsOn)</CompileDependsOn>
 		<PublishMode Condition=" '$(PublishMode)' == '' ">None</PublishMode>
-
-		<DefineConstants>$(PlatformConstant) $(OSPlatform)</DefineConstants>
-			
+		
 		<CompileDependsOn>$(CompileDependsOn)</CompileDependsOn>
-		<OutputPath>$(CCNetArtifactDirectory)$(Configuration)\$(CCNetLabel)\$(ReleasePlatform)\</OutputPath>
-		<MSBuildProperties>ReleasePlatform=$(ReleasePlatform);SignAssemblies=$(SignAssemblies);Configuration=$(Configuration);OutputPath=$(OutputPath);CCNetLabel=$(CCNetLabel);CCNetIntegrationStatus=$(CCNetIntegrationStatus);CCNetBuildCondition=$(CCNetBuildCondition);CCNetProject=$(CCNetProject);CCNetBuildDate=$(CCNetBuildDate);CCNetLastIntegrationStatus=$(CCNetLastIntegrationStatus);CCNetBuildTime=$(CCNetBuildTime);CCNetArtifactDirectory=$(CCNetArtifactDirectory);CCNetWorkingDirectory=$(CCNetWorkingDirectory);CCNetRequestSource=$(CCNetRequestSource)</MSBuildProperties>
-
 
 		<PublishNuGet Condition=" '$(PublishMode)' == 'NuGet' ">PublishNuGet</PublishNuGet>
 		<NugetPath>$(MSBuildProjectDirectory)\..\.nuget</NugetPath>
@@ -66,7 +62,9 @@
 		<NugetPackageId>$(CCNetProject).$(Platform)</NugetPackageId>
 		<NugetPackageId Condition=" '$(Platform)' == 'x86' ">$(CCNetProject)</NugetPackageId>
 
-		<ReleasesPath>$(CCNetArtifactDirectory)$(Configuration)\nuget\</ReleasesPath>
+		<ReleasesPath>$(CCNetArtifactDirectory)\$(Configuration)\nuget\</ReleasesPath>
+
+
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -89,7 +87,7 @@
 			<Output PropertyName="OutputPath" TaskParameter="Value" />
 		</CreateProperty>
 
-		<CreateProperty Value="DefineConstants=$(DefineConstants);OSPlatform=$(OSPlatform);ReleasePlatform=$(ReleasePlatform);SignAssemblies=$(SignAssemblies);Configuration=$(Configuration);OutputPath=$(OutputPath);CCNetLabel=$(CCNetLabel);CCNetIntegrationStatus=$(CCNetIntegrationStatus);CCNetBuildCondition=$(CCNetBuildCondition);CCNetProject=$(CCNetProject);CCNetBuildDate=$(CCNetBuildDate);CCNetLastIntegrationStatus=$(CCNetLastIntegrationStatus);CCNetBuildTime=$(CCNetBuildTime);CCNetArtifactDirectory=$(CCNetArtifactDirectory);CCNetWorkingDirectory=$(CCNetWorkingDirectory);CCNetRequestSource=$(CCNetRequestSource)">
+		<CreateProperty Value="DefineConstants=$(DefineConstants) $(PlatformConstant) $(PlatformConstant);OSPlatform=$(OSPlatform);ReleasePlatform=$(ReleasePlatform);SignAssemblies=$(SignAssemblies);Configuration=$(Configuration);OutputPath=$(OutputPath);CCNetLabel=$(CCNetLabel);CCNetIntegrationStatus=$(CCNetIntegrationStatus);CCNetBuildCondition=$(CCNetBuildCondition);CCNetProject=$(CCNetProject);CCNetBuildDate=$(CCNetBuildDate);CCNetLastIntegrationStatus=$(CCNetLastIntegrationStatus);CCNetBuildTime=$(CCNetBuildTime);CCNetArtifactDirectory=$(CCNetArtifactDirectory);CCNetWorkingDirectory=$(CCNetWorkingDirectory);CCNetRequestSource=$(CCNetRequestSource)">
 			<Output PropertyName="MSBuildProperties" TaskParameter="Value" />
 		</CreateProperty>
 	</Target>
@@ -130,7 +128,7 @@
 		
 		<AssemblyInfo CodeLanguage="CS"
 									AssemblyFileVersion="$(CCNetLabel)"
-									AssemblyVersion="$(CCNetLabel)"
+									AssemblyVersion="$(Major).$(Minor).0.0"
 									OutputFile="$(MSBuildProjectDirectory)\..\Shared\VersionAssemblyInfo.cs"
 									/>
 	</Target>
@@ -142,6 +140,11 @@
 
 
 	<Target Name="CleanBuild">
+		<CreateProperty Value="$(CCNetArtifactDirectory)$(Configuration)\$(CCNetLabel)\$(ReleasePlatform)\">
+			<Output PropertyName="OutputPath" TaskParameter="Value"/>
+		</CreateProperty>
+		
+		
 		<RemoveDir Directories="$(OutputPath)" Condition="Exists('$(OutputPath)')" ContinueOnError="true" />
 		<MakeDir Directories="$(OutputPath)" Condition="!Exists('$(OutputPath)')" />
 	</Target>
@@ -150,8 +153,8 @@
 		<CreateItem Include="$(OutputPath)**\*.*" Exclude="$(OutputPath)*.zip">
 			<Output ItemName="Files" TaskParameter="Include" />
 		</CreateItem>
-		
-		<CreateItem Include="$(OutputPath)**\*.*" Exclude="$(OutputPath)*.pdb;$(OutputPath)*.zip;$(OutputPath)*.vshost.*;$(OutputPath)*.msi;$(OutputPath)*.wixpdb">
+
+		<CreateItem Include="$(OutputPath)**\*.*" Exclude="$(OutputPath)*.pdb;$(OutputPath)*.zip;$(OutputPath)*.vshost.*;$(OutputPath)*.msi;$(OutputPath)*.wixpdb;$(OutputPath)*.nupkg">
 			<Output ItemName="ZipFiles" TaskParameter="Include" />
 		</CreateItem>
 
@@ -159,29 +162,28 @@
 			<Output PropertyName="ZipFile" TaskParameter="Value" />
 		</CreateProperty>
 
-		<Zip Comment="$(CCNetBuildDate) $(CCNetBuildTime) $(CCNetProject) version $(CCNetLabel)" Files="@(ZipFiles)"
+		<Zip Comment="$(CCNetBuildDate) $(CCNetBuildTime) $(CCNetProject) version $(CCNetLabel) $(Platform)" Files="@(ZipFiles)"
 				 WorkingDirectory="$(OutputPath)"
-				 ZipFileName="$(OutputPath)$(CCNetProject).$(CCNetLabel).$(Platform).zip" ZipLevel="9" Flatten="False" />
+				 ZipFileName="$(ZipFile)" ZipLevel="9" Flatten="False" />
 	</Target>
 
 	<Target Name="ILMergeAssemblies">
+		<Move SourceFiles="$(OutputPath)$(OriginalAssemblyName).xml" 
+					DestinationFiles="$(OutputPath)$(CCNetProject).xml" 
+					ContinueOnError="true" />
+		
 		<CreateProperty Value="$(CCNetArtifactDirectory)$(Configuration)\$(CCNetLabel)\$(ReleasePlatform)\">
 			<Output PropertyName="OutputPath" TaskParameter="Value" />
 		</CreateProperty>
-
-
 
 		<CreateItem Include="$(OutputPath)*.dll" Exclude="$(OutputPath)*Tests.dll">
 			<Output ItemName="InputAssemblies" TaskParameter="Include"/>
 		</CreateItem>
 
-		<CreateItem Include="$(OutputPath)*.xml">
+		<CreateItem Include="$(OutputPath)*.xml" Exclude="$(OutputPath)$(CCNetProject).xml">
 			<Output ItemName="XmlFilesAssemblies" TaskParameter="Include"/>
 		</CreateItem>
-
-
-		<!--<Error Text="INPUT: $(InputAssemblies)" Code="2" />-->
-
+		
 		<MakeDir Directories="$(OutputPath)Temp\" />
 
 		<ILMerge
@@ -220,25 +222,22 @@
 		<Delete Files="$(OutputPath)\$(NugetPackage)" />
 	</Target>
 
-	<Target Name="RetrieveIdentities">
-		<CreateItem Include="$(OutputPath)\$(CCNetProject).dll">
-			<Output ItemName="ProjectAssemblies" TaskParameter="Include"/>
-		</CreateItem>
-
-		<GetAssemblyIdentity
-        AssemblyFiles="@(ProjectAssemblies)">
-			<Output
-					TaskParameter="Assemblies"
-					ItemName="ProjectIdentities"/>
-		</GetAssemblyIdentity>
-	</Target>
-
-	<Target Name="NuGetPackage" DependsOnTargets="RetrieveIdentities">
+	<Target Name="NuGetPackage" DependsOnTargets="">
+		
 		<CreateProperty Value="$(ProjectFriendlyName).nuspec" Condition=" '$(NuSpecFile)' == '' ">
 			<Output TaskParameter="Value" PropertyName="NuSpecFile" />
 		</CreateProperty>
 
-		<CreateProperty Value="$(OutputPath)\$(CCNetProject).$(GitVersion)">
+		<CreateItem Include="$(OutputPath)\$(CCNetProject).dll">
+			<Output ItemName="ProjectAssemblies" TaskParameter="Include"/>
+		</CreateItem>
+
+		<CreateItem Include="$(OutputPath)$(CCNetProject).xml">
+			<Output ItemName="XmlDocumentationFiles" TaskParameter="Include"/>
+		</CreateItem>
+
+
+		<CreateProperty Value="$(OutputPath)\$(CCNetProject).$(CCNetLabel)">
 			<Output TaskParameter="Value" PropertyName="PackagePath" />
 		</CreateProperty>
 
@@ -253,7 +252,7 @@
 
 		<Copy SourceFiles="$(MSBuildProjectDirectory)\$(NuSpecFile)" DestinationFiles="$(PackagePath)\$(NuSpecFile)" />
 
-		<CreateItem Include="@(ProjectAssemblies)" Exclude="$(OutputPath)*.zip;$(OutputPath)*.vshost.*;">
+		<CreateItem Include="@(ProjectAssemblies);@(XmlDocumentationFiles)" Exclude="$(OutputPath)*.zip;$(OutputPath)*.vshost.*;">
 			<Output ItemName="CopyFiles" TaskParameter="Include"/>
 		</CreateItem>
 

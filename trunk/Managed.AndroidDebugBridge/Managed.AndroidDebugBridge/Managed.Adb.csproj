@@ -123,8 +123,8 @@
     <Compile Include="..\Shared\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Shared\AssemblyVersionInfo.cs" Condition="Exists('..\Shared\AssemblyVersionInfo.cs')">
-      <Link>Properties\AssemblyVersionInfo.cs</Link>
+    <Compile Include="..\Shared\VersionAssemblyInfo.cs" Condition="Exists('..\Shared\VersionAssemblyInfo.cs')">
+      <Link>Properties\VersionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AdbHelper.cs" />
     <Compile Include="AdbResponse.cs" />
