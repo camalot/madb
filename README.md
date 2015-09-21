@@ -3,14 +3,16 @@
 # madb
 This is a Managed port of the Android Debug Bridge to allow communication from .NET applications to Android devices. 
 This wraps the same methods that the ddms uses to directly communicate with ADB. 
-This gives more flexibility to the developer then launching an adb process and executing one of its build in commands.
+This gives more flexibility to the developer than launching an adb process and executing one of its build in commands.
 
 ## Installation
 To install madb, run the following command in the [Package Manager Console](http://docs.nuget.org/consume/package-manager-console):
 
 ```
+
 PM> Install-Package Managed.Adb 
 PM> Install-Package Managed.Adb.x64
+
 ```
 
 ## FileSystem Methods / Properties
