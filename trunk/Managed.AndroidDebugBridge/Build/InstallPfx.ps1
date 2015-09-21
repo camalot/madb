@@ -11,20 +11,20 @@ Param (
    [string] $containerName
 );
 
-$scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
-$PWD
-$cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2
-$cert.Import($pfx, $password, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::Exportable)
-$exportPrivateKeyInformation = $true
-$certXml = $cert.PrivateKey.ToXmlString($exportPrivateKeyInformation)
+$scriptPath = split-path -parent $MyInvocation.MyCommand.Definition;
+$PWD;
+$cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2;
+$cert.Import($pfx, $password, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::Exportable);
+$exportPrivateKeyInformation = $true;
+$certXml = $cert.PrivateKey.ToXmlString($exportPrivateKeyInformation);
 
-$csp = New-Object System.Security.Cryptography.CspParameters
-$csp.KeyContainerName = $containerName
-$csp.Flags = [System.Security.Cryptography.CspProviderFlags]::UseMachineKeyStore -bor [System.Security.Cryptography.CspProviderFlags]::NoPrompt # -bor is biwise or
-$csp.KeyNumber = [System.Security.Cryptography.KeyNumber]::Signature
+$csp = New-Object System.Security.Cryptography.CspParameters;
+$csp.KeyContainerName = $containerName;
+$csp.Flags = [System.Security.Cryptography.CspProviderFlags]::UseMachineKeyStore -bor [System.Security.Cryptography.CspProviderFlags]::NoPrompt; # -bor is biwise or
+$csp.KeyNumber = [System.Security.Cryptography.KeyNumber]::Signature;
 
-$rsa = New-Object System.Security.Cryptography.RSACryptoServiceProvider $csp
-$rsa.FromXmlString($certXml)
-$rsa.Clear()
+$rsa = New-Object System.Security.Cryptography.RSACryptoServiceProvider $csp;
+$rsa.FromXmlString($certXml);
+$rsa.Clear();
 
-Write-Output "Sucesfully imported $pfx into StrongName CSP store"
+Write-Output "Sucesfully imported $pfx into StrongName CSP store";
