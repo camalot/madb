@@ -189,11 +189,9 @@
 		<Message Text="InputAssemblies: @(InputAssemblies)" />
 		
 		<ILMerge
+			ToolPath="$(MSBuildProjectDirectory)\..\3rdParty\ilmerge\"
 			InputAssemblies="@(InputAssemblies)"
-			DebugInfo="True"
-			OutputFile="$(OutputPath)Temp\$(CCNetProject).dll"
-			LogFile="$(OutputPath)ilmerge.log"
-			XmlDocumentation="true" />
+			OutputFile="$(OutputPath)Temp\$(CCNetProject).dll" />
 
 		<Delete Files="@(InputAssemblies);@(XmlFilesAssemblies)" TreatErrorsAsWarnings="true" />
 
