@@ -1,0 +1,51 @@
+version: 1.0.{build}
+os: Visual Studio 2015
+environment:
+  MADB_PFX_KEY:
+    secure: FJBT+POuE4uUdLGJRsmNsw==
+  NugetKey:
+    secure: gPptstGoLCHosJehp3kN0m+/GGxLisXf4RtR1L6MfMBDaTJ0uU6TTOOkYUEe1KS5
+  VS_PFX_KEY: VS_KEY_B73CFF62431D23D3
+install:
+- choco install -y ilmerge
+- set PATH=C:\ProgramData\chocolatey\lib\ilmerge;%PATH%
+before_build:
+- ps: >-
+    $rootLocation = ((Get-Item Env:\APPVEYOR_BUILD_FOLDER).Value);
+
+    $trunk = "$rootLocation\trunk\Managed.AndroidDebugBridge";
+
+    $ignore = Set-Location $trunk;
+
+
+    .\Build\InstallPfx.ps1 -pfx "$trunk\Shared\madb.pfx" -password ((Get-Item Env:\MADB_PFX_KEY).Value) -containerName VS_KEY_B73CFF62431D23D3
+
+
+    $version = (Get-Content -Path $trunk\Shared\VersionAssemblyInfo.txt)
+
+    $env:MADB_BUILD_VERSION = $version;
+
+
+    $ignore = Set-Location ((Get-Item Env:\APPVEYOR_BUILD_FOLDER).Value);
+build:
+  project: trunk\Managed.AndroidDebugBridge\Build\BuildAll.msbuild
+  verbosity: detailed
+artifacts:
+- path: '**\x86\Managed.Adb.*.zip'
+  name: ZipX86
+- path: '**\x64\Managed.Adb.*.zip'
+  name: ZipX64
+- path: '**\Managed.Adb.*.nupkg'
+  name: Nupkg
+deploy:
+- provider: GitHub
+  tag: $(APPVEYOR_PROJECT_NAME)-v$(MADB_BUILD_VERSION)
+  release: $(APPVEYOR_PROJECT_NAME)-v$(MADB_BUILD_VERSION)
+  auth_token:
+    secure: UEgy2H9zJKLi599QoO3qVf5BKFqloRQ246ez9cEgsfV3vooAUfVopMS9+IjRtArL
+  artifact: 
+  draft: true
+- provider: NuGet
+  api_key:
+    secure: /M57OlSjcpugJFARA+j30alG5I+J1QxfRCDi5lWU3YhhzE1kxqLiAxtO+Bu7bQJt
+  artifact: Nupkg

@@ -61,7 +61,7 @@
 		<ProjectFriendlyName>madbee</ProjectFriendlyName>
 		<NugetPackageId>$(CCNetProject).$(Platform)</NugetPackageId>
 		<NugetPackageId Condition=" '$(Platform)' == 'x86' ">$(CCNetProject)</NugetPackageId>
-
+		<DescriptionFile>$(MSBuildProjectDirectory)\Build\publish-changelog.txt</DescriptionFile>
 		<ReleasesPath>$(CCNetArtifactDirectory)\$(Configuration)\nuget\</ReleasesPath>
 
 
@@ -189,7 +189,6 @@
 		<Message Text="InputAssemblies: @(InputAssemblies)" />
 		
 		<ILMerge
-			ToolPath="$(MSBuildProjectDirectory)\..\3rdParty\ilmerge\"
 			InputAssemblies="@(InputAssemblies)"
 			OutputFile="$(OutputPath)Temp\$(CCNetProject).dll" />
 
@@ -223,6 +222,10 @@
 	</Target>
 
 	<Target Name="NuGetPackage" DependsOnTargets="">
+
+		<ReadLinesFromFile File="$(DescriptionFile)">
+			<Output TaskParameter="Lines" PropertyName="ReleaseDescription"/>
+		</ReadLinesFromFile>
 		
 		<CreateProperty Value="$(ProjectFriendlyName).nuspec" Condition=" '$(NuSpecFile)' == '' ">
 			<Output TaskParameter="Value" PropertyName="NuSpecFile" />
