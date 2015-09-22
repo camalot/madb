@@ -129,7 +129,7 @@
 			<Output PropertyName="CCNetLabel" TaskParameter="Value" />
 		</CreateProperty>
 
-		<SetEnv Name="MADB_BUILD_VERSION" Value="$(CCNetLabel)" />
+		<Exec Command=".\set-environment-variable.ps1 -Name MADB_BUILD_VERSION -Value $(CCNetLabel)" WorkingDirectory="$(MSBuildProjectDirectory)" Condition=" '$(APPVEYOR)' == 'True' " />
 		
 	</Target>
 

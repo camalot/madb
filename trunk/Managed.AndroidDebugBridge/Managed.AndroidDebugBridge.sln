@@ -22,6 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{49EA5373
 		Build\madbee.nuspec = Build\madbee.nuspec
 		Build\publish-changelog.txt = Build\publish-changelog.txt
 		Build\SharedProperties.msbuild = Build\SharedProperties.msbuild
+		Build\set-environment-variable.ps1 = Build\set-environment-variable.ps1
 		Build\WebPublish.msbuild = Build\WebPublish.msbuild
 	EndProjectSection
 EndProject
