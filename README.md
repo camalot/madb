@@ -10,6 +10,13 @@ This gives more flexibility to the developer than launching an adb process and e
 [![Donate](http://www.paypal.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=43MEF4EUT8DLL)
 
 
+
+![PushBullet Channels](http://i.imgur.com/GlVy4rW.png)
+
+- [Source Code Commits](https://www.pushbullet.com/channel?tag=madbsourcecode)
+- [Releases](https://www.pushbullet.com/channel?tag=madbreleases)
+
+
 ## Installation
 To install madbee, run the following command in the [Package Manager Console](http://docs.nuget.org/consume/package-manager-console):
 

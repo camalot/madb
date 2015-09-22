@@ -581,7 +581,7 @@ namespace Managed.Adb {
 		/// </summary>
 		/// <param name="reply">The reply.</param>
 		/// <returns></returns>
-		public String ReplyToString(byte[] reply) {
+		public string ReplyToString(byte[] reply) {
 			String result;
 			try {
 				result = Encoding.Default.GetString(reply);

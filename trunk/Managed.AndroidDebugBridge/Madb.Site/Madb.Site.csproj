@@ -170,8 +170,6 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\Managed.AndroidDebugBridge.dll" />
-    <Content Include="App_Data\Managed.AndroidDebugBridge.xml" />
     <Content Include="assets\images\madbee-114.png" />
     <Content Include="assets\images\madbee-120.png" />
     <Content Include="assets\images\madbee-144.png" />
@@ -381,7 +379,9 @@
       <DependentUpon>respond.js</DependentUpon>
     </Content>
     <Content Include="assets\Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -479,13 +479,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Managed.AndroidDebugBridge\Managed.Adb.csproj">
       <Project>{65473257-e70f-410b-9269-d0c0f771ea87}</Project>
       <Name>Managed.Adb</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="packages.config" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -523,7 +523,7 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetDir)\Managed.AndroidDebugBridge.*" "$(ProjectDir)\App_Data\" /h /i /c /k /e /y
+    <PostBuildEvent>xcopy "$(TargetDir)Managed.AndroidDebugBridge.*" "$(ProjectDir)App_Data\" /h /i /c /k /e /y
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
