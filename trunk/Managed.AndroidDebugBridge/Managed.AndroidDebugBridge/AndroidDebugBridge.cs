@@ -60,6 +60,7 @@ namespace Managed.Adb {
 		/// </summary>
 		private const String ADB_VERSION_PATTERN = "^.*(\\d+)\\.(\\d+)\\.(\\d+)$";
 
+		private const string TAG = "adb";
 #if LINUX
 		/// <summary>
 		/// The ADB executive
@@ -272,7 +273,7 @@ namespace Managed.Adb {
 					return _instance;
 				} else {
 					// stop the current server
-					Console.WriteLine ( "Stopping Current Instance" );
+					Log.d (TAG, "Stopping Current Instance" );
 					_instance.Stop ( );
 				}
 			}
@@ -326,8 +327,8 @@ namespace Managed.Adb {
 			}
 
 			if ( !File.Exists ( osLocation ) ) {
-				Console.WriteLine ( osLocation );
-				throw new FileNotFoundException ( "unable to locate adb in the specified location" );
+				Log.w (TAG, "unable to locate adb in the specified location '{0}'", osLocation );
+        throw new FileNotFoundException ( "unable to locate adb in the specified location" );
 			}
 
 			AdbOsLocation = osLocation;
@@ -593,8 +594,8 @@ namespace Managed.Adb {
 			// default is bad check
 			VersionCheck = false;
 
-			if ( String.IsNullOrEmpty ( AdbOsLocation ) ) {
-				Console.WriteLine ( "AdbOsLocation is Empty" );
+			if ( string.IsNullOrEmpty ( AdbOsLocation ) ) {
+				Log.w(TAG, "AdbOsLocation is Empty" );
 				return;
 			}
 
@@ -618,7 +619,7 @@ namespace Managed.Adb {
 						foreach ( String error in errorOutput ) {
 							builder.AppendLine ( error );
 						}
-						Log.LogAndDisplay ( LogLevel.Error, "adb", builder.ToString ( ) );
+						Log.LogAndDisplay ( LogLevel.Error, TAG, builder.ToString ( ) );
 					}
 				}
 

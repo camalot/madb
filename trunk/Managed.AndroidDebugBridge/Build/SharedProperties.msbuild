@@ -130,7 +130,7 @@
 		</CreateProperty>
 
 		<!--<Exec Command=".\set-environment-variable.ps1 -Name MADB_BUILD_VERSION -Value $(CCNetLabel)" WorkingDirectory="$(MSBuildProjectDirectory)" Condition=" '$(APPVEYOR)' == 'True' " />-->
-		<SetEnvironmentVariable Name="MADB_BUILD_VERSION" Value="$(CCNetLabel)" Condition=" '$(APPVEYOR)' == 'True' " />
+		<SetEnvironmentVariable Name="MADB_BUILD_VERSION" Value="$(CCNetLabel)" Condition=" '$(CI_BUILD_NUMBER)' != '' " />
 
 	</Target>
 

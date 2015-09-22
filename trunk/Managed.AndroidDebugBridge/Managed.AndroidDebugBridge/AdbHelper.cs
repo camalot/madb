@@ -218,7 +218,7 @@ namespace Managed.Adb {
 				return int.Parse(sReply, System.Globalization.NumberStyles.HexNumber);
 
 			} catch(Exception ex) {
-				Console.WriteLine(ex);
+				Log.e ( TAG, ex );
 				throw;
 			}
 		}
@@ -352,7 +352,7 @@ namespace Managed.Adb {
 					numWaits = 0;
 				}
 			} catch(SocketException sex) {
-				Console.WriteLine(sex);
+				Log.e ( TAG, sex );
 				throw;
 			}
 			//}
@@ -387,7 +387,7 @@ namespace Managed.Adb {
 				// length string is in next 4 bytes
 				byte[] lenBuf = new byte[4];
 				if(!Read(socket, lenBuf)) {
-					Console.WriteLine("Expected diagnostic string not found");
+					Log.w(TAG,"Expected diagnostic string not found");
 					break;
 				}
 
@@ -463,7 +463,7 @@ namespace Managed.Adb {
 						Log.e(TAG, "read: channel EOF");
 						throw new AdbException("EOF");
 					} else if(count == 0) {
-						Console.WriteLine("DONE with Read");
+						Log.d(TAG,"DONE with Read");
 					} else {
 						Array.Copy(buffer, 0, data, totalRead, count);
 						totalRead += count;
