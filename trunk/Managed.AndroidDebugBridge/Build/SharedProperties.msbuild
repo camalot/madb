@@ -129,8 +129,9 @@
 			<Output PropertyName="CCNetLabel" TaskParameter="Value" />
 		</CreateProperty>
 
-		<Exec Command=".\set-environment-variable.ps1 -Name MADB_BUILD_VERSION -Value $(CCNetLabel)" WorkingDirectory="$(MSBuildProjectDirectory)" Condition=" '$(APPVEYOR)' == 'True' " />
-		
+		<!--<Exec Command=".\set-environment-variable.ps1 -Name MADB_BUILD_VERSION -Value $(CCNetLabel)" WorkingDirectory="$(MSBuildProjectDirectory)" Condition=" '$(APPVEYOR)' == 'True' " />-->
+		<SetEnvironmentVariable Name="MADB_BUILD_VERSION" Value="$(CCNetLabel)" />
+
 	</Target>
 
 	<Target Name="AssemblyInfo"
@@ -291,5 +292,26 @@
 		<Exec WorkingDirectory="$(NugetPath)" Command="nuget.exe pack &quot;$(PackagePath)\$(NuSpecFile)&quot; -OutputDirectory $(OutputPath)" />
 		<RemoveDir Directories="$(PackagePath)" Condition="Exists('$(PackagePath)')" ContinueOnError="true" />
 	</Target>
+
+	<UsingTask
+  TaskName="SetEnvironmentVariable"
+  TaskFactory="CodeTaskFactory"
+  AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v$(MSBuildToolsVersion).dll">
+
+		<ParameterGroup>
+			<Name ParameterType="System.String" Required="true" />
+			<Value ParameterType="System.String" Required="true" />
+		</ParameterGroup>
+
+		<Task>
+			<Using Namespace="System" />
+			<Code Type="Fragment" Language="cs">
+				<![CDATA[
+        Environment.SetEnvironmentVariable(Name, Value, EnvironmentVariableTarget.Process);
+      ]]>
+			</Code>
+		</Task>
+
+	</UsingTask>
 
 </Project>
