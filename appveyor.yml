@@ -18,7 +18,7 @@ before_build:
     $ignore = Set-Location $trunk;
 
 
-    .Build/appveyor.before-build.ps1
+    .\Build\appveyor.before-build.ps1
 
 
     $ignore = Set-Location $rootLocation;
@@ -34,7 +34,7 @@ after_build:
     $ignore = Set-Location $trunk;
 
 
-    .Build/appveyor.after-build.ps1
+    .\Build\appveyor.after-build.ps1
 
 
     $ignore = Set-Location $rootLocation;
@@ -51,7 +51,7 @@ before_deploy:
 
     $ignore = Set-Location $trunk;
 
-    .Build/appveyor.before-deployment.ps1
+    .\Build\appveyor.before-deployment.ps1
 
     $ignore = Set-Location $rootLocation;
 deploy:
@@ -78,6 +78,6 @@ after_deploy:
 
     $ignore = Set-Location $trunk;
 
-    .Build/appveyor.after-deployment.ps1
+    .\Build\appveyor.after-deployment.ps1
 
     $ignore = Set-Location $rootLocation;
