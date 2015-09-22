@@ -1,1 +1,0 @@
-A managed library for communicating with the Android Debug Bridge.

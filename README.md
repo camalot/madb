@@ -1,12 +1,17 @@
+[![MadBee](http://i.imgur.com/UxO8Lrj.png)](http://madb.bit13.com/)
+
 [![Build status](https://ci.appveyor.com/api/projects/status/dn8mjauo4i5ghwlg?svg=true)](https://ci.appveyor.com/project/camalot/madb)
 
-# madb
 This is a Managed port of the Android Debug Bridge to allow communication from .NET applications to Android devices. 
 This wraps the same methods that the ddms uses to directly communicate with ADB. 
 This gives more flexibility to the developer than launching an adb process and executing one of its build in commands.
 
+[![ohloh stats](http://www.ohloh.net/p/madb/widgets/project_partner_badge.gif)](http://www.ohloh.net/p/madb?ref=github)
+[![Donate](http://www.paypal.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=43MEF4EUT8DLL)
+
+
 ## Installation
-To install madb, run the following command in the [Package Manager Console](http://docs.nuget.org/consume/package-manager-console):
+To install madbee, run the following command in the [Package Manager Console](http://docs.nuget.org/consume/package-manager-console):
 
 ```
 

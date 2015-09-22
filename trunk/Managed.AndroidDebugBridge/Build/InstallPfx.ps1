@@ -11,11 +11,6 @@ Param (
    [string] $containerName
 );
 
-$scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
-
-$scriptPath
-$PWD
-
 $cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2
 $cert.Import($pfx, $password, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::Exportable)
 $exportPrivateKeyInformation = $true
@@ -30,4 +25,4 @@ $rsa = New-Object System.Security.Cryptography.RSACryptoServiceProvider $csp
 $rsa.FromXmlString($certXml)
 $rsa.Clear()
 
-Write-Output "Sucesfully imported $pfx into StrongName CSP store";
+"Sucesfully imported $pfx into StrongName CSP store";

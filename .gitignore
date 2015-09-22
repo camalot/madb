@@ -3,9 +3,8 @@
 
 */.localhistory/*
 **/.vs/*
-
 # Generated Version File:
-**/VersionAssemblyInfo.cs
+*/VersionAssemblyInfo.cs
 
 #nuget
 [pP]ackages/*
@@ -27,7 +26,6 @@
 [Dd]ebug/
 [Rr]elease/
 x64/
-build/
 [Bb]in/
 **/node_modules/*/bin/
 [Oo]bj/
@@ -55,7 +53,7 @@ build/
 *.log
 *.vspscc
 *.vssscc
-.builds
+#.builds
 *.pidb
 *.log
 *.scc

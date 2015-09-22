@@ -5,15 +5,19 @@
 	<Import Project="$(MSBuildProjectDirectory)\NuGetPublish.msbuild"
 				Condition="Exists('$(MSBuildProjectDirectory)\NuGetPublish.msbuild') AND '$(PublishNuGet)' != 'PublishNuGet' " />
 
-
+	<!-- http://www.appveyor.com/docs/environment-variables -->
+	
 	<PropertyGroup>
 		<!-- This indicates that this file has been loaded -->
 		<SharedProperties>SharedProperties</SharedProperties>
 
+		<CI_BUILD_NUMBER Condition=" '$(APPVEYOR)' == 'True' AND '$(APPVEYOR_BUILD_NUMBER)' != '' ">$(APPVEYOR_BUILD_NUMBER)</CI_BUILD_NUMBER>
+
 		<Major>1</Major>
 		<Minor>0</Minor>
-		<Build>1</Build>
+		<Build>$(CI_BUILD_NUMBER)</Build>
 		<Revision>0</Revision>
+
 		<VersionFile>$(MSBuildProjectDirectory)\..\Shared\VersionAssemblyInfo.txt</VersionFile>
 		<SkipIncrementAssemblyVersion Condition=" '$(SkipIncrementAssemblyVersion)' == '' ">False</SkipIncrementAssemblyVersion>
 		<ProgramFiles32>$(MSBuildProgramFiles32)</ProgramFiles32>
@@ -116,10 +120,17 @@
 			<Output TaskParameter="Build" PropertyName="Build" />
 			<Output TaskParameter="Revision" PropertyName="Revision" />
 		</Version>
-
-		<CreateProperty Value="$(Major).$(Minor).$(Build).$(Revision)">
+		
+		<!-- If CI provides a build number, we use that, otherwise we take what is in the file -->
+		<CreateProperty Value="$(Major).$(Minor).$(CI_BUILD_NUMBER).$(Revision)" Condition=" '$(CI_BUILD_NUMBER)' != '' ">
 			<Output PropertyName="CCNetLabel" TaskParameter="Value" />
 		</CreateProperty>
+		<CreateProperty Value="$(Major).$(Minor).$(Build).$(Revision)" Condition=" '$(CI_BUILD_NUMBER)' == '' ">
+			<Output PropertyName="CCNetLabel" TaskParameter="Value" />
+		</CreateProperty>
+
+		<SetEnv Name="MADB_BUILD_VERSION" Value="$(CCNetLabel)" />
+		
 	</Target>
 
 	<Target Name="AssemblyInfo"
@@ -280,6 +291,5 @@
 		<Exec WorkingDirectory="$(NugetPath)" Command="nuget.exe pack &quot;$(PackagePath)\$(NuSpecFile)&quot; -OutputDirectory $(OutputPath)" />
 		<RemoveDir Directories="$(PackagePath)" Condition="Exists('$(PackagePath)')" ContinueOnError="true" />
 	</Target>
-
 
 </Project>

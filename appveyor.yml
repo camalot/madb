@@ -1,31 +1,59 @@
 version: 1.0.{build}
+skip_tags: true
 os: Visual Studio 2015
 environment:
   MADB_PFX_KEY:
     secure: FJBT+POuE4uUdLGJRsmNsw==
-  VS_PFX_KEY: VS_KEY_B73CFF62431D23D3
+  VS_PFX_KEY:
+    secure: keVRcK5OQHwSoXOQNQjN0xro8KegWRMoLYLqneJmqFo=
 install:
 - choco install -y ilmerge
 - set PATH=C:\ProgramData\chocolatey\lib\ilmerge;%PATH%
 before_build:
 - ps: >-
     $rootLocation = ((Get-Item Env:\APPVEYOR_BUILD_FOLDER).Value);
+
     $trunk = "$rootLocation\trunk\Managed.AndroidDebugBridge";
+
     $ignore = Set-Location $trunk;
-    .\Build\InstallPfx.ps1 -pfx "$trunk\Shared\madb.pfx" -password ((Get-Item Env:\MADB_PFX_KEY).Value) -containerName ((Get-Item Env:\VS_PFX_KEY).Value);
-    $ignore = Set-Location ((Get-Item Env:\APPVEYOR_BUILD_FOLDER).Value);
+
+
+    .Build/appveyor.before-build.ps1
+
+
+    $ignore = Set-Location $rootLocation;
 build:
   project: trunk\Managed.AndroidDebugBridge\Build\BuildAll.msbuild
   verbosity: detailed
 after_build:
 - ps: >-
-    $version = (Get-Content -Path $trunk\Shared\VersionAssemblyInfo.txt);
-    $env:MADB_BUILD_VERSION = $version;
+    $rootLocation = ((Get-Item Env:\APPVEYOR_BUILD_FOLDER).Value);
+
+    $trunk = "$rootLocation\trunk\Managed.AndroidDebugBridge";
+
+    $ignore = Set-Location $trunk;
+
+
+    .Build/appveyor.after-build.ps1
+
+
+    $ignore = Set-Location $rootLocation;
 artifacts:
 - path: '**\Managed.Adb.*.zip'
   name: Zips
 - path: '**\Managed.Adb.*.nupkg'
   name: Nupkg
+before_deploy:
+- ps: >-
+    $rootLocation = ((Get-Item Env:\APPVEYOR_BUILD_FOLDER).Value);
+
+    $trunk = "$rootLocation\trunk\Managed.AndroidDebugBridge";
+
+    $ignore = Set-Location $trunk;
+
+    .Build/appveyor.before-deployment.ps1
+
+    $ignore = Set-Location $rootLocation;
 deploy:
 - provider: GitHub
   tag: $(APPVEYOR_PROJECT_NAME)-v$(MADB_BUILD_VERSION)
@@ -34,7 +62,22 @@ deploy:
     secure: UEgy2H9zJKLi599QoO3qVf5BKFqloRQ246ez9cEgsfV3vooAUfVopMS9+IjRtArL
   artifact: Zips
   draft: false
+  on:
+    CI_DEPLOY_GITHUB: True
 - provider: NuGet
   api_key:
     secure: /M57OlSjcpugJFARA+j30alG5I+J1QxfRCDi5lWU3YhhzE1kxqLiAxtO+Bu7bQJt
   artifact: Nupkg
+  on:
+    CI_DEPLOY_NUGET: True
+after_deploy:
+- ps: >-
+    $rootLocation = ((Get-Item Env:\APPVEYOR_BUILD_FOLDER).Value);
+
+    $trunk = "$rootLocation\trunk\Managed.AndroidDebugBridge";
+
+    $ignore = Set-Location $trunk;
+
+    .Build/appveyor.after-deployment.ps1
+
+    $ignore = Set-Location $rootLocation;
