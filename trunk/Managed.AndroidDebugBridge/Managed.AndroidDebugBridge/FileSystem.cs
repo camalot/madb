@@ -419,14 +419,17 @@ namespace Managed.Adb {
 				return ( cresult == null || String.IsNullOrEmpty ( cresult.Result ) ) ? path : cresult.Result;
 			} else {
 				try {
-					// this uses the ls command to get the link path
-					var receiver = new LinkResoverReceiver ( );
-					Device.ExecuteShellCommand ( "ls {0} -l".With ( path.ToArgumentSafe ( ) ), receiver );
-					if ( !String.IsNullOrEmpty ( receiver.ResolvedPath ) ) {
-						return receiver.ResolvedPath;
+					// have to try 2 ways because why the hell would it just work...
+					var cresult = new CommandResultReceiver ( );
+					this.Device.ExecuteShellCommand ( "readlink -f {0}", cresult, path );
+					if(string.IsNullOrWhiteSpace(cresult.Result)) {
+						cresult = new CommandResultReceiver ( );
+						this.Device.ExecuteShellCommand ( "readlink {0}", cresult, path );
+						return ( string.IsNullOrWhiteSpace ( cresult.Result ) ) ? path : cresult.Result;
 					}
+					return cresult.Result;
 				} catch ( Exception e ) {
-					Log.d ( "FileSytem", e.Message );
+					// if the command doesn't exist then we just return the path.
 				}
 				return path;
 			}

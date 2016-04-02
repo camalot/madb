@@ -620,7 +620,9 @@ namespace Managed.Adb {
 				String[] data = reply.GetString(Encoding.Default).Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
 				data.ForEach(item => {
 					var device = Device.CreateFromAdbData(item);
-					s.Add(device);
+					if ( device != null ) {
+						s.Add ( device );
+					}
 				});
 
 				return s;
@@ -827,7 +829,7 @@ namespace Managed.Adb {
 
 							// checks if the permission to execute the command was denied.
 							// workitem: 16822
-							if(sdataTrimmed.IsMatch("(permission|access) denied$")) {
+							if( !sdataTrimmed.IsMatch(@"^lstat\s'") && sdataTrimmed.IsMatch("(permission|access) denied$")) {
 								Log.w(TAG, "The remote execution returned: '{0}'", sdataTrimmed);
 								throw new PermissionDeniedException(String.Format("The remote execution returned: '{0}'", sdataTrimmed));
 							}

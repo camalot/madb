@@ -56,8 +56,10 @@ namespace Managed.Adb {
 		/// <param name="lines">The lines.</param>
 		protected override void ProcessNewLines ( string[] lines ) {
 			foreach ( String line in lines ) {
+				Console.WriteLine ( line );
 				// no need to handle empty lines.
-				if ( line.Length == 0 ) {
+				if ( line.Length == 0 || (line.IsMatch("^lstat") && line.IsMatch(@"permission\sdenied")) ) {
+					Console.WriteLine ( "Ignored" );
 					continue;
 				}
 				// run the line through the regexp

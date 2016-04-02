@@ -160,13 +160,13 @@
 		<RemoveDir Directories="$(OutputPath)" Condition="Exists('$(OutputPath)')" ContinueOnError="true" />
 		<MakeDir Directories="$(OutputPath)" Condition="!Exists('$(OutputPath)')" />
 	</Target>
-
-	<Target Name="ZipRelease" DependsOnTargets="CoreBuild;ILMergeAssemblies;NugetPublish">
+<!--CoreBuild;ILMergeAssemblies;NugetPublish-->
+	<Target Name="ZipRelease" DependsOnTargets="CoreBuild;NugetPublish">
 		<CreateItem Include="$(OutputPath)**\*.*" Exclude="$(OutputPath)*.zip">
 			<Output ItemName="Files" TaskParameter="Include" />
 		</CreateItem>
-
-		<CreateItem Include="$(OutputPath)**\*.*" Exclude="$(OutputPath)*.pdb;$(OutputPath)*.zip;$(OutputPath)*.vshost.*;$(OutputPath)*.msi;$(OutputPath)*.wixpdb;$(OutputPath)*.nupkg">
+<!--$(OutputPath)*.pdb;-->
+		<CreateItem Include="$(OutputPath)**\*.*" Exclude="$(OutputPath)*.zip;$(OutputPath)*.vshost.*;$(OutputPath)*.msi;$(OutputPath)*.wixpdb;$(OutputPath)*.nupkg">
 			<Output ItemName="ZipFiles" TaskParameter="Include" />
 		</CreateItem>
 
@@ -202,7 +202,7 @@
 		
 		<ILMerge
 			InputAssemblies="@(InputAssemblies)"
-			OutputFile="$(OutputPath)Temp\$(CCNetProject).dll" />
+			OutputFile="$(OutputPath)Temp\$(CCNetProject).dll" TargetPlatformVersion="v4" KeyFile="$(MSBuildProjectDirectory)\..\Shared\madb.pfx"  />
 
 		<Delete Files="@(InputAssemblies);@(XmlFilesAssemblies)" TreatErrorsAsWarnings="true" />
 
@@ -243,9 +243,10 @@
 			<Output TaskParameter="Value" PropertyName="NuSpecFile" />
 		</CreateProperty>
 
-		<CreateItem Include="$(OutputPath)\$(CCNetProject).dll">
+		<CreateItem Include="$(OutputPath)\$(CCNetProject).dll;$(OutputPath)\$(CCNetProject).pdb">
 			<Output ItemName="ProjectAssemblies" TaskParameter="Include"/>
 		</CreateItem>
+
 
 		<CreateItem Include="$(OutputPath)$(CCNetProject).xml">
 			<Output ItemName="XmlDocumentationFiles" TaskParameter="Include"/>

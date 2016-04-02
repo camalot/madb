@@ -16,5 +16,11 @@
 		<language>en-US</language>
 		<releaseNotes></releaseNotes>
 		<copyright>Copyright 2015 Ryan Conrad</copyright>
+
+		<dependencies>
+			<group targetFramework="net45">
+				<dependency id="morelinq" />
+			</group>
+		</dependencies>
 	</metadata>
 </package>
