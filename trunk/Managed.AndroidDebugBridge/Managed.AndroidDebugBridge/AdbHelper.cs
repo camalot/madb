@@ -10,6 +10,7 @@ using Managed.Adb.Exceptions;
 using MoreLinq;
 using Managed.Adb.IO;
 using Managed.Adb.Logs;
+using Camalot.Common.Extensions;
 
 // services that are supported by adb: https://github.com/android/platform_system_core/blob/master/adb/SERVICES.TXT
 namespace Managed.Adb {

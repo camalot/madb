@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using Camalot.Common.Extensions;
 
 namespace Managed.Adb {
 	/// <summary>

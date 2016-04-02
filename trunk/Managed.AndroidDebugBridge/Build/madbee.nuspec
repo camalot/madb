@@ -19,7 +19,8 @@
 
 		<dependencies>
 			<group targetFramework="net45">
-				<dependency id="morelinq" />
+				<dependency id="morelinq" version="(,2.0)" />
+				<dependency id="camalot.common" version="(,2.0)" />
 			</group>
 		</dependencies>
 	</metadata>
