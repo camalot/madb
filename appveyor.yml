@@ -5,7 +5,7 @@ environment:
   MADB_PFX_KEY:
     secure: FJBT+POuE4uUdLGJRsmNsw==
   VS_PFX_KEY:
-    secure: keVRcK5OQHwSoXOQNQjN0xro8KegWRMoLYLqneJmqFo=
+    secure: LYUvBEhpB5ZzJT6ij5xnSQ4QoeasERP+iATMxhRqNhs=
 install:
 - choco install -y ilmerge
 - set PATH=C:\ProgramData\chocolatey\lib\ilmerge;%PATH%
