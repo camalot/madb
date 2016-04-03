@@ -16,5 +16,13 @@
 		<language>en-US</language>
 		<releaseNotes></releaseNotes>
 		<copyright>Copyright 2015 Ryan Conrad</copyright>
+
+		<dependencies>
+			<group targetFramework="net45">
+				<dependency id="morelinq" version="(,2.0)" />
+				<!-- this has to be a hard ref until it is fixed in camalot.common -->
+				<dependency id="camalot.common" version="1.0.5937.17275" />
+			</group>
+		</dependencies>
 	</metadata>
 </package>

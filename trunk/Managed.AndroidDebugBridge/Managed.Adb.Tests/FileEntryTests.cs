@@ -13,6 +13,9 @@ namespace Managed.Adb.Tests {
 
 			FileEntry fe = FileEntry.Find ( device, "/system/" );
 
+			fe = FileEntry.Find ( device, "/" );
+
+
 			fe = FileEntry.Find ( device, "/system/bin/" );
 
 			fe = FileEntry.Find ( device, "/mnt/sdcard/Android/data/com.camalotdesigns.myandroider/Injector.jar" );

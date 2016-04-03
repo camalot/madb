@@ -10,6 +10,7 @@ using Managed.Adb.Exceptions;
 using MoreLinq;
 using Managed.Adb.IO;
 using Managed.Adb.Logs;
+using Camalot.Common.Extensions;
 
 // services that are supported by adb: https://github.com/android/platform_system_core/blob/master/adb/SERVICES.TXT
 namespace Managed.Adb {
@@ -607,7 +608,7 @@ namespace Managed.Adb {
 					Log.e(TAG, "error in getting data length");
 					return null;
 				}
-				String lenHex = reply.GetString(Encoding.Default);
+				string lenHex = reply.GetString(Encoding.Default);
 				int len = int.Parse(lenHex, System.Globalization.NumberStyles.HexNumber);
 
 				reply = new byte[len];
@@ -617,10 +618,12 @@ namespace Managed.Adb {
 				}
 
 				List<Device> s = new List<Device>();
-				String[] data = reply.GetString(Encoding.Default).Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+				string[] data = reply.GetString(Encoding.Default).Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
 				data.ForEach(item => {
 					var device = Device.CreateFromAdbData(item);
-					s.Add(device);
+					if ( device != null ) {
+						s.Add ( device );
+					}
 				});
 
 				return s;
@@ -827,9 +830,10 @@ namespace Managed.Adb {
 
 							// checks if the permission to execute the command was denied.
 							// workitem: 16822
-							if(sdataTrimmed.IsMatch("(permission|access) denied$")) {
+							// I have decided that the receiver should handle this... maybe the others too?
+							if( sdataTrimmed.IsMatch("(permission|access) denied$")) {
 								Log.w(TAG, "The remote execution returned: '{0}'", sdataTrimmed);
-								throw new PermissionDeniedException(String.Format("The remote execution returned: '{0}'", sdataTrimmed));
+								//throw new PermissionDeniedException(String.Format("The remote execution returned: '{0}'", sdataTrimmed));
 							}
 
 							// Add the data to the receiver

@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildProjectDirectory)\..\Build\SharedProperties.msbuild" 
-					Condition="Exists('$(MSBuildProjectDirectory)\..\Build\SharedProperties.msbuild') AND '$(SharedProperties)' != 'SharedProperties' " />
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildProjectDirectory)\..\Build\SharedProperties.msbuild" Condition="Exists('$(MSBuildProjectDirectory)\..\Build\SharedProperties.msbuild') AND '$(SharedProperties)' != 'SharedProperties' " />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -12,16 +11,14 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Managed.Adb</RootNamespace>
-    <AssemblyName>Managed.AndroidDebugBridge</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <AssemblyName>Managed.Adb</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
-		
-		<SignAssembly Condition=" Exists('..\shared\madb.pfx') ">true</SignAssembly>
-		<SignAssembly Condition=" !Exists('..\shared\madb.pfx') ">false</SignAssembly>
-		
-		<AssemblyOriginatorKeyFile Condition="Exists('..\shared\madb.pfx')">..\shared\madb.pfx</AssemblyOriginatorKeyFile>
+    <SignAssembly Condition=" Exists('..\shared\madb.pfx') ">true</SignAssembly>
+    <SignAssembly Condition=" !Exists('..\shared\madb.pfx') ">false</SignAssembly>
+    <AssemblyOriginatorKeyFile Condition="Exists('..\shared\madb.pfx')">..\shared\madb.pfx</AssemblyOriginatorKeyFile>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
     <PublishUrl>publish\</PublishUrl>
@@ -48,20 +45,19 @@
     <CCNetLabel Condition=" '$(CCNetLabel)' == '' ">1.0.1.0</CCNetLabel>
     <OutputPath Condition=" '$(OutputPath)' == '' ">..\bin\$(Configuration)\$(CCNetLabel)\$(Platform)\</OutputPath>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+    <TargetFrameworkProfile />
   </PropertyGroup>
-
-	<PropertyGroup>
-		<DebugSymbols>true</DebugSymbols>
-		<DefineConstants>TRACE;DEBUG;PLATFORMX86</DefineConstants>
-		<DebugType>full</DebugType>
-		<CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-		<CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-		<ErrorReport>prompt</ErrorReport>
-		<Optimize>true</Optimize>
-		<CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-		<PlatformTarget>x86</PlatformTarget>
-	</PropertyGroup>
-	
+  <PropertyGroup>
+    <DebugSymbols>true</DebugSymbols>
+    <DefineConstants>TRACE;DEBUG;PLATFORMX86</DefineConstants>
+    <DebugType>full</DebugType>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <Optimize>true</Optimize>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
     <DefineConstants>TRACE;DEBUG;PLATFORMX64</DefineConstants>
@@ -69,9 +65,10 @@
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-		<PlatformTarget>x64</PlatformTarget>
-		<Optimize>true</Optimize>
+    <PlatformTarget>x64</PlatformTarget>
+    <Optimize>true</Optimize>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <DefineConstants>TRACE;PLATFORMX64</DefineConstants>
@@ -80,8 +77,9 @@
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-		<PlatformTarget>x64</PlatformTarget>
-		<CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -94,25 +92,49 @@
     <Optimize>true</Optimize>
     <PlatformTarget>x86</PlatformTarget>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DefineConstants>TRACE;PLATFORMX86</DefineConstants>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <DebugType>pdbonly</DebugType>
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ia64'">
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ia64'">
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Camalot.Common, Version=1.0.5937.17275, Culture=neutral, PublicKeyToken=02434577b8ec3216, processorArchitecture=MSIL">
+      <HintPath>..\packages\Camalot.Common.1.0.5937.17275\lib\net45\Camalot.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MoreLinq">
       <HintPath>..\packages\morelinq.1.1.0\lib\net35\MoreLinq.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -238,6 +260,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

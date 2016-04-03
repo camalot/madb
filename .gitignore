@@ -6,6 +6,9 @@
 # Generated Version File:
 */VersionAssemblyInfo.cs
 
+**/*.pfx
+**/*.snk
+
 #nuget
 [pP]ackages/*
 **/.nuget/*.nupkg

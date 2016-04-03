@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Xunit;
 using MoreLinq;
+using Camalot.Common.Extensions;
 
 namespace Managed.Adb.Tests {
 	public class FileSystemTests : BaseDeviceTests {
