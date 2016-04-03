@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Camalot.Common.Extensions;
 using MoreLinq;
 
 namespace Managed.Adb {
