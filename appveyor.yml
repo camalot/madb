@@ -6,6 +6,8 @@ environment:
     secure: FJBT+POuE4uUdLGJRsmNsw==
   VS_PFX_KEY:
     secure: LYUvBEhpB5ZzJT6ij5xnSQ4QoeasERP+iATMxhRqNhs=
+	CI_DEPLOY_GITHUB_ISDRAFT: false
+	CI_DEPLOY_GITHUB_ISPRERELEASE: false
 install:
 - choco install -y ilmerge
 - set PATH=C:\ProgramData\chocolatey\lib\ilmerge;%PATH%
@@ -61,14 +63,18 @@ deploy:
   auth_token:
     secure: UEgy2H9zJKLi599QoO3qVf5BKFqloRQ246ez9cEgsfV3vooAUfVopMS9+IjRtArL
   artifact: Zips
-  draft: false
+  draft: $(CI_DEPLOY_GITHUB_ISDRAFT)
+  prerelease: $(CI_DEPLOY_GITHUB_ISPRERELEASE)
+  force_update: true
   on:
+		branch: master
     CI_DEPLOY_GITHUB: True
 - provider: NuGet
   api_key:
     secure: /M57OlSjcpugJFARA+j30alG5I+J1QxfRCDi5lWU3YhhzE1kxqLiAxtO+Bu7bQJt
   artifact: Nupkg
   on:
+		branch: master
     CI_DEPLOY_NUGET: True
 after_deploy:
 - ps: >-
