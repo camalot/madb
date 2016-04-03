@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using Camalot.Common.Extensions;
 
 namespace Managed.Adb {
 	/// <summary>
@@ -55,11 +56,18 @@ namespace Managed.Adb {
 		/// </summary>
 		/// <param name="lines">The lines.</param>
 		protected override void ProcessNewLines ( string[] lines ) {
-			foreach ( String line in lines ) {
+			foreach ( string line in lines ) {
 				// no need to handle empty lines.
 				if ( line.Length == 0 ) {
 					continue;
 				}
+				// maybe parse out the folder name and show it, but 'locked'?
+				var deniedMatch = line.Match ( @"^l?stat\s'(.*?)'\failed:\spermission\sdenied" );
+				if ( ( deniedMatch.Success ) ) {
+					Console.Write ( $"Permission Denied: {deniedMatch.Groups[2].Value}" );
+					continue;
+				}
+
 				// run the line through the regexp
 				var m = line.Trim ( ).Match ( FileListingService.LS_PATTERN_EX, RegexOptions.Compiled );
 				if ( !m.Success ) {
@@ -67,40 +75,40 @@ namespace Managed.Adb {
 					continue;
 				}
 				// get the name
-				String name = m.Groups[9].Value;
+				string name = m.Groups[9].Value;
 
-				if ( String.Compare ( name, ".", true ) == 0 || String.Compare ( name, "..", true ) == 0 ) {
+				if ( string.Compare ( name, ".", true ) == 0 || string.Compare ( name, "..", true ) == 0 ) {
 					// we don't care if the entry is a "." or ".."
 					continue;
 				}
 
 				// get the rest of the groups
-				String permissions = m.Groups[1].Value;
-				String owner = m.Groups[2].Value;
-				String group = m.Groups[3].Value;
-				bool isExec = String.Compare ( m.Groups[10].Value, "*", true ) == 0;
+				string permissions = m.Groups[1].Value;
+				string owner = m.Groups[2].Value;
+				string group = m.Groups[3].Value;
+				bool isExec = string.Compare ( m.Groups[10].Value, "*", true ) == 0;
 				long size = 0;
-				String sizeData = m.Groups[4].Value.Trim ( );
-				long.TryParse ( String.IsNullOrEmpty ( sizeData ) ? "0" : sizeData, out size );
-				String date1 = m.Groups[5].Value.Trim ( );
-				String date2 = m.Groups[6].Value.Trim ( );
-				String date3 = m.Groups[7].Value.Trim ( );
+				string sizeData = m.Groups[4].Value.Trim ( );
+				long.TryParse ( string.IsNullOrWhiteSpace ( sizeData ) ? "-1" : sizeData, out size );
+				string date1 = m.Groups[5].Value.Trim ( );
+				string date2 = m.Groups[6].Value.Trim ( );
+				string date3 = m.Groups[7].Value.Trim ( );
 
 				DateTime date = DateTime.Now.GetEpoch ( );
-				String time = m.Groups[8].Value.Trim();
-				if ( String.IsNullOrEmpty ( time ) ) {
+				string time = m.Groups[8].Value.Trim();
+				if ( string.IsNullOrWhiteSpace ( time ) ) {
 					time = date.ToString ( "HH:mm" );
 				}
 				if ( date1.Length == 3 ) {
 					// check if we don't have a year and use current if we don't
-					String tyear = String.IsNullOrEmpty ( date3 ) ? DateTime.Now.Year.ToString ( ) : date3;
-					date = DateTime.ParseExact ( String.Format ( "{0}-{1}-{2} {3}", date1, date2.PadLeft(2,'0'), tyear, time ), "MMM-dd-yyyy HH:mm", CultureInfo.CreateSpecificCulture("en-US"));
+					string tyear = string.IsNullOrWhiteSpace ( date3 ) ? DateTime.Now.Year.ToString ( ) : date3;
+					date = DateTime.ParseExact ( string.Format ( "{0}-{1}-{2} {3}", date1, date2.PadLeft(2,'0'), tyear, time ), "MMM-dd-yyyy HH:mm", CultureInfo.CreateSpecificCulture("en-US"));
 				} else if ( date1.Length == 4 ) {
-					date = DateTime.ParseExact(String.Format("{0}-{1}-{2} {3}", date1, date2.PadLeft(2, '0'), date3, time), "yyyy-MM-dd HH:mm", CultureInfo.CreateSpecificCulture("en-US"));
+					date = DateTime.ParseExact( string.Format("{0}-{1}-{2} {3}", date1, date2.PadLeft(2, '0'), date3, time), "yyyy-MM-dd HH:mm", CultureInfo.CreateSpecificCulture("en-US"));
 				}
 
-				String info = null;
-				String linkName = null;
+				string info = null;
+				string linkName = null;
 
 				// and the type
 				FileListingService.FileTypes objectType = FileListingService.FileTypes.Other;
@@ -131,7 +139,7 @@ namespace Managed.Adb {
 
 				// now check what we may be linking to
 				if ( objectType == FileListingService.FileTypes.Link ) {
-					String[] segments = name.Split ( new string[] { " -> " }, StringSplitOptions.RemoveEmptyEntries );
+					string[] segments = name.Split ( new string[] { " -> " }, StringSplitOptions.RemoveEmptyEntries );
 					// we should have 2 segments
 					if ( segments.Length == 2 ) {
 						// update the entry name to not contain the link
@@ -140,11 +148,11 @@ namespace Managed.Adb {
 						info = segments[1];
 
 						// now get the path to the link
-						String[] pathSegments = info.Split ( new String[] { FileListingService.FILE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries );
+						string[] pathSegments = info.Split ( new string[] { FileListingService.FILE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries );
 						if ( pathSegments.Length == 1 ) {
 							// the link is to something in the same directory,
 							// unless the link is ..
-							if ( String.Compare ( "..", pathSegments[0], false ) == 0 ) {
+							if ( string.Compare ( "..", pathSegments[0], false ) == 0 ) {
 								// set the type and we're done.
 								objectType = FileListingService.FileTypes.DirectoryLink;
 							} else {
@@ -152,13 +160,20 @@ namespace Managed.Adb {
 								// or we'll find it later.
 							}
 						}
+
+						// if we set the size to -1, then its a directory link
+						// this is a hack because Android M stock does not support -lFa the right way.
+						if ( size == -1 ) {
+							objectType = FileListingService.FileTypes.DirectoryLink;
+							size = 0;
+						}
 					} else {
 						
 					}
 
 					linkName = info;
 					// add an arrow in front to specify it's a link.
-					info = String.Format ( LINK_FORMAT, info );
+					info = string.Format ( LINK_FORMAT, info );
 				}
 
 				// get the entry, either from an existing one, or a new one
@@ -175,7 +190,7 @@ namespace Managed.Adb {
 				entry.Group =  group;
 				entry.IsExecutable = isExec;
 				entry.LinkName = linkName;
-				if ( objectType == FileListingService.FileTypes.Link ) {
+				if ( objectType == FileListingService.FileTypes.Link || objectType == FileListingService.FileTypes.DirectoryLink ) {
 					entry.Info = info;
 				}
 

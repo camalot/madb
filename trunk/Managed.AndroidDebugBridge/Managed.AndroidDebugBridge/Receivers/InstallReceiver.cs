@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Camalot.Common.Extensions;
 
 namespace Managed.Adb {
 	/// <summary>
@@ -35,7 +36,7 @@ namespace Managed.Adb {
 						ErrorMessage = UNKNOWN_ERROR;
 						if ( m.Success ) {
 							string msg = m.Groups[1].Value;
-							ErrorMessage = String.IsNullOrEmpty ( msg ) || msg.IsNullOrWhiteSpace() ? UNKNOWN_ERROR : msg;
+							ErrorMessage = string.IsNullOrWhiteSpace(msg) ? UNKNOWN_ERROR : msg;
 						}
 						Success = false;
 					}

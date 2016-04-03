@@ -107,7 +107,7 @@ namespace Managed.Adb {
 		/// Device list info regex
 		/// </summary>
 		/// <workitem>21136</workitem>
-		private const String RE_DEVICELIST_INFO = @"^([a-z0-9_-]+(?:\s?[\.a-z0-9_-]+)?(?:\:\d{1,})?)\s+(device|offline|unknown|bootloader|recovery|download)(?:\s+product:([\S]+)\s+model\:([\S]+)\s+device\:([\S]+))?$";
+		private const String RE_DEVICELIST_INFO = @"^([a-z0-9_-]+(?:\s?[\.a-z0-9_-]+)?(?:\:\d{1,})?)\s+(device|offline|unknown|bootloader|recovery|download|host)(?:(?:\s+product:([\S]+)\s+model\:([\S]+)\s+device\:([\S]+))|(?:\s+features:\S+))?$";
 		/// <summary>
 		/// Tag
 		/// </summary>
@@ -194,7 +194,10 @@ namespace Managed.Adb {
 			Regex re = new Regex(RE_DEVICELIST_INFO, RegexOptions.Compiled | RegexOptions.IgnoreCase);
 			Match m = re.Match(data);
 			if(m.Success) {
-				return new Device(m.Groups[1].Value, GetStateFromString(m.Groups[2].Value), m.Groups[4].Value, m.Groups[3].Value, m.Groups[5].Value );
+				if ( m.Groups[2].Value != "host" ) {
+					return new Device ( m.Groups[1].Value, GetStateFromString ( m.Groups[2].Value ), m.Groups[4].Value, m.Groups[3].Value, m.Groups[5].Value );
+				}
+				return null;
 			} else {
 				throw new ArgumentException("Invalid device list data");
 			}

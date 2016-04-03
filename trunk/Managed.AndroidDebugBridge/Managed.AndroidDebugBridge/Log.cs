@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Camalot.Common.Extensions;
 
 namespace Managed.Adb {
 	/// <summary>
@@ -337,7 +338,7 @@ namespace Managed.Adb {
 		/// <param name="message"></param>
 		/// <returns></returns>
 		public static String GetLogFormatString ( LogLevel.LogLevelInfo logLevel, String tag, String message ) {
-			long msec = DateTime.Now.ToUnixEpoch ( );
+			long msec = DateTime.UtcNow.ToUnixEpoch ( );
 			return String.Format ( "{0:00}:{1:00} {2}/{3}: {4}\n", ( msec / 60000 ) % 60, ( msec / 1000 ) % 60,
 							logLevel.Letter, tag, message );
 		}

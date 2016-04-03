@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Camalot.Common.Extensions;
 using MoreLinq;
 
 namespace Managed.Adb {

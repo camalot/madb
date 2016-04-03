@@ -6,6 +6,7 @@ using System.IO;
 using Managed.Adb.IO;
 using MoreLinq;
 using System.Text.RegularExpressions;
+using Camalot.Common.Extensions;
 
 namespace Managed.Adb {
 	/// <summary>
@@ -219,7 +220,7 @@ namespace Managed.Adb {
 				Match match = null;
 				int state = 0;
 				foreach ( var line in lines ) {
-					if ( line.IsNullOrWhiteSpace ( ) ) {
+					if ( string.IsNullOrWhiteSpace(line) ) {
 						continue;
 					}
 					switch ( state ) {

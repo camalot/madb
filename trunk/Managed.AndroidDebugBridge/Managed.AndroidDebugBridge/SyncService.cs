@@ -6,6 +6,7 @@ using System.Net;
 using System.IO;
 using System.Net.Sockets;
 using Managed.Adb.IO;
+using Camalot.Common.Extensions;
 
 namespace Managed.Adb {
 	public class SyncService : IDisposable {
