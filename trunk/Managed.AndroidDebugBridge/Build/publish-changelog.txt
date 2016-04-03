@@ -1,1 +1,4 @@
-* Removed all the Console.WriteLines from the library, except in the ConsoleOutputReceiver. 
+* builds against .net 4.5.1
+* removed the ilmerge. dependencies are now pulled from nuget
+* added reference to camalot.common (this lib has a hard version reference, will be fixed in the future)
+* removed some extensions that were duplicated from camalot.common

@@ -32,7 +32,6 @@ namespace Managed.Adb {
 					if (string.IsNullOrEmpty ( line ) || line.StartsWith ( "#" ) || line.StartsWith("$") ) {
 						continue;
 					}
-					// todo: does this need to be here?
 					Console.WriteLine ( line );
         }
 			}
