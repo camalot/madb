@@ -608,7 +608,7 @@ namespace Managed.Adb {
 					Log.e(TAG, "error in getting data length");
 					return null;
 				}
-				String lenHex = reply.GetString(Encoding.Default);
+				string lenHex = reply.GetString(Encoding.Default);
 				int len = int.Parse(lenHex, System.Globalization.NumberStyles.HexNumber);
 
 				reply = new byte[len];
@@ -618,7 +618,7 @@ namespace Managed.Adb {
 				}
 
 				List<Device> s = new List<Device>();
-				String[] data = reply.GetString(Encoding.Default).Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+				string[] data = reply.GetString(Encoding.Default).Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
 				data.ForEach(item => {
 					var device = Device.CreateFromAdbData(item);
 					if ( device != null ) {
@@ -830,7 +830,7 @@ namespace Managed.Adb {
 
 							// checks if the permission to execute the command was denied.
 							// workitem: 16822
-							if( !sdataTrimmed.IsMatch(@"^lstat\s'") && sdataTrimmed.IsMatch("(permission|access) denied$")) {
+							if( !sdataTrimmed.IsMatch(@"^l?stat\s'") && sdataTrimmed.IsMatch("(permission|access) denied$")) {
 								Log.w(TAG, "The remote execution returned: '{0}'", sdataTrimmed);
 								throw new PermissionDeniedException(String.Format("The remote execution returned: '{0}'", sdataTrimmed));
 							}
