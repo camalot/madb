@@ -56,18 +56,17 @@ before_deploy:
 
     $ignore = Set-Location $rootLocation;
 deploy:
- - provider: GitHub
-		tag: $(APPVEYOR_PROJECT_NAME)-v$(MADB_BUILD_VERSION)
-		release: $(APPVEYOR_PROJECT_NAME)-v$(MADB_BUILD_VERSION)
-		auth_token:
-			secure: UEgy2H9zJKLi599QoO3qVf5BKFqloRQ246ez9cEgsfV3vooAUfVopMS9+IjRtArL
-		artifact: Zips
-		draft: $(CI_DEPLOY_GITHUB_ISDRAFT)
-		prerelease: $(CI_DEPLOY_GITHUB_ISPRERELEASE)
-		force_update: true
-		on:
-			branch: master
-			CI_DEPLOY_GITHUB: True
+- provider: GitHub
+	tag: $(APPVEYOR_PROJECT_NAME)-v$(MADB_BUILD_VERSION)
+	release: $(APPVEYOR_PROJECT_NAME)-v$(MADB_BUILD_VERSION)
+	auth_token:
+		secure: UEgy2H9zJKLi599QoO3qVf5BKFqloRQ246ez9cEgsfV3vooAUfVopMS9+IjRtArL
+	artifact: Zips
+	draft: true
+	force_update: true
+	on:
+		branch: master
+		CI_DEPLOY_GITHUB: True
 - provider: NuGet
   api_key:
     secure: /M57OlSjcpugJFARA+j30alG5I+J1QxfRCDi5lWU3YhhzE1kxqLiAxtO+Bu7bQJt
