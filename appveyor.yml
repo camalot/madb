@@ -1,5 +1,7 @@
-version: 1.0.{build}
+version: 2.0.{build}
 skip_tags: true
+pull_requests:
+  do_not_increment_build_number: true
 image: Visual Studio 2015
 environment:
   MADB_PFX_KEY:
@@ -48,6 +50,7 @@ artifacts:
 before_deploy:
 - ps: >-
     $rootLocation = ((Get-Item Env:\APPVEYOR_BUILD_FOLDER).Value);
+
     $trunk = "$rootLocation\trunk\Managed.AndroidDebugBridge";
 
     $ignore = Set-Location $trunk;
@@ -57,23 +60,22 @@ before_deploy:
     $ignore = Set-Location $rootLocation;
 deploy:
 - provider: GitHub
-	tag: $(APPVEYOR_PROJECT_NAME)-v$(MADB_BUILD_VERSION)
-	release: $(APPVEYOR_PROJECT_NAME)-v$(MADB_BUILD_VERSION)
-	auth_token:
-		secure: UEgy2H9zJKLi599QoO3qVf5BKFqloRQ246ez9cEgsfV3vooAUfVopMS9+IjRtArL
-	artifact: Zips
-	draft: true
-	force_update: true
-	on:
-		branch: master
-		CI_DEPLOY_GITHUB: True
+  tag: $(APPVEYOR_PROJECT_NAME)-v$(MADB_BUILD_VERSION)
+  release: $(APPVEYOR_PROJECT_NAME)-v$(MADB_BUILD_VERSION)
+  auth_token:
+    secure: UEgy2H9zJKLi599QoO3qVf5BKFqloRQ246ez9cEgsfV3vooAUfVopMS9+IjRtArL
+  draft: true
+  force_update: true
+  on:
+    branch: master
+    CI_DEPLOY_GITHUB: True
 - provider: NuGet
   api_key:
     secure: /M57OlSjcpugJFARA+j30alG5I+J1QxfRCDi5lWU3YhhzE1kxqLiAxtO+Bu7bQJt
   artifact: Nupkg
   on:
-		branch: master
-		CI_DEPLOY_NUGET: True
+    branch: master
+    CI_DEPLOY_NUGET: True
 after_deploy:
 - ps: >-
     $rootLocation = ((Get-Item Env:\APPVEYOR_BUILD_FOLDER).Value);
