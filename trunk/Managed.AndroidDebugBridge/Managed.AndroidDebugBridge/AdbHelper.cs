@@ -830,9 +830,10 @@ namespace Managed.Adb {
 
 							// checks if the permission to execute the command was denied.
 							// workitem: 16822
-							if( !sdataTrimmed.IsMatch(@"^l?stat\s'") && sdataTrimmed.IsMatch("(permission|access) denied$")) {
+							// I have decided that the receiver should handle this... maybe the others too?
+							if( sdataTrimmed.IsMatch("(permission|access) denied$")) {
 								Log.w(TAG, "The remote execution returned: '{0}'", sdataTrimmed);
-								throw new PermissionDeniedException(String.Format("The remote execution returned: '{0}'", sdataTrimmed));
+								//throw new PermissionDeniedException(String.Format("The remote execution returned: '{0}'", sdataTrimmed));
 							}
 
 							// Add the data to the receiver

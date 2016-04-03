@@ -57,11 +57,17 @@ namespace Managed.Adb {
 		/// <param name="lines">The lines.</param>
 		protected override void ProcessNewLines ( string[] lines ) {
 			foreach ( string line in lines ) {
-				Console.WriteLine ( line );
 				// no need to handle empty lines.
-				if ( line.Length == 0 || (line.IsMatch("^l?stat") && line.IsMatch(@"permission\sdenied")) ) {
+				if ( line.Length == 0 ) {
 					continue;
 				}
+				// maybe parse out the folder name and show it, but 'locked'?
+				var deniedMatch = line.Match ( @"^l?stat\s'(.*?)'\failed:\spermission\sdenied" );
+				if ( ( deniedMatch.Success ) ) {
+					Console.Write ( $"Permission Denied: {deniedMatch.Groups[2].Value}" );
+					continue;
+				}
+
 				// run the line through the regexp
 				var m = line.Trim ( ).Match ( FileListingService.LS_PATTERN_EX, RegexOptions.Compiled );
 				if ( !m.Success ) {
