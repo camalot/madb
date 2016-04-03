@@ -1,14 +1,16 @@
-version: 2.0.{build}
+version: 1.0.{build}
 skip_tags: true
-os: Visual Studio 2015
+image: Visual Studio 2015
 environment:
   MADB_PFX_KEY:
     secure: FJBT+POuE4uUdLGJRsmNsw==
   VS_PFX_KEY:
     secure: LYUvBEhpB5ZzJT6ij5xnSQ4QoeasERP+iATMxhRqNhs=
 install:
-- choco install -y ilmerge
-- set PATH=C:\ProgramData\chocolatey\lib\ilmerge;%PATH%
+- cmd: >-
+    choco install -y ilmerge
+
+    set PATH=C:\ProgramData\chocolatey\lib\ilmerge;%PATH%
 before_build:
 - ps: >-
     $rootLocation = ((Get-Item Env:\APPVEYOR_BUILD_FOLDER).Value);
@@ -61,14 +63,18 @@ deploy:
   auth_token:
     secure: UEgy2H9zJKLi599QoO3qVf5BKFqloRQ246ez9cEgsfV3vooAUfVopMS9+IjRtArL
   artifact: Zips
-  draft: false
+  draft: $(CI_DEPLOY_GITHUB_ISDRAFT)
+  prerelease: $(CI_DEPLOY_GITHUB_ISPRERELEASE)
+  force_update: true
   on:
+    branch: master
     CI_DEPLOY_GITHUB: True
 - provider: NuGet
   api_key:
     secure: /M57OlSjcpugJFARA+j30alG5I+J1QxfRCDi5lWU3YhhzE1kxqLiAxtO+Bu7bQJt
   artifact: Nupkg
   on:
+    branch: master
     CI_DEPLOY_NUGET: True
 after_deploy:
 - ps: >-
@@ -81,3 +87,11 @@ after_deploy:
     .\Build\appveyor.after-deployment.ps1
 
     $ignore = Set-Location $rootLocation;
+notifications:
+- provider: Slack
+  auth_token:
+    secure: dEyWFeGEKdMmajrfGAYOGhWPEpivj1DiWu1xbbngPVcDW8vucg7JvWtJWTdARJ2bLedEg009P1o0JupLLx69Fg==
+  channel: notifications
+  on_build_success: true
+  on_build_failure: true
+  on_build_status_changed: true
