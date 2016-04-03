@@ -63,8 +63,7 @@ deploy:
   auth_token:
     secure: UEgy2H9zJKLi599QoO3qVf5BKFqloRQ246ez9cEgsfV3vooAUfVopMS9+IjRtArL
   artifact: Zips
-  draft: $(CI_DEPLOY_GITHUB_ISDRAFT)
-  prerelease: $(CI_DEPLOY_GITHUB_ISPRERELEASE)
+  draft: true
   force_update: true
   on:
 		branch: master
