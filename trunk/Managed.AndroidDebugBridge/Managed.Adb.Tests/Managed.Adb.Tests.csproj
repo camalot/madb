@@ -62,8 +62,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Camalot.Common, Version=1.0.5718.34616, Culture=neutral, PublicKeyToken=02434577b8ec3216, processorArchitecture=MSIL">
-      <HintPath>..\packages\Camalot.Common.1.0.5718.34616\lib\net45\Camalot.Common.dll</HintPath>
+    <Reference Include="Camalot.Common, Version=1.0.5937.17275, Culture=neutral, PublicKeyToken=02434577b8ec3216, processorArchitecture=MSIL">
+      <HintPath>..\packages\Camalot.Common.1.0.5937.17275\lib\net45\Camalot.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MoreLinq">
