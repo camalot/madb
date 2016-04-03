@@ -13,7 +13,7 @@
 
 		<CI_BUILD_NUMBER Condition=" '$(APPVEYOR)' == 'True' AND '$(APPVEYOR_BUILD_NUMBER)' != '' ">$(APPVEYOR_BUILD_NUMBER)</CI_BUILD_NUMBER>
 
-		<Major>1</Major>
+		<Major>2</Major>
 		<Minor>0</Minor>
 		<Build>$(CI_BUILD_NUMBER)</Build>
 		<Revision>0</Revision>
