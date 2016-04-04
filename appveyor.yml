@@ -1,7 +1,7 @@
 version: 2.0.{build}
-skip_tags: true
 pull_requests:
   do_not_increment_build_number: true
+skip_tags: true
 image: Visual Studio 2015
 environment:
   MADB_PFX_KEY:
@@ -16,9 +16,15 @@ install:
 before_build:
 - ps: >-
     $rootLocation = ((Get-Item Env:\APPVEYOR_BUILD_FOLDER).Value);
+
     $trunk = "$rootLocation\trunk\Managed.AndroidDebugBridge";
+
     $ignore = Set-Location $trunk;
+
+
     .\Build\appveyor.before-build.ps1
+
+
     $ignore = Set-Location $rootLocation;
 build:
   project: trunk\Managed.AndroidDebugBridge\Build\BuildAll.msbuild
@@ -26,9 +32,15 @@ build:
 after_build:
 - ps: >-
     $rootLocation = ((Get-Item Env:\APPVEYOR_BUILD_FOLDER).Value);
+
     $trunk = "$rootLocation\trunk\Managed.AndroidDebugBridge";
+
     $ignore = Set-Location $trunk;
+
+
     .\Build\appveyor.after-build.ps1
+
+
     $ignore = Set-Location $rootLocation;
 artifacts:
 - path: '**\Managed.Adb.*.zip'
@@ -38,9 +50,13 @@ artifacts:
 before_deploy:
 - ps: >-
     $rootLocation = ((Get-Item Env:\APPVEYOR_BUILD_FOLDER).Value);
+
     $trunk = "$rootLocation\trunk\Managed.AndroidDebugBridge";
+
     $ignore = Set-Location $trunk;
+
     .\Build\appveyor.before-deployment.ps1
+
     $ignore = Set-Location $rootLocation;
 deploy:
 - provider: GitHub
@@ -63,9 +79,13 @@ deploy:
 after_deploy:
 - ps: >-
     $rootLocation = ((Get-Item Env:\APPVEYOR_BUILD_FOLDER).Value);
+
     $trunk = "$rootLocation\trunk\Managed.AndroidDebugBridge";
+
     $ignore = Set-Location $trunk;
+
     .\Build\appveyor.after-deployment.ps1
+
     $ignore = Set-Location $rootLocation;
 notifications:
 - provider: Slack
@@ -73,5 +93,5 @@ notifications:
     secure: dEyWFeGEKdMmajrfGAYOGhWPEpivj1DiWu1xbbngPVcDW8vucg7JvWtJWTdARJ2bLedEg009P1o0JupLLx69Fg==
   channel: notifications
   on_build_success: true
-  on_build_failure: true
-  on_build_status_changed: true
+  on_build_failure: true 
+  on_build_status_changed: false 
