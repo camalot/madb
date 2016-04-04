@@ -9,59 +9,29 @@ environment:
   VS_PFX_KEY:
     secure: LYUvBEhpB5ZzJT6ij5xnSQ4QoeasERP+iATMxhRqNhs=
 install:
-- cmd: >-
-    choco install -y ilmerge
-
-    set PATH=C:\ProgramData\chocolatey\lib\ilmerge;%PATH%
+- ps: .\.appveyor\appveyor.install.ps1
 before_build:
 - ps: >-
-    $rootLocation = ((Get-Item Env:\APPVEYOR_BUILD_FOLDER).Value);
+    nuget.exe restore
 
-    $trunk = "$rootLocation\trunk\Managed.AndroidDebugBridge";
-
-    $ignore = Set-Location $trunk;
-
-
-    .\Build\appveyor.before-build.ps1
-
-
-    $ignore = Set-Location $rootLocation;
+    .\.appveyor\appveyor.before-build.ps1
 build:
-  project: trunk\Managed.AndroidDebugBridge\Build\BuildAll.msbuild
+  project: .\.build\BuildAll.msbuild
   verbosity: detailed
 after_build:
-- ps: >-
-    $rootLocation = ((Get-Item Env:\APPVEYOR_BUILD_FOLDER).Value);
-
-    $trunk = "$rootLocation\trunk\Managed.AndroidDebugBridge";
-
-    $ignore = Set-Location $trunk;
-
-
-    .\Build\appveyor.after-build.ps1
-
-
-    $ignore = Set-Location $rootLocation;
+- ps: .\.appveyor\appveyor.after-build.ps1
 artifacts:
 - path: '**\Managed.Adb.*.zip'
   name: Zips
 - path: '**\Managed.Adb.*.nupkg'
   name: Nupkg
 before_deploy:
-- ps: >-
-    $rootLocation = ((Get-Item Env:\APPVEYOR_BUILD_FOLDER).Value);
-
-    $trunk = "$rootLocation\trunk\Managed.AndroidDebugBridge";
-
-    $ignore = Set-Location $trunk;
-
-    .\Build\appveyor.before-deployment.ps1
-
-    $ignore = Set-Location $rootLocation;
+- ps: .\.appveyor\appveyor.before-deployment.ps1
 deploy:
 - provider: GitHub
-  tag: $(APPVEYOR_PROJECT_NAME)-v$(MADB_BUILD_VERSION)
-  release: $(APPVEYOR_PROJECT_NAME)-v$(MADB_BUILD_VERSION)
+  tag: $(APPVEYOR_PROJECT_NAME)-v$(CI_BUILD_VERSION)
+  release: $(APPVEYOR_PROJECT_NAME)-v$(CI_BUILD_VERSION)
+  description: $(CI_RELEASE_DESCRIPTION)
   auth_token:
     secure: UEgy2H9zJKLi599QoO3qVf5BKFqloRQ246ez9cEgsfV3vooAUfVopMS9+IjRtArL
   draft: true
@@ -77,16 +47,7 @@ deploy:
     branch: master
     CI_DEPLOY_NUGET: True
 after_deploy:
-- ps: >-
-    $rootLocation = ((Get-Item Env:\APPVEYOR_BUILD_FOLDER).Value);
-
-    $trunk = "$rootLocation\trunk\Managed.AndroidDebugBridge";
-
-    $ignore = Set-Location $trunk;
-
-    .\Build\appveyor.after-deployment.ps1
-
-    $ignore = Set-Location $rootLocation;
+- ps: .\.appveyor\appveyor.after-deployment.ps1
 notifications:
 - provider: Slack
   auth_token:

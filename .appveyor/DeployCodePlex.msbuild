@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0" DefaultTargets="Publish">
+	<Import Project="$(MSBuildProjectDirectory)\..\.build\SharedProperties.msbuild" Condition="'$(SharedProperties)' == ''"/>
+	<Import Project="$(MSBuildProjectDirectory)\AppVeyorProperties.msbuild" Condition="'$(AppVeyorProperties)' == ''"/>
+	<Import Project="$(MSBuildProjectDirectory)\..\.build\MSBuild.Community.Tasks.Targets" Condition="'$(MSBuildCommunityTasksPath)' == ''"/>
+	<Import Project="$(MSBuildProjectDirectory)\..\.build\MSBuild.Deployment.Tasks.Targets" />
+
+	<PropertyGroup>
+		<DeployCodePlex>DeployCodePlex</DeployCodePlex>
+		<CI_DEPLOY_CODEPLEX Condition=" '$(CI_DEPLOY_CODEPLEX)' == '' ">False</CI_DEPLOY_CODEPLEX>
+		<CodePlexProject>de</CodePlexProject>
+
+
+		<!--<IsDefaultRelease>$(CI_DEPLOY_CODEPLEX)</IsDefaultRelease>
+		<IsShown>$(CI_DEPLOY_CODEPLEX)</IsShown>-->
+
+		<!-- For Testing -->
+		<IsDefaultRelease>False</IsDefaultRelease>
+		<IsShown>False</IsShown>
+
+		<Status>Beta</Status>
+
+		<ReleaseTimeout>120</ReleaseTimeout>
+		<UploadTimeout>1200</UploadTimeout>
+
+		<ChangeLogFile>$(MSBuildProjectDirectory)\..\.build\publish-changelog.txt</ChangeLogFile>
+		<ReleaseInfoFile>$(MSBuildProjectDirectory)\codeplex-release.txt</ReleaseInfoFile>
+	</PropertyGroup>
+
+
+	<Target Name="Publish" DependsOnTargets="PublishPrep">
+
+		<Error Condition=" '$(CI_CODEPLEX_USER)' == '' " Code="500" Text="'CI_CODEPLEX_USER' property was not set." />
+		<Error Condition=" '$(CI_CODEPLEX_PASSWORD)' == '' " Code="500" Text="'CI_CODEPLEX_PASSWORD' property was not set." />
+		<Error Condition=" '$(CI_DEPLOY_CODEPLEX)' == 'False' " Code="500" Text="'CI_DEPLOY_CODEPLEX' property is set to False" />
+		<Error Condition=" !Exists('$(ZipFile)') " Code="404" Text="Unable to locate '$(ZipFile)'" />
+		
+		<CallTarget Targets="Upload" />
+	</Target>
+
+	<Target Name="PublishPrep">
+		<Error Condition=" '$(CI_BUILD_VERSION)' == '' AND '$(CI_BUILD_NUMBER)' == '' " Code="500" Text="'CI_BUILD_NUMBER' property was not set." />
+		<Error Condition=" '$(CI_BUILD_VERSION)' == '' AND '$(CI_BUILD_REVISION)' == '' " Code="500" Text="'CI_BUILD_REVISION' property was not set." />
+		<Error Condition=" '$(CI_PROJECT_FRIENDLY_NAME)' == ''" Code="500" Text="'CI_PROJECT_FRIENDLY_NAME' property was not set." />
+
+		<CreateProperty Value="$(Major).$(Minor).$(CI_BUILD_NUMBER).$(CI_BUILD_REVISION)" Condition=" '$(CI_BUILD_NUMBER)' != '' ">
+			<Output PropertyName="CI_BUILD_VERSION" TaskParameter="Value" />
+		</CreateProperty>
+		
+		<Message Text="CI_BUILD_VERSION Set to $(CI_BUILD_VERSION)" />
+		
+		<CreateProperty Value="$(APPVEYOR_BUILD_FOLDER)\bin\$(Configuration)\$(CI_BUILD_VERSION)\$(Platform)">
+			<Output PropertyName="OutputPath" TaskParameter="Value" />
+		</CreateProperty>
+		
+		<CreateProperty Value="$(OutputPath)\$(CI_PROJECT_NAME).$(CI_BUILD_VERSION).$(Platform).$(ReleaseMode).zip">
+			<Output PropertyName="ZipFile" TaskParameter="Value" />
+		</CreateProperty>
+		
+		<CreateProperty Value="$(CI_PROJECT_FRIENDLY_NAME) $(CI_BUILD_VERSION) $(Status)">
+			<Output PropertyName="ReleaseName" TaskParameter="Value" />
+		</CreateProperty>
+
+		<Message Text="ZipFile set: '$(ZipFile)'" />
+		<Message Text="ReleaseName set: '$(ReleaseName)'" />
+	</Target>
+
+
+	<!-- This should only create the release when it is x86 -->
+	<!-- BUT! When we do x64, we need to know the Release Name -->
+	<Target Name="CreateRelease">
+
+		<!-- Read the file if it was not read for some reason and put into ENV:CI_RELEASE_DESCRIPTION-->
+		<ReadTextFile Files="$(ChangeLogFile)" Condition=" '$(CI_RELEASE_DESCRIPTION)' == '' AND Exists($(ChangeLogFile)) ">
+			<Output TaskParameter="OutputText" PropertyName="CI_RELEASE_DESCRIPTION" />
+		</ReadTextFile>
+
+		<CodePlexCreateRelease
+		  ContinueOnError="True"
+			Project="$(CodePlexProject)"
+			Username="$(CI_CODEPLEX_USER)"
+			Password="$(CI_CODEPLEX_PASSWORD)"
+			ProjectFriendlyName="$(CI_PROJECT_FRIENDLY_NAME)"
+			Version="$(CI_BUILD_VERSION)"
+			Description="$(CI_RELEASE_DESCRIPTION)"
+			IsDefaultRelease="$(IsDefaultRelease)"
+			IsShownToPublic="$(IsShown)"
+			TreatErrorsAsWarnings="True"
+			Status="$(Status)"
+			Timeout="$(ReleaseTimeout)">
+			<Output PropertyName="ReleaseName" TaskParameter="ReleaseName" />
+			<Output PropertyName="ReleaseId" TaskParameter="ReleaseId" />
+			<Output PropertyName="ReleaseUrl" TaskParameter="ReleaseUrl" />
+		</CodePlexCreateRelease>
+
+		
+		
+		<CreateItem Include="Id=$(ReleaseId);Name=$(ReleaseName);Url=$(ReleaseUrl)" Condition=" '$(Platform)' == 'x86' ">
+			<Output ItemName="CPLines" TaskParameter="Include"/>
+		</CreateItem>
+		<WriteLinesToFile File="$(ReleaseInfoFile)" Lines="@(CPLines)" Overwrite="true" Condition=" '$(Platform)' == 'x86' AND '$(ReleaseId)' != '' AND '$(ReleaseUrl)' != '' "/>
+		<Message Text="@(CPLines)" Condition=" '$(ReleaseId)' != '' AND '$(ReleaseUrl)' != '' AND '$(Platform)' == 'x86' "/>
+
+		<Exec Command="appveyor SetVariable -Name CP_RELEASE_NAME -Value &quot;$(ReleaseName)&quot;" Condition=" '$(APPVEYOR)' == 'True' AND '$(Platform)' == 'x86' AND '$(ReleaseName)' != '' " />
+		<Exec Command="appveyor SetVariable -Name CP_RELEASE_ID -Value &quot;$(ReleaseId)&quot;" Condition=" '$(APPVEYOR)' == 'True' AND '$(Platform)' == 'x86' AND '$(ReleaseId)' != '' " />
+		<Exec Command="appveyor SetVariable -Name CP_RELEASE_URL -Value &quot;$(ReleaseUrl)&quot;" Condition=" '$(APPVEYOR)' == 'True' AND '$(Platform)' == 'x86' AND '$(ReleaseUrl)' != '' " />
+		<Exec Command="appveyor SetVariable -Name CP_RELEASE_PROJECT -Value &quot;$(CodePlexProject)&quot;" Condition=" '$(APPVEYOR)' == 'True' AND '$(Platform)' == 'x86' AND '$(CodePlexProject)' != '' " />
+	</Target>
+
+	<Target Name="Upload" DependsOnTargets="CreateRelease">
+		<CodePlexUpload
+			Project="$(CodePlexProject)"
+			Username="$(CI_CODEPLEX_USER)"
+			Password="$(CI_CODEPLEX_PASSWORD)"
+			ReleaseName="$(ReleaseName)"
+			FileType="RuntimeBinary"
+			File="$(ZipFile)"
+			Timeout="$(UploadTimeout)" />
+	</Target>
+
+</Project>
