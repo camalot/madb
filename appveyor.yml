@@ -12,15 +12,9 @@ install:
 before_build:
 - ps: >-
     $rootLocation = ((Get-Item Env:\APPVEYOR_BUILD_FOLDER).Value);
-
     $trunk = "$rootLocation\trunk\Managed.AndroidDebugBridge";
-
     $ignore = Set-Location $trunk;
-
-
     .\Build\appveyor.before-build.ps1
-
-
     $ignore = Set-Location $rootLocation;
 build:
   project: trunk\Managed.AndroidDebugBridge\Build\BuildAll.msbuild
@@ -28,15 +22,9 @@ build:
 after_build:
 - ps: >-
     $rootLocation = ((Get-Item Env:\APPVEYOR_BUILD_FOLDER).Value);
-
     $trunk = "$rootLocation\trunk\Managed.AndroidDebugBridge";
-
     $ignore = Set-Location $trunk;
-
-
     .\Build\appveyor.after-build.ps1
-
-
     $ignore = Set-Location $rootLocation;
 artifacts:
 - path: '**\Managed.Adb.*.zip'
@@ -46,13 +34,9 @@ artifacts:
 before_deploy:
 - ps: >-
     $rootLocation = ((Get-Item Env:\APPVEYOR_BUILD_FOLDER).Value);
-
     $trunk = "$rootLocation\trunk\Managed.AndroidDebugBridge";
-
     $ignore = Set-Location $trunk;
-
     .\Build\appveyor.before-deployment.ps1
-
     $ignore = Set-Location $rootLocation;
 deploy:
 - provider: GitHub
@@ -73,11 +57,8 @@ deploy:
 after_deploy:
 - ps: >-
     $rootLocation = ((Get-Item Env:\APPVEYOR_BUILD_FOLDER).Value);
-
     $trunk = "$rootLocation\trunk\Managed.AndroidDebugBridge";
-
     $ignore = Set-Location $trunk;
-
     .\Build\appveyor.after-deployment.ps1
-
     $ignore = Set-Location $rootLocation;
+
