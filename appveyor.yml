@@ -8,6 +8,9 @@ environment:
     secure: FJBT+POuE4uUdLGJRsmNsw==
   VS_PFX_KEY:
     secure: LYUvBEhpB5ZzJT6ij5xnSQ4QoeasERP+iATMxhRqNhs=
+  PUSHBULLET_API_TOKEN:
+    secure: 2MwCYfQNYPfPjDqNJ1EL8VrIydQNRz3MfhnuI9dzSZag9JwCnqk5k3mMYTFn4ORk
+	CI_PROJECT_FRIENDLY_NAME: Managed.Adb
 install:
 - ps: .\.appveyor\appveyor.install.ps1
 before_build:

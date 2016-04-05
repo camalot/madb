@@ -177,6 +177,7 @@
     <Compile Include="IO\BEBinaryWriter.cs" />
     <Compile Include="IO\ByteBuffer.cs" />
     <Compile Include="IO\ByteOrder.cs" />
+    <Compile Include="IO\ScreenResolution.cs" />
     <Compile Include="Logs\ILogListener.cs" />
     <Compile Include="Logs\LogEntry.cs" />
     <Compile Include="Extensions\ThrowIf.cs">

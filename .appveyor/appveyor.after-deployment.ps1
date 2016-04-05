@@ -73,10 +73,10 @@ if($env:PUSHBULLET_API_TOKEN) {
 		$pbtoken = $_;
 		try {
 			# Send a pushbullet message if there is an api token available
-			Send-PushbulletMessage -apiKey $pbtoken -Type Message -Title "[Build] Droid Explorer $env:Platform v$env:CI_BUILD_VERSION Build Finished" -msg ("Build completed at $timestamp UTC");
+			Send-PushbulletMessage -apiKey $pbtoken -Type Message -Title "[Build] Managed.ADB $env:Platform v$env:CI_BUILD_VERSION Build Finished" -msg ("Build completed at $timestamp UTC");
 
 			if( $env:Platform -eq "x64" -and $env:CI_DEPLOY_PUSHBULLET -eq $true) {
-				Send-PushbulletMessage -apiKey $pbtoken -Type Message -Title "[Deploy] Droid Explorer v$env:CI_BUILD_VERSION Deployed" -msg ("Deployment completed at $timestamp UTC");
+				Send-PushbulletMessage -apiKey $pbtoken -Type Message -Title "[Deploy] Managed.ADB v$env:CI_BUILD_VERSION Deployed" -msg ("Deployment completed at $timestamp UTC");
 			} else {
 				Write-Host -BackgroundColor Yellow -ForegroundColor Black "Skip `"PushBullet`" deployment as environment variable has not matched (`"CI_DEPLOY_PUSHBULLET`" is `"$false`", should be `"$true`" and `"Platform`" is `"$env:Platform`", should be `"x64`")";
 			}		
