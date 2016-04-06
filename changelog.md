@@ -1,4 +1,7 @@
+#### Change log v2.0.XX.XXX
 
+- Version scheme has changed a little bit. The revision now indicates the yyyymmdd of the build.
+- Added some overloads to some methods that Droid Explorer was using of it's own.
 
 #### Change log v2.0.82.7204
 
