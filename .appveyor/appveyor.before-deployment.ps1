@@ -11,7 +11,7 @@ $commitMessageRegex = "^\[deploy\:(pre-release|draft|release)\]$";
 # Must match regex
 if ( ($env:APPVEYOR_REPO_BRANCH -eq "master") -and ($env:APPVEYOR_REPO_COMMIT_MESSAGE -match $commitMessageRegex) ) {
 	$env:CI_DEPLOY_NUGET = $true;
-  $env:CI_DEPLOY_GITHUB = $true;
+	$env:CI_DEPLOY_GITHUB = $true;
   $env:CI_DEPLOY_FTP = $false;
 	$env:CI_DEPLOY_WebHook = $true;
 	$env:CI_DEPLOY_WebDeploy = $true;
@@ -21,7 +21,8 @@ if ( ($env:APPVEYOR_REPO_BRANCH -eq "master") -and ($env:APPVEYOR_REPO_COMMIT_ME
 	$env:CI_DEPLOY = $true;
 } else {
 	# Do not assign a release number or deploy
-  $env:CI_DEPLOY_NUGET = $false;
+  $env:CI_DEPLOY_NUGET = $true;
+	$env:CI_DEPLOY_GITHUB_PRE = $true;
   $env:CI_DEPLOY_GITHUB = $false;
   $env:CI_DEPLOY_FTP = $false;
 	$env:CI_DEPLOY_WebHook = $false;
