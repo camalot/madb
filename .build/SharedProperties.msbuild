@@ -20,7 +20,7 @@
 		<CI_BUILD_REVISION Condition =" '$(CI_BUILD_REVISION)' == ''">0</CI_BUILD_REVISION>
 
 		<CI_PROJECT_NAME Condition="'$(APPVEYOR)' == 'True' ">$(APPVEYOR_PROJECT_NAME)</CI_PROJECT_NAME>
-		<CI_PROJECT_NAME Condition=" '$(CI_PROJECT_NAME)' == '' ">Managed.Adb</CI_PROJECT_NAME>
+		<CI_PROJECT_NAME Condition=" '$(CI_PROJECT_NAME)' == '' ">madb</CI_PROJECT_NAME>
 		<CI_PROJECT_FRIENDLY_NAME Condition=" '$(CI_PROJECT_FRIENDLY_NAME)' == '' ">Managed.Adb</CI_PROJECT_FRIENDLY_NAME>
 		<CI_ARTIFACT_PATH Condition=" '$(CI_ARTIFACT_PATH)' == '' ">$(MSBuildProjectDirectory)\..\bin\</CI_ARTIFACT_PATH>
 		<CI_PROJECT_PATH Condition=" '$(CI_PROJECT_PATH)' == '' ">$(MSBuildProjectDirectory)\..\</CI_PROJECT_PATH>
@@ -112,7 +112,7 @@
 		</CreateProperty>
 
 
-		<CreateProperty Value="DefineConstants=$(DefineConstants) $(PlatformConstant);OSPlatform=$(OSPlatform);ReleasePlatform=$(ReleasePlatform);SignAssemblies=$(SignAssemblies);Configuration=$(Configuration);OutputPath=$(OutputPath);CI_BUILD_VERSION=$(CI_BUILD_VERSION);CI_BUILD_CONDITION=$(CI_BUILD_CONDITION);CI_PROJECT_NAME=$(CI_PROJECT_NAME);CI_PROJECT_FRIENDLY_NAME=$(CI_PROJECT_FRIENDLY_NAME)CI_BUILD_DATE=$(CI_BUILD_DATE);CI_BUILD_TIME=$(CI_BUILD_TIME);CI_ARTIFACT_PATH=$(CI_ARTIFACT_PATH);CI_PROJECT_PATH=$(CI_PROJECT_PATH);">
+		<CreateProperty Value="DefineConstants=$(DefineConstants) $(PlatformConstant);OSPlatform=$(OSPlatform);ReleasePlatform=$(ReleasePlatform);SignAssemblies=$(SignAssemblies);Configuration=$(Configuration);OutputPath=$(OutputPath);CI_BUILD_VERSION=$(CI_BUILD_VERSION);CI_BUILD_CONDITION=$(CI_BUILD_CONDITION);CI_PROJECT_NAME=$(CI_PROJECT_NAME);CI_PROJECT_FRIENDLY_NAME=$(CI_PROJECT_FRIENDLY_NAME);CI_BUILD_DATE=$(CI_BUILD_DATE);CI_BUILD_TIME=$(CI_BUILD_TIME);CI_ARTIFACT_PATH=$(CI_ARTIFACT_PATH);CI_PROJECT_PATH=$(CI_PROJECT_PATH);">
 			<Output PropertyName="MSBuildProperties" TaskParameter="Value" />
 		</CreateProperty>
 	</Target>
@@ -197,18 +197,18 @@
 			<Output ItemName="ZipFiles" TaskParameter="Include" />
 		</CreateItem>
 
-		<CreateProperty Value="$(OutputPath)$(CI_PROJECT_NAME).$(CI_BUILD_VERSION).$(Platform).zip">
+		<CreateProperty Value="$(OutputPath)$(CI_PROJECT_FRIENDLY_NAME).$(CI_BUILD_VERSION).$(Platform).zip">
 			<Output PropertyName="ZipFile" TaskParameter="Value" />
 		</CreateProperty>
 
-		<Zip Comment="$(CI_BUILD_DATE) $(CI_BUILD_TIME) $(CI_PROJECT_NAME) version $(CI_BUILD_VERSION) $(Platform)" Files="@(ZipFiles)"
+		<Zip Comment="$(CI_BUILD_DATE) $(CI_BUILD_TIME) $(CI_PROJECT_FRIENDLY_NAME) version $(CI_BUILD_VERSION) $(Platform)" Files="@(ZipFiles)"
 				 WorkingDirectory="$(OutputPath)"
 				 ZipFileName="$(ZipFile)" ZipLevel="9" Flatten="False" />
 	</Target>
 
 	<Target Name="ILMergeAssemblies">
 		<Move SourceFiles="$(OutputPath)$(OriginalAssemblyName).xml" 
-					DestinationFiles="$(OutputPath)$(CI_PROJECT_NAME).xml" 
+					DestinationFiles="$(OutputPath)$(CI_PROJECT_FRIENDLY_NAME).xml" 
 					ContinueOnError="true" />
 		
 		<CreateProperty Value="$(CI_ARTIFACT_PATH)$(Configuration)\$(CI_BUILD_VERSION)\$(ReleasePlatform)\">
@@ -219,7 +219,7 @@
 			<Output ItemName="InputAssemblies" TaskParameter="Include"/>
 		</CreateItem>
 
-		<CreateItem Include="$(OutputPath)*.xml" Exclude="$(OutputPath)$(CI_PROJECT_NAME).xml">
+		<CreateItem Include="$(OutputPath)*.xml" Exclude="$(OutputPath)$(CI_PROJECT_FRIENDLY_NAME).xml">
 			<Output ItemName="XmlFilesAssemblies" TaskParameter="Include"/>
 		</CreateItem>
 		
@@ -229,13 +229,13 @@
 		
 		<ILMerge
 			InputAssemblies="@(InputAssemblies)"
-			OutputFile="$(OutputPath)Temp\$(CI_PROJECT_NAME).dll" TargetPlatformVersion="v4" KeyFile="$(MSBuildProjectDirectory)\..\Shared\madb.pfx"  />
+			OutputFile="$(OutputPath)Temp\$(CI_PROJECT_FRIENDLY_NAME).dll" TargetPlatformVersion="v4" KeyFile="$(MSBuildProjectDirectory)\..\Shared\madb.pfx"  />
 
 		<Delete Files="@(InputAssemblies);@(XmlFilesAssemblies)" TreatErrorsAsWarnings="true" />
 
-		<Copy SourceFiles="$(OutputPath)Temp\$(CI_PROJECT_NAME).dll" DestinationFolder="$(OutputPath)" />
+		<Copy SourceFiles="$(OutputPath)Temp\$(CI_PROJECT_FRIENDLY_NAME).dll" DestinationFolder="$(OutputPath)" />
 
-		<Delete Files="$(OutputPath)Temp\$(CI_PROJECT_NAME).dll" />
+		<Delete Files="$(OutputPath)Temp\$(CI_PROJECT_FRIENDLY_NAME).dll" />
 		<RemoveDir Directories="$(OutputPath)Temp\" />
 
 	</Target>
@@ -270,17 +270,17 @@
 			<Output TaskParameter="Value" PropertyName="NuSpecFile" />
 		</CreateProperty>
 
-		<CreateItem Include="$(OutputPath)\$(CI_PROJECT_NAME).dll;$(OutputPath)\$(CI_PROJECT_NAME).pdb">
+		<CreateItem Include="$(OutputPath)\$(CI_PROJECT_FRIENDLY_NAME).dll;$(OutputPath)\$(CI_PROJECT_FRIENDLY_NAME).pdb">
 			<Output ItemName="ProjectAssemblies" TaskParameter="Include"/>
 		</CreateItem>
 
 
-		<CreateItem Include="$(OutputPath)$(CI_PROJECT_NAME).xml">
+		<CreateItem Include="$(OutputPath)$(CI_PROJECT_FRIENDLY_NAME).xml">
 			<Output ItemName="XmlDocumentationFiles" TaskParameter="Include"/>
 		</CreateItem>
 
 
-		<CreateProperty Value="$(OutputPath)\$(CI_PROJECT_NAME).$(CI_BUILD_VERSION)">
+		<CreateProperty Value="$(OutputPath)\$(CI_PROJECT_FRIENDLY_NAME).$(CI_BUILD_VERSION)">
 			<Output TaskParameter="Value" PropertyName="PackagePath" />
 		</CreateProperty>
 
