@@ -14,10 +14,7 @@ environment:
 install:
 - ps: .\.appveyor\appveyor.install.ps1
 before_build:
-- ps: >-
-    nuget.exe restore
-
-    .\.appveyor\appveyor.before-build.ps1
+- ps: .\.appveyor\appveyor.before-build.ps1
 build:
   project: .\.build\BuildAll.msbuild
   verbosity: detailed

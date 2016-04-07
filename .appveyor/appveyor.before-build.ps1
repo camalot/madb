@@ -1,3 +1,9 @@
+try {
+	& nuget restore -NonInteractive;
+} catch {
+	$_.Exception.Message | Write-Error;
+}
+
 Import-Module "$env:APPVEYOR_BUILD_FOLDER\.appveyor\modules\Import-PfxCertificate.psm1";
 Import-Module "$env:APPVEYOR_BUILD_FOLDER\.appveyor\modules\Set-BuildVersion.psm1";
 

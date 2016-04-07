@@ -9,6 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Managed.Adb.Tests", "Manage
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{9AA331B1-1F41-41B7-B04A-95E8656E560A}"
 	ProjectSection(SolutionItems) = preProject
+		Shared\madb.pfx = Shared\madb.pfx
 		Shared\SharedAssemblyInfo.cs = Shared\SharedAssemblyInfo.cs
 		Shared\VersionAssemblyInfo.txt = Shared\VersionAssemblyInfo.txt
 	EndProjectSection
@@ -38,11 +39,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Madb.Site", "Madb.Site\Madb
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".git", ".git", "{D7A1978C-D781-439B-A122-4AEABCDB5BA6}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\.gitattributes = ..\..\.gitattributes
-		..\..\.gitignore = ..\..\.gitignore
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
 		changelog.md = changelog.md
-		..\..\license.md = ..\..\license.md
-		..\..\README.md = ..\..\README.md
+		license.md = license.md
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".appveyor", ".appveyor", "{6E150E51-496B-460B-84E9-9035FE1E3143}"
