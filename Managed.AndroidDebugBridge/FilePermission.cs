@@ -35,10 +35,20 @@ namespace Managed.Adb {
 		public FilePermission Other { get; set; }
 
 
+		/// <summary>
+		/// Returns a <see cref="System.String" /> that represents this instance.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.String" /> that represents this instance.
+		/// </returns>
 		public override string ToString ( ) {
 			return String.Format ( "{0}{1}{2}", User.ToString ( ), Group.ToString ( ), Other.ToString ( ) );
 		}
 
+		/// <summary>
+		/// Converts to string that can be used in a chmod command.
+		/// </summary>
+		/// <returns></returns>
 		public String ToChmod ( ) {
 			return String.Format ( "{0}{1}{2}", (int)User.ToChmod ( ), (int)Group.ToChmod ( ), (int)Other.ToChmod ( ) );
 		}
@@ -73,7 +83,7 @@ namespace Managed.Adb {
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Permission"/> class.
+		/// Initializes a new instance of the <see cref="FilePermission"/> class.
 		/// </summary>
 		public FilePermission ( )
 			: this ( "---" ) {
@@ -81,7 +91,7 @@ namespace Managed.Adb {
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Permission"/> class.
+		/// Initializes a new instance of the <see cref="FilePermission"/> class.
 		/// </summary>
 		/// <param name="linuxPermissions">The linux permissions.</param>
 		public FilePermission ( string linuxPermissions ) {

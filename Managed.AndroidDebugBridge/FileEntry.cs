@@ -20,7 +20,7 @@ namespace Managed.Adb {
 		/// <param name="path">The path.</param>
 		/// <remarks>This does not create the FileEntry on disk. It only creates the FileEntry object.</remarks>
 		/// <returns></returns>
-		public static FileEntry FindOrCreate ( Device device, String path ) {
+		public static FileEntry FindOrCreate ( Device device, string path ) {
 			device.ThrowIfNull ( "device" );
 			path.ThrowIfNullOrEmpty ( "path" );
 
@@ -37,7 +37,13 @@ namespace Managed.Adb {
 			}
 		}
 
-		public static FileEntry CreateNoPermissions ( Device device, String path ) {
+		/// <summary>
+		/// Creates the the FileEntry without permissions specified.
+		/// </summary>
+		/// <param name="device">The device.</param>
+		/// <param name="path">The path.</param>
+		/// <returns></returns>
+		public static FileEntry CreateNoPermissions ( Device device, string path ) {
 			var fe = new FileEntry ( device, path );
 			fe.Permissions = new FilePermissions ( );
 			return fe;
@@ -52,7 +58,7 @@ namespace Managed.Adb {
 		/// <exception cref="ArgumentNullException">If the device or path is null.</exception>
 		/// <exception cref="FileNotFoundException">If the entrty is not found.</exception>
 		/// <returns></returns>
-		public static FileEntry Find ( Device device, String path ) {
+		public static FileEntry Find ( Device device, string path ) {
 			device.ThrowIfNull ( "device" );
 			path.ThrowIfNullOrEmpty ( "path" );
 
@@ -73,7 +79,7 @@ namespace Managed.Adb {
 		/// <param name="name">name of the entry.</param>
 		/// <param name="type">entry type.</param>
 		/// <param name="isRoot">if set to <c>true</c> [is root].</param>
-		internal FileEntry ( Device device, FileEntry parent, String name, FileListingService.FileTypes type, bool isRoot ) {
+		internal FileEntry ( Device device, FileEntry parent, string name, FileListingService.FileTypes type, bool isRoot ) {
 			this.FetchTime = 0;
 			this.Parent = parent;
 			this.Name = name;
@@ -90,10 +96,10 @@ namespace Managed.Adb {
 		/// </summary>
 		/// <param name="device">The device.</param>
 		/// <param name="path">The path.</param>
-		internal FileEntry ( Device device, String path ) {
+		internal FileEntry ( Device device, string path ) {
 			this.FetchTime = 0;
 			this.Parent = null;
-			bool isDir = path.EndsWith ( new String ( LinuxPath.DirectorySeparatorChar, 1 ) );
+			bool isDir = path.EndsWith ( new string ( LinuxPath.DirectorySeparatorChar, 1 ) );
 			this.Name = isDir ? LinuxPath.GetDirectoryName ( path ) : LinuxPath.GetFileName ( path );
 			this.IsRoot = path.Length == 1 && path[0] == LinuxPath.DirectorySeparatorChar;
 			this.Type = isDir ? FileListingService.FileTypes.Directory : FileListingService.FileTypes.File;
@@ -115,21 +121,21 @@ namespace Managed.Adb {
 		/// <summary>
 		/// Gets the name.
 		/// </summary>
-		public String Name { get; private set; }
+		public string Name { get; private set; }
 		/// <summary>
 		/// Gets or sets the name of the link.
 		/// </summary>
 		/// <value>
 		/// The name of the link.
 		/// </value>
-		public String LinkName { get; set; }
+		public string LinkName { get; set; }
 		/// <summary>
 		/// Gets or sets the info.
 		/// </summary>
 		/// <value>
 		/// The info.
 		/// </value>
-		public String Info { get; set; }
+		public string Info { get; set; }
 		/// <summary>
 		/// Gets or sets the permissions.
 		/// </summary>
@@ -157,14 +163,14 @@ namespace Managed.Adb {
 		/// <value>
 		/// The owner.
 		/// </value>
-		public String Owner { get; set; }
+		public string Owner { get; set; }
 		/// <summary>
 		/// Gets or sets the group.
 		/// </summary>
 		/// <value>
 		/// The group.
 		/// </value>
-		public String Group { get; set; }
+		public string Group { get; set; }
 		/// <summary>
 		/// Gets the type.
 		/// </summary>
@@ -285,8 +291,8 @@ namespace Managed.Adb {
 		/// </summary>
 		/// <param name="name">the name of the child to return.</param>
 		/// <return>the FileEntry matching the name or null.</return>
-		public FileEntry FindChild ( String name ) {
-			var entry = Children.Where ( e => String.Compare ( e.Name, name, false ) == 0 ).FirstOrDefault ( );
+		public FileEntry FindChild ( string name ) {
+			var entry = Children.Where ( e => string.Compare ( e.Name, name, false ) == 0 ).FirstOrDefault ( );
 
 			return entry;
 		}
@@ -320,7 +326,7 @@ namespace Managed.Adb {
 		/// <summary>
 		/// Gets the full path of the entry.
 		/// </summary>
-		public String FullPath {
+		public string FullPath {
 			get {
 				if ( IsRoot ) {
 					return FileListingService.FILE_ROOT;
@@ -352,7 +358,7 @@ namespace Managed.Adb {
 		/// <summary>
 		/// Gets the fully escaped path of the entry. This path is safe to use in a shell command line.
 		/// </summary>
-		public String FullEscapedPath {
+		public string FullEscapedPath {
 			get {
 				StringBuilder pathBuilder = new StringBuilder ( );
 				FillPathBuilder ( pathBuilder, true, true );
@@ -364,9 +370,9 @@ namespace Managed.Adb {
 		/// <summary>
 		/// Gets the path as a list of segments.
 		/// </summary>
-		public String[] PathSegments {
+		public string[] PathSegments {
 			get {
-				var list = new List<String> ( );
+				var list = new List<string> ( );
 				FillPathSegments ( list );
 
 				return list.ToArray ( );
@@ -382,13 +388,13 @@ namespace Managed.Adb {
 		private void CheckAppPackageStatus ( ) {
 			IsApplicationPackage = false;
 
-			String[] segments = PathSegments;
+			string[] segments = PathSegments;
 			if ( this.Type == FileListingService.FileTypes.File && segments.Length == 3 && IsApplicationFileName ) {
-				IsApplicationPackage = String.Compare ( FileListingService.DIRECTORY_APP, segments[1], false ) == 0 &&
-						( String.Compare ( FileListingService.DIRECTORY_SYSTEM, segments[0], false ) == 0 ||
-						String.Compare ( FileListingService.DIRECTORY_DATA, segments[0], false ) == 0 ||
-						String.Compare ( FileListingService.DIRECTORY_SD, segments[0], false ) == 0 ||
-						String.Compare ( FileListingService.DIRECTORY_SDEXT, segments[0], false ) == 0 );
+				IsApplicationPackage = string.Compare ( FileListingService.DIRECTORY_APP, segments[1], false ) == 0 &&
+						( string.Compare ( FileListingService.DIRECTORY_SYSTEM, segments[0], false ) == 0 ||
+						string.Compare ( FileListingService.DIRECTORY_DATA, segments[0], false ) == 0 ||
+						string.Compare ( FileListingService.DIRECTORY_SD, segments[0], false ) == 0 ||
+						string.Compare ( FileListingService.DIRECTORY_SDEXT, segments[0], false ) == 0 );
 			}
 		}
 
@@ -396,7 +402,7 @@ namespace Managed.Adb {
 		/// Recursively fills the segment list with the full path.
 		/// </summary>
 		/// <param name="list">The list of segments to fill.</param>
-		protected void FillPathSegments ( List<String> list ) {
+		protected void FillPathSegments ( List<string> list ) {
 			if ( IsRoot ) {
 				return;
 			}
@@ -423,7 +429,7 @@ namespace Managed.Adb {
 				Parent.FillPathBuilder ( pathBuilder, escapePath, resolveLinks );
 			}
 
-			String n = resolveLinks && !String.IsNullOrEmpty ( LinkName ) ? LinkName : Name;
+			string n = resolveLinks && !string.IsNullOrEmpty ( LinkName ) ? LinkName : Name;
 
 			if ( n[0] != LinuxPath.DirectorySeparatorChar ) {
 				pathBuilder.Append ( LinuxPath.DirectorySeparatorChar );

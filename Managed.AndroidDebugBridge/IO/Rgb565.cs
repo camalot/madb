@@ -14,6 +14,58 @@ namespace Managed.Adb.IO {
 	public static class Rgb565 {
 
 		/// <summary>
+		/// To the image.
+		/// </summary>
+		/// <param name="file">The file.</param>
+		/// <returns></returns>
+		public static Image ToImage ( string file ) {
+			using ( FileStream fs = new FileStream ( file, FileMode.Open, FileAccess.Read ) ) {
+				return ToImage ( fs );
+			}
+		}
+
+		/// <summary>
+		/// To the image.
+		/// </summary>
+		/// <param name="stream">The stream.</param>
+		/// <returns></returns>
+		public static Image ToImage ( Stream stream ) {
+			byte[] buffer = new byte[32768];
+			using ( MemoryStream ms = new MemoryStream ( ) ) {
+				while ( true ) {
+					int read = stream.Read ( buffer, 0, buffer.Length );
+					if ( read <= 0 ) {
+						return ToImage ( ms.ToArray ( ) );
+					}
+					ms.Write ( buffer, 0, read );
+				}
+			}
+
+		}
+
+		/// <summary>
+		/// To the image.
+		/// </summary>
+		/// <param name="buffer">The buffer.</param>
+		/// <returns></returns>
+		public static Image ToImage ( byte[] buffer ) {
+			return ToImage ( PixelFormat.Format16bppRgb565, buffer );
+		}
+
+		/// <summary>
+		/// To the image.
+		/// </summary>
+		/// <param name="format">The format.</param>
+		/// <param name="buffer">The buffer.</param>
+		/// <returns></returns>
+		public static Image ToImage ( PixelFormat format, byte[] buffer ) {
+			int pixels = buffer.Length / 2;
+			Size imageSize = ScreenResolution.Instance.CalculateSize ( pixels );
+			return ToImage ( format, buffer, imageSize.Width, imageSize.Height );
+		}
+
+
+		/// <summary>
 		/// Gets the Image from the raw image data
 		/// </summary>
 		/// <param name="format">The format.</param>
@@ -26,6 +78,8 @@ namespace Managed.Adb.IO {
 			Bitmap bitmap = null;
 			Bitmap image = null;
 			BitmapData bitmapdata = null;
+			pixels = ScreenResolution.Instance.PixelsFromSize ( new Size(width,height) );
+
 			try {
 				bitmap = new Bitmap ( width, height, format );
 				bitmapdata = bitmap.LockBits ( new Rectangle ( 0, 0, width, height ), ImageLockMode.WriteOnly, format );

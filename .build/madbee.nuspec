@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package>
+	<metadata>
+		<id>Managed.AndroidDebugBridge</id>
+		<version>1.0.0.0</version>
+		<authors>Ryan Conrad</authors>
+		<owners>Ryan Conrad</owners>
+		<title>Managed Android Debug Bridge (MadBee)</title>
+		<description>A managed library for communicating with the Android Debug Bridge. See more info @ https://github.com/camalot/madb</description>
+		<summary>This is a Managed port of the Android Debug Bridge to allow communication from .NET applications to Android devices. This wraps the same methods that the ddms uses to directly communicate with ADB. This gives more flexibility to the developer then launching an adb process and executing one of its build in commands.</summary>
+		<projectUrl>https://github.com/camalot/madb</projectUrl>
+		<licenseUrl>https://raw.githubusercontent.com/camalot/madb/master/license.md</licenseUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<iconUrl>http://i.imgur.com/OOliDq6.png</iconUrl>
+		<tags>android adb library</tags>
+		<language>en-US</language>
+		<releaseNotes></releaseNotes>
+		<copyright>Copyright 2016 Ryan Conrad</copyright>
+
+		<dependencies>
+			<group targetFramework="net45">
+				<dependency id="morelinq" version="(,2.0)" />
+				<!-- this has to be a hard ref until it is fixed in camalot.common -->
+				<dependency id="camalot.common" version="1.0.5937.17275" />
+			</group>
+		</dependencies>
+	</metadata>
+</package>
