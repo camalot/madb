@@ -54,6 +54,7 @@ deploy:
   auth_token:
     secure: UEgy2H9zJKLi599QoO3qVf5BKFqloRQ246ez9cEgsfV3vooAUfVopMS9+IjRtArL
   draft: true
+	artifact: Zips
   prerelease: true
   force_update: true
   on:
