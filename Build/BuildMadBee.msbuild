@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0" DefaultTargets="Build">
+	<Import Project="$(MSBuildProjectDirectory)\SharedProperties.msbuild"
+					Condition="Exists('$(MSBuildProjectDirectory)\SharedProperties.msbuild') AND '$(SharedProperties)' != 'SharedProperties' " />
+
+	<Target Name="Build" DependsOnTargets="CoreBuild;ReleaseCleanup"></Target>
+</Project>

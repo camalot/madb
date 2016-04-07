@@ -1,64 +1,36 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Managed.Adb", "Managed.AndroidDebugBridge\Managed.Adb.csproj", "{65473257-E70F-410B-9269-D0C0F771EA87}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Managed.Adb.Tests", "Managed.Adb.Tests\Managed.Adb.Tests.csproj", "{2C43B828-BE5E-47B6-93BB-A624B6B36633}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3rdParty", "3rdParty", "{3F2F4DFF-41B3-45CA-AC47-E00250DCE930}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit", "xunit", "{E9A9E417-965C-461D-ABCA-3A32E5BF15B2}"
-	ProjectSection(SolutionItems) = preProject
-		3rdParty\xunit\xunit.dll = 3rdParty\xunit\xunit.dll
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{49EA5373-6CDB-45BE-A763-80F421B8A22E}"
-	ProjectSection(SolutionItems) = preProject
-		Build\BuildAll.msbuild = Build\BuildAll.msbuild
-		Build\BuildMadBee.msbuild = Build\BuildMadBee.msbuild
-		Build\InstallPfx.ps1 = Build\InstallPfx.ps1
-		Build\madbee.nuspec = Build\madbee.nuspec
-		Build\publish-changelog.txt = Build\publish-changelog.txt
-		Build\SharedProperties.msbuild = Build\SharedProperties.msbuild
-		Build\set-environment-variable.ps1 = Build\set-environment-variable.ps1
-		Build\WebPublish.msbuild = Build\WebPublish.msbuild
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{9AA331B1-1F41-41B7-B04A-95E8656E560A}"
 	ProjectSection(SolutionItems) = preProject
+		Shared\madb.pfx = Shared\madb.pfx
 		Shared\SharedAssemblyInfo.cs = Shared\SharedAssemblyInfo.cs
 		Shared\VersionAssemblyInfo.txt = Shared\VersionAssemblyInfo.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MadBee.Console", "MadBee.Console\MadBee.Console.csproj", "{F9A436F4-0606-4326-8607-9EA4D9E6AF18}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "msbuildtasks", "msbuildtasks", "{2A9166E3-7655-4DB8-9F7A-DB150428821F}"
-	ProjectSection(SolutionItems) = preProject
-		3rdParty\msbuildtasks\MSBuild.Deployment.Tasks.dll = 3rdParty\msbuildtasks\MSBuild.Deployment.Tasks.dll
-		3rdParty\msbuildtasks\MSBuild.Deployment.Tasks.pdb = 3rdParty\msbuildtasks\MSBuild.Deployment.Tasks.pdb
-		3rdParty\msbuildtasks\MSBuild.Deployment.Tasks.Targets = 3rdParty\msbuildtasks\MSBuild.Deployment.Tasks.Targets
-		3rdParty\msbuildtasks\MSBuild.Deployment.Tasks.XML = 3rdParty\msbuildtasks\MSBuild.Deployment.Tasks.XML
-		3rdParty\msbuildtasks\MSBuild.Deployment.Tasks.xsd = 3rdParty\msbuildtasks\MSBuild.Deployment.Tasks.xsd
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{AA1EF3B1-0792-405E-A5F1-0CE913FC8816}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{4E89FCCE-DDF2-46CE-8E69-9975FD3A39DD}"
 	ProjectSection(SolutionItems) = preProject
+		.build\BuildAll.msbuild = .build\BuildAll.msbuild
+		.build\BuildMadBee.msbuild = .build\BuildMadBee.msbuild
+		.build\madbee.nuspec = .build\madbee.nuspec
 		.build\MSBuild.Community.Tasks.dll = .build\MSBuild.Community.Tasks.dll
 		.build\MSBuild.Community.Tasks.targets = .build\MSBuild.Community.Tasks.targets
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ilmerge", "ilmerge", "{325AB15A-3710-4C89-9732-2F46E93036B0}"
-	ProjectSection(SolutionItems) = preProject
-		3rdParty\ilmerge\Download ILMerge from Official Microsoft Download Center.url = 3rdParty\ilmerge\Download ILMerge from Official Microsoft Download Center.url
+		.build\MSBuild.Deployment.Tasks.dll = .build\MSBuild.Deployment.Tasks.dll
+		.build\MSBuild.Deployment.Tasks.pdb = .build\MSBuild.Deployment.Tasks.pdb
+		.build\MSBuild.Deployment.Tasks.Targets = .build\MSBuild.Deployment.Tasks.Targets
+		.build\MSBuild.Deployment.Tasks.XML = .build\MSBuild.Deployment.Tasks.XML
+		.build\MSBuild.Deployment.Tasks.xsd = .build\MSBuild.Deployment.Tasks.xsd
+		.build\publish-changelog.txt = .build\publish-changelog.txt
+		.build\SharedProperties.msbuild = .build\SharedProperties.msbuild
+		.build\WebPublish.msbuild = .build\WebPublish.msbuild
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{9A4671AA-B664-4BC5-AE31-5074DDEB9E67}"
@@ -67,20 +39,32 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Madb.Site", "Madb.Site\Madb
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".git", ".git", "{D7A1978C-D781-439B-A122-4AEABCDB5BA6}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\appveyor.yml = ..\..\appveyor.yml
-		..\..\.gitattributes = ..\..\.gitattributes
-		..\..\.gitignore = ..\..\.gitignore
-		..\..\license.md = ..\..\license.md
-		..\..\README.md = ..\..\README.md
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		changelog.md = changelog.md
+		license.md = license.md
+		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "appveyor", "appveyor", "{A117AF40-0D8C-4099-B69C-5D035E1585BE}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".appveyor", ".appveyor", "{6E150E51-496B-460B-84E9-9035FE1E3143}"
 	ProjectSection(SolutionItems) = preProject
-		Build\appveyor-variables.txt = Build\appveyor-variables.txt
-		Build\appveyor.after-build.ps1 = Build\appveyor.after-build.ps1
-		Build\appveyor.after-deployment.ps1 = Build\appveyor.after-deployment.ps1
-		Build\appveyor.before-build.ps1 = Build\appveyor.before-build.ps1
-		Build\appveyor.before-deployment.ps1 = Build\appveyor.before-deployment.ps1
+		.appveyor\appveyor-variables.txt = .appveyor\appveyor-variables.txt
+		.appveyor\appveyor.after-build.ps1 = .appveyor\appveyor.after-build.ps1
+		.appveyor\appveyor.after-deployment.ps1 = .appveyor\appveyor.after-deployment.ps1
+		.appveyor\appveyor.before-build.ps1 = .appveyor\appveyor.before-build.ps1
+		.appveyor\appveyor.before-deployment.ps1 = .appveyor\appveyor.before-deployment.ps1
+		.appveyor\appveyor.install.ps1 = .appveyor\appveyor.install.ps1
+		appveyor.yml = appveyor.yml
+		.appveyor\AppVeyorProperties.msbuild = .appveyor\AppVeyorProperties.msbuild
+		.appveyor\DeployCodePlex.msbuild = .appveyor\DeployCodePlex.msbuild
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{F20CB2B3-5DA3-46BD-BDEC-91CC5AFC78E7}"
+	ProjectSection(SolutionItems) = preProject
+		.appveyor\modules\Import-PfxCertificate.psm1 = .appveyor\modules\Import-PfxCertificate.psm1
+		.appveyor\modules\Invoke-MsBuild.psm1 = .appveyor\modules\Invoke-MsBuild.psm1
+		.appveyor\modules\Send-PushBulletMessage.psm1 = .appveyor\modules\Send-PushBulletMessage.psm1
+		.appveyor\modules\Set-BuildVersion.psm1 = .appveyor\modules\Set-BuildVersion.psm1
 	EndProjectSection
 EndProject
 Global
@@ -162,10 +146,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{E9A9E417-965C-461D-ABCA-3A32E5BF15B2} = {3F2F4DFF-41B3-45CA-AC47-E00250DCE930}
-		{2A9166E3-7655-4DB8-9F7A-DB150428821F} = {3F2F4DFF-41B3-45CA-AC47-E00250DCE930}
-		{325AB15A-3710-4C89-9732-2F46E93036B0} = {3F2F4DFF-41B3-45CA-AC47-E00250DCE930}
 		{A3BA455F-4829-4412-9ACC-DEFBC1BC84FC} = {9A4671AA-B664-4BC5-AE31-5074DDEB9E67}
-		{A117AF40-0D8C-4099-B69C-5D035E1585BE} = {49EA5373-6CDB-45BE-A763-80F421B8A22E}
+		{F20CB2B3-5DA3-46BD-BDEC-91CC5AFC78E7} = {6E150E51-496B-460B-84E9-9035FE1E3143}
 	EndGlobalSection
 EndGlobal

@@ -6,9 +6,6 @@
 # Generated Version File:
 */VersionAssemblyInfo.cs
 
-**/*.pfx
-**/*.snk
-
 #nuget
 [pP]ackages/*
 **/.nuget/*.nupkg
@@ -130,7 +127,7 @@ ClientBin/
 *~
 *.dbmdl
 *.[Pp]ublish.xml
-*.pfx
+#*.pfx
 *.publishsettings
 
 # RIA/Silverlight projects

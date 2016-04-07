@@ -1,0 +1,345 @@
+<?xml version="1.0"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0" DefaultTargets="Build">
+	<Import Project="$(MSBuildProjectDirectory)\..\.build\MSBuild.Community.Tasks.targets" Condition="'$(MSBuildCommunityTasksPath)' == ''"/>
+
+	<Import Project="$(MSBuildProjectDirectory)\NuGetPublish.msbuild"
+				Condition="Exists('$(MSBuildProjectDirectory)\NuGetPublish.msbuild') AND '$(PublishNuGet)' != 'PublishNuGet' " />
+
+	<!-- http://www.appveyor.com/docs/environment-variables -->
+	
+	<PropertyGroup>
+		<!-- This indicates that this file has been loaded -->
+		<SharedProperties>SharedProperties</SharedProperties>
+
+		<CI Condition=" '$(CI)' == '' ">False</CI>
+		<CI_BUILD_MAJOR Condition=" '$(CI_BUILD_MAJOR)' == '' ">0</CI_BUILD_MAJOR>
+		<CI_BUILD_MINOR Condition=" '$(CI_BUILD_MINOR)' == '' ">10</CI_BUILD_MINOR>
+		<CI_BUILD_NUMBER Condition="'$(CI_BUILD_NUMBER)' == '' AND '$(APPVEYOR)' == 'True' AND '$(APPVEYOR_BUILD_NUMBER)' != '' ">$(APPVEYOR_BUILD_NUMBER)</CI_BUILD_NUMBER>
+		<CI_BUILD_NUMBER Condition="'$(CI_BUILD_NUMBER)' == ''">0</CI_BUILD_NUMBER>
+		<CI_BUILD_REVISION Condition=" '$(CI_BUILD_REVISION)' == '' AND '$(APPVEYOR)' != 'True' ">0</CI_BUILD_REVISION>
+		<CI_BUILD_REVISION Condition =" '$(CI_BUILD_REVISION)' == ''">0</CI_BUILD_REVISION>
+
+		<CI_PROJECT_NAME Condition="'$(APPVEYOR)' == 'True' ">$(APPVEYOR_PROJECT_NAME)</CI_PROJECT_NAME>
+		<CI_PROJECT_NAME Condition=" '$(CI_PROJECT_NAME)' == '' ">madb</CI_PROJECT_NAME>
+		<CI_PROJECT_FRIENDLY_NAME Condition=" '$(CI_PROJECT_FRIENDLY_NAME)' == '' ">Managed.Adb</CI_PROJECT_FRIENDLY_NAME>
+		<CI_ARTIFACT_PATH Condition=" '$(CI_ARTIFACT_PATH)' == '' ">$(MSBuildProjectDirectory)\..\bin\</CI_ARTIFACT_PATH>
+		<CI_PROJECT_PATH Condition=" '$(CI_PROJECT_PATH)' == '' ">$(MSBuildProjectDirectory)\..\</CI_PROJECT_PATH>
+
+		<CI_BUILD_DATE Condition=" '$(CI_BUILD_DATE)' == '' ">$([System.DateTime]::UtcNow.ToString("MM-dd-yyyy"))</CI_BUILD_DATE>
+		<CI_BUILD_TIME Condition=" '$(CI_BUILD_TIME)' == '' ">$([System.DateTime]::UtcNow.ToString("hh:mm:ss"))</CI_BUILD_TIME>
+
+		<CI_BUILD_CONDITION Condition=" '$(CI)' == 'False' ">Local</CI_BUILD_CONDITION>
+		<CI_BUILD_CONDITION Condition=" '$(CI)' == 'True' AND '$(APPVEYOR_SCHEDULED_BUILD)' == 'True' ">Scheduled</CI_BUILD_CONDITION>
+		<CI_BUILD_CONDITION Condition=" '$(CI)' == 'True' AND '$(APPVEYOR_FORCED_BUILD)' == 'True' ">Forced</CI_BUILD_CONDITION>
+		<CI_BUILD_CONDITION Condition=" '$(CI)' == 'True' AND '$(APPVEYOR_RE_BUILD)' == 'True' ">Rebuild</CI_BUILD_CONDITION>
+		<CI_BUILD_CONDITION Condition=" '$(CI)' == 'True' AND '$(APPVEYOR_REPO_TAG)' == 'True' ">Tag</CI_BUILD_CONDITION>
+		<CI_BUILD_CONDITION Condition=" '$(CI)' == 'True' AND '$(APPVEYOR_PULL_REQUEST_NUMBER)' == 'True' ">PullRequest</CI_BUILD_CONDITION>
+
+		<Major>$(CI_BUILD_MAJOR)</Major>
+		<Minor>$(CI_BUILD_MINOR)</Minor>
+		<Build>$(CI_BUILD_NUMBER)</Build>
+		<Revision>$(CI_BUILD_REVISION)</Revision>
+
+		<CI_BUILD_VERSION Condition=" '$(CI_BUILD_VERSION)' == '' ">$(Major).$(Minor).$(Build).$(Revision)</CI_BUILD_VERSION>
+
+		<VersionFile>$(MSBuildProjectDirectory)\..\Shared\VersionAssemblyInfo.txt</VersionFile>
+		<SkipIncrementAssemblyVersion Condition=" '$(SkipIncrementAssemblyVersion)' == '' ">False</SkipIncrementAssemblyVersion>
+		<ProgramFiles32>$(MSBuildProgramFiles32)</ProgramFiles32>
+		<!--Use OS env var as a fallback:- 32 bit MSBuild 2.0/3.5 on x64 will use this-->
+		<ProgramFiles32 Condition=" '$(ProgramFiles32)' == '' ">$(ProgramFiles%28x86%29)</ProgramFiles32>
+		<!-- Handle MSBuild 2.0/3.5 running in 64 bit mode - neither of the above env vars are available. http://stackoverflow.com/questions/336633
+       NB this trick (Adding a literal " (x86)" to the 64 bit Program Files path) may or may not work on all versions/locales of Windows -->
+		<ProgramFiles32 Condition ="'$(ProgramFiles32)' == '' AND 'AMD64' == '$(PROCESSOR_ARCHITECTURE)'">$(ProgramFiles) (x86)</ProgramFiles32>
+		<!--Catch-all - handles .NET 2.0/3.5 non-AMD64 and .NET 2.0 on x86 -->
+		<ProgramFiles32 Condition=" '$(ProgramFiles32)' == '' ">$(ProgramFiles)</ProgramFiles32>
+		<OriginalAssemblyName>Managed.AndroidDebugBridge</OriginalAssemblyName>
+		
+		<GIT_HOME Condition=" '$(GIT_HOME)' == '' ">$(ProgramFiles32)\Git\bin</GIT_HOME>
+
+		<Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+		<Configuration Condition="'$(CI)' == 'True'">Release</Configuration>
+		
+		<Platform Condition="'$(Platform)' == 'AnyCPU' OR '$(Platform)' == ''">x86</Platform>
+		
+		<ReleasePlatform>$(Platform)</ReleasePlatform>
+		<ReleasePlatform Condition=" '$(ReleasePlatform)' == '' OR '$(ReleasePlatform)' == 'Any CPU' ">x86</ReleasePlatform>
+
+		<PlatformConstant Condition=" '$(Platform)' == 'x86' OR '$(Platform)' == 'AnyCPU' ">PLATFORMX86</PlatformConstant>
+		<PlatformConstant Condition=" '$(Platform)' == 'x64' ">PLATFORMX64</PlatformConstant>
+		<PlatformConstant Condition=" '$(Platform)' == 'ia64' ">PLATFORMIA64</PlatformConstant>
+		<PlatformConstant Condition=" '$(PlatformConstant)' == '' ">PLATFORMX86</PlatformConstant>
+		<OSPlatform Condition=" '$(OSPlatform)' == '' ">WINDOWS</OSPlatform>
+
+		<SignAssemblies Condition=" '$(SignAssemblies)' == '' ">true</SignAssemblies>
+
+		<CleanBuildOutput>True</CleanBuildOutput>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<BuildAllDependsOn>AssemblyInfo;CleanBuild;PluginBuild;ReleaseCleanup</BuildAllDependsOn>
+		<CompileDependsOn>$(CompileDependsOn)</CompileDependsOn>
+		<PublishMode Condition=" '$(PublishMode)' == '' ">None</PublishMode>
+
+		<PublishNuGet Condition=" '$(PublishMode)' == 'NuGet' ">PublishNuGet</PublishNuGet>
+		<NugetPath>$(MSBuildProjectDirectory)\..\.nuget</NugetPath>
+		<Platform Condition=" '$(Platform)' == '' OR '$(Platform)' == 'AnyCPU' ">x86</Platform>
+		<LocalDeploy Condition=" '$(LocalDeploy)' == '' ">E:\Development\deploy\nuget</LocalDeploy>
+		<ProjectFriendlyName>madbee</ProjectFriendlyName>
+		<NugetPackageId>$(CI_PROJECT_FRIENDLY_NAME).$(Platform)</NugetPackageId>
+		<NugetPackageId Condition=" '$(Platform)' == 'x86' ">$(CI_PROJECT_FRIENDLY_NAME)</NugetPackageId>
+		<DescriptionFile>$(MSBuildProjectDirectory)\Build\publish-changelog.txt</DescriptionFile>
+		<ReleasesPath>$(CI_ARTIFACT_PATH)\$(Configuration)\nuget\</ReleasesPath>
+
+
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectsToBuild Include="$(CI_PROJECT_PATH)**\Managed.Adb.csproj" Exclude="$(CI_PROJECT_PATH)**\*.Site.csproj;$(CI_PROJECT_PATH)**\*Tests*.csproj;$(CI_PROJECT_PATH)**\.localhistory\**"/>
+
+		<NugetContentFiles Include="$(OutputPath)\Nuget\content\**" />
+		<NugetToolsFiles Include="$(OutputPath)\Nuget\tools\**" />
+	</ItemGroup>
+
+	<Target Name="CoreBuild" DependsOnTargets="BuildPrep">
+
+		<MSBuild Projects ="@(ProjectsToBuild)" ContinueOnError="false"
+						 Properties="$(MSBuildProperties)">
+			<Output ItemName="OutputFiles" TaskParameter="TargetOutputs"/>
+		</MSBuild>
+	</Target>
+
+	<Target Name="BuildPrep" DependsOnTargets="SetBuildNumber;AssemblyInfo">
+		<CreateProperty Value="$(CI_ARTIFACT_PATH)$(Configuration)\$(CI_BUILD_VERSION)\$(ReleasePlatform)\">
+			<Output PropertyName="OutputPath" TaskParameter="Value" />
+		</CreateProperty>
+
+
+		<CreateProperty Value="DefineConstants=$(DefineConstants) $(PlatformConstant);OSPlatform=$(OSPlatform);ReleasePlatform=$(ReleasePlatform);SignAssemblies=$(SignAssemblies);Configuration=$(Configuration);OutputPath=$(OutputPath);CI_BUILD_VERSION=$(CI_BUILD_VERSION);CI_BUILD_CONDITION=$(CI_BUILD_CONDITION);CI_PROJECT_NAME=$(CI_PROJECT_NAME);CI_PROJECT_FRIENDLY_NAME=$(CI_PROJECT_FRIENDLY_NAME);CI_BUILD_DATE=$(CI_BUILD_DATE);CI_BUILD_TIME=$(CI_BUILD_TIME);CI_ARTIFACT_PATH=$(CI_ARTIFACT_PATH);CI_PROJECT_PATH=$(CI_PROJECT_PATH);">
+			<Output PropertyName="MSBuildProperties" TaskParameter="Value" />
+		</CreateProperty>
+	</Target>
+
+	<Target Name="SetBuildNumber">
+		<VersionRevision Condition=" '$(CI_BUILD_NUMBER)' != '' ">
+			<Output PropertyName="Revision" TaskParameter="Revision" />
+		</VersionRevision>
+
+		<CreateProperty Value="$(Revision)">
+			<Output PropertyName="CI_BUILD_REVISION" TaskParameter="Value" />
+		</CreateProperty>
+
+		<CreateProperty Value="$(Build)" Condition=" '$(CI_BUILD_NUMBER)' == '0' ">
+			<Output PropertyName="CI_BUILD_NUMBER" TaskParameter="Value" />
+		</CreateProperty>
+
+
+		<CreateProperty Value="$(Major).$(Minor).$(CI_BUILD_NUMBER).$(CI_BUILD_REVISION)">
+			<Output PropertyName="CI_BUILD_VERSION" TaskParameter="Value" />
+		</CreateProperty>
+
+		<SetEnvironmentVariable Name="CI_BUILD_VERSION" Value="$(CI_BUILD_VERSION)" Condition=" '$(CI_BUILD_NUMBER)' != '' " />
+
+	</Target>
+
+	<Target Name="AssemblyInfo"
+					Outputs="$(MSBuildProjectDirectory)\..\Shared\AssemblyVersionInfo.cs" DependsOnTargets="CleanBuild">
+		
+		
+		<AssemblyInfo CodeLanguage="CS"
+									AssemblyFileVersion="$(CI_BUILD_VERSION)"
+									AssemblyVersion="$(Major).$(Minor).0.0"
+									OutputFile="$(MSBuildProjectDirectory)\..\Shared\VersionAssemblyInfo.cs"
+									/>
+	</Target>
+
+
+	<Target Name="ReleaseCleanup" DependsOnTargets="ZipRelease">
+		<Delete Files="@(Files)" ContinueOnError="true" />
+	</Target>
+
+
+	<Target Name="CleanBuild">
+		<CreateProperty Value="$(CI_ARTIFACT_PATH)$(Configuration)\$(CI_BUILD_VERSION)\$(ReleasePlatform)\">
+			<Output PropertyName="OutputPath" TaskParameter="Value"/>
+		</CreateProperty>
+		
+		
+		<RemoveDir Directories="$(OutputPath)" Condition="Exists('$(OutputPath)')" ContinueOnError="true" />
+		<MakeDir Directories="$(OutputPath)" Condition="!Exists('$(OutputPath)')" />
+	</Target>
+<!--CoreBuild;ILMergeAssemblies;NugetPublish-->
+	<Target Name="ZipRelease" DependsOnTargets="CoreBuild;NugetPublish">
+		<CreateItem Include="$(OutputPath)**\*.*" Exclude="$(OutputPath)*.zip">
+			<Output ItemName="Files" TaskParameter="Include" />
+		</CreateItem>
+<!--$(OutputPath)*.pdb;-->
+		<CreateItem Include="$(OutputPath)**\*.*" Exclude="$(OutputPath)*.zip;$(OutputPath)*.vshost.*;$(OutputPath)*.msi;$(OutputPath)*.wixpdb;$(OutputPath)*.nupkg">
+			<Output ItemName="ZipFiles" TaskParameter="Include" />
+		</CreateItem>
+
+		<CreateProperty Value="$(OutputPath)$(CI_PROJECT_FRIENDLY_NAME).$(CI_BUILD_VERSION).$(Platform).zip">
+			<Output PropertyName="ZipFile" TaskParameter="Value" />
+		</CreateProperty>
+
+		<Zip Comment="$(CI_BUILD_DATE) $(CI_BUILD_TIME) $(CI_PROJECT_FRIENDLY_NAME) version $(CI_BUILD_VERSION) $(Platform)" Files="@(ZipFiles)"
+				 WorkingDirectory="$(OutputPath)"
+				 ZipFileName="$(ZipFile)" ZipLevel="9" Flatten="False" />
+	</Target>
+
+	<Target Name="ILMergeAssemblies">
+		<Move SourceFiles="$(OutputPath)$(OriginalAssemblyName).xml" 
+					DestinationFiles="$(OutputPath)$(CI_PROJECT_FRIENDLY_NAME).xml" 
+					ContinueOnError="true" />
+		
+		<CreateProperty Value="$(CI_ARTIFACT_PATH)$(Configuration)\$(CI_BUILD_VERSION)\$(ReleasePlatform)\">
+			<Output PropertyName="OutputPath" TaskParameter="Value" />
+		</CreateProperty>
+
+		<CreateItem Include="$(OutputPath)*.dll" Exclude="$(OutputPath)*Tests.dll">
+			<Output ItemName="InputAssemblies" TaskParameter="Include"/>
+		</CreateItem>
+
+		<CreateItem Include="$(OutputPath)*.xml" Exclude="$(OutputPath)$(CI_PROJECT_FRIENDLY_NAME).xml">
+			<Output ItemName="XmlFilesAssemblies" TaskParameter="Include"/>
+		</CreateItem>
+		
+		<MakeDir Directories="$(OutputPath)Temp\" />
+
+		<Message Text="InputAssemblies: @(InputAssemblies)" />
+		
+		<ILMerge
+			InputAssemblies="@(InputAssemblies)"
+			OutputFile="$(OutputPath)Temp\$(CI_PROJECT_FRIENDLY_NAME).dll" TargetPlatformVersion="v4" KeyFile="$(MSBuildProjectDirectory)\..\Shared\madb.pfx"  />
+
+		<Delete Files="@(InputAssemblies);@(XmlFilesAssemblies)" TreatErrorsAsWarnings="true" />
+
+		<Copy SourceFiles="$(OutputPath)Temp\$(CI_PROJECT_FRIENDLY_NAME).dll" DestinationFolder="$(OutputPath)" />
+
+		<Delete Files="$(OutputPath)Temp\$(CI_PROJECT_FRIENDLY_NAME).dll" />
+		<RemoveDir Directories="$(OutputPath)Temp\" />
+
+	</Target>
+
+	<Target Name="NugetPublish" Condition=" '$(PublishMode)' == 'NuGet' " DependsOnTargets="NuGetPackage">
+		<CreateProperty Value="$(NugetPackageId).$(CI_BUILD_VERSION).nupkg">
+			<Output TaskParameter="Value" PropertyName="NugetPackage" />
+		</CreateProperty>
+
+		<Error Condition=" '$(NuSpecFile)' == '' " Code="500" Text="'NuSpecFile' property was not set."></Error>
+		<Error Condition=" '$(NugetPackage)' == '' " Code="500" Text="'NugetPackage' property was not set."></Error>
+		<Error Condition="!Exists('$(OutputPath)\$(NugetPackage)')" Code="500" Text="'$(NugetPackage)' does not exist."></Error>
+
+		<Exec WorkingDirectory="$(NugetPath)" Command="nuget.exe push $(OutputPath)\$(NugetPackage) $(NuGetKey)"  Condition=" '$(NuGetKey)' != '' "/>
+
+		<MakeDir Directories="$(ReleasesPath)" Condition="!Exists('$(ReleasesPath)')" />
+		<Copy SourceFiles="$(OutputPath)\$(NugetPackage)" DestinationFiles="$(ReleasesPath)\$(NugetPackage)" />
+
+		<MakeDir Directories="$(LocalDeploy)" Condition=" '$(LocalDeploy)' != '' AND !Exists('$(LocalDeploy)')" ContinueOnError="true" />
+		<Copy SourceFiles="$(ReleasesPath)\$(NugetPackage)" DestinationFolder="$(LocalDeploy)" Condition=" '$(LocalDeploy)' != '' AND Exists('$(LocalDeploy)') " />
+
+		<Delete Files="$(OutputPath)\$(NugetPackage)" />
+	</Target>
+
+	<Target Name="NuGetPackage" DependsOnTargets="">
+
+		<ReadLinesFromFile File="$(DescriptionFile)">
+			<Output TaskParameter="Lines" PropertyName="ReleaseDescription"/>
+		</ReadLinesFromFile>
+		
+		<CreateProperty Value="$(ProjectFriendlyName).nuspec" Condition=" '$(NuSpecFile)' == '' ">
+			<Output TaskParameter="Value" PropertyName="NuSpecFile" />
+		</CreateProperty>
+
+		<CreateItem Include="$(OutputPath)\$(CI_PROJECT_FRIENDLY_NAME).dll;$(OutputPath)\$(CI_PROJECT_FRIENDLY_NAME).pdb">
+			<Output ItemName="ProjectAssemblies" TaskParameter="Include"/>
+		</CreateItem>
+
+
+		<CreateItem Include="$(OutputPath)$(CI_PROJECT_FRIENDLY_NAME).xml">
+			<Output ItemName="XmlDocumentationFiles" TaskParameter="Include"/>
+		</CreateItem>
+
+
+		<CreateProperty Value="$(OutputPath)\$(CI_PROJECT_FRIENDLY_NAME).$(CI_BUILD_VERSION)">
+			<Output TaskParameter="Value" PropertyName="PackagePath" />
+		</CreateProperty>
+
+		<CreateProperty Value="$(PackagePath)\lib\net45">
+			<Output TaskParameter="Value" PropertyName="Net4LibPath" />
+		</CreateProperty>
+
+		<MakeDir Directories="$(PackagePath)" Condition="!Exists('$(PackagePath)')" />
+		<MakeDir Directories="$(Net4LibPath)" Condition="!Exists('$(Net4LibPath)')" />
+		<MakeDir Directories="$(PackagePath)/content" Condition="!Exists('$(PackagePath)/content')" />
+		<MakeDir Directories="$(PackagePath)/tools" Condition="!Exists('$(PackagePath)/tools')" />
+
+		<Copy SourceFiles="$(MSBuildProjectDirectory)\$(NuSpecFile)" DestinationFiles="$(PackagePath)\$(NuSpecFile)" />
+
+		<CreateItem Include="@(ProjectAssemblies);@(XmlDocumentationFiles)" Exclude="$(OutputPath)*.zip;$(OutputPath)*.vshost.*;">
+			<Output ItemName="CopyFiles" TaskParameter="Include"/>
+		</CreateItem>
+
+		<Copy SourceFiles="@(CopyFiles)" DestinationFolder="$(Net4LibPath)" />
+
+		<Copy SourceFiles="@(NugetContentFiles)" DestinationFolder="$(PackagePath)\content\%(RecursiveDir)" />
+		<Copy SourceFiles="@(NugetToolsFiles)" DestinationFolder="$(PackagePath)\tools\%(RecursiveDir)" />
+
+		<XmlUpdate
+			XPath="/package/metadata/version"
+			XmlFileName="$(PackagePath)\$(NuSpecFile)"
+			Value="$(CI_BUILD_VERSION)"/>
+		<XmlUpdate
+			XPath="/package/metadata/id"
+			XmlFileName="$(PackagePath)\$(NuSpecFile)"
+			Value="$(NugetPackageId)"/>
+		<XmlUpdate
+			XPath="/package/metadata/releaseNotes"
+			XmlFileName="$(PackagePath)\$(NuSpecFile)"
+			Value="$(ReleaseDescription)"/>
+
+		<Exec WorkingDirectory="$(NugetPath)" Command="nuget.exe pack &quot;$(PackagePath)\$(NuSpecFile)&quot; -OutputDirectory $(OutputPath)" />
+		<RemoveDir Directories="$(PackagePath)" Condition="Exists('$(PackagePath)')" ContinueOnError="true" />
+	</Target>
+
+	<UsingTask
+  TaskName="SetEnvironmentVariable"
+  TaskFactory="CodeTaskFactory"
+  AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+
+		<ParameterGroup>
+			<Name ParameterType="System.String" Required="true" />
+			<Value ParameterType="System.String" Required="true" />
+		</ParameterGroup>
+
+		<Task>
+			<Using Namespace="System" />
+			<Code Type="Fragment" Language="cs">
+				<![CDATA[
+        Environment.SetEnvironmentVariable(Name, Value, EnvironmentVariableTarget.Machine);
+      ]]>
+			</Code>
+		</Task>
+
+	</UsingTask>
+
+	<UsingTask
+	TaskName="VersionRevision"
+	TaskFactory="CodeTaskFactory"
+	AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+		<ParameterGroup>
+			<Revision ParameterType="System.Int32" Output="true" />
+		</ParameterGroup>
+		<Task>
+			<Using Namespace="System" />
+			<Code Type="Fragment" Language="cs">
+				<![CDATA[
+				var yy = DateTime.UtcNow.ToString("yy");
+				var day = DateTime.UtcNow.DayOfYear.ToString() ;
+				// 27015 = 09/26/2015
+				this.Revision = int.Parse(day + yy);
+      ]]>
+			</Code>
+
+		</Task>
+
+	</UsingTask>
+
+</Project>
