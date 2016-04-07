@@ -34,6 +34,7 @@ deploy:
   description: $(CI_RELEASE_DESCRIPTION)
   auth_token:
     secure: UEgy2H9zJKLi599QoO3qVf5BKFqloRQ246ez9cEgsfV3vooAUfVopMS9+IjRtArL
+  artifact: Zips
   draft: true
   force_update: true
   on:
@@ -46,6 +47,18 @@ deploy:
   on:
     branch: master
     CI_DEPLOY_NUGET: True
+- provider: GitHub
+  tag: $(APPVEYOR_PROJECT_NAME)-v$(CI_BUILD_VERSION)-prerelease
+  release: $(APPVEYOR_PROJECT_NAME)-v$(CI_BUILD_VERSION)-prerelease
+  description: $(CI_RELEASE_DESCRIPTION)
+  auth_token:
+    secure: UEgy2H9zJKLi599QoO3qVf5BKFqloRQ246ez9cEgsfV3vooAUfVopMS9+IjRtArL
+  draft: true
+  prerelease: true
+  force_update: true
+  on:
+    branch: develop
+    CI_DEPLOY_GITHUB_PRE: True
 after_deploy:
 - ps: .\.appveyor\appveyor.after-deployment.ps1
 notifications:

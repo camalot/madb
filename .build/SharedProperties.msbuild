@@ -12,10 +12,10 @@
 		<SharedProperties>SharedProperties</SharedProperties>
 
 		<CI Condition=" '$(CI)' == '' ">False</CI>
-		<CI_BUILD_MAJOR Condition=" '$(CI_BUILD_MAJOR)' == '' ">0</CI_BUILD_MAJOR>
-		<CI_BUILD_MINOR Condition=" '$(CI_BUILD_MINOR)' == '' ">10</CI_BUILD_MINOR>
+		<CI_BUILD_MAJOR Condition=" '$(CI_BUILD_MAJOR)' == '' ">2</CI_BUILD_MAJOR>
+		<CI_BUILD_MINOR Condition=" '$(CI_BUILD_MINOR)' == '' ">1</CI_BUILD_MINOR>
 		<CI_BUILD_NUMBER Condition="'$(CI_BUILD_NUMBER)' == '' AND '$(APPVEYOR)' == 'True' AND '$(APPVEYOR_BUILD_NUMBER)' != '' ">$(APPVEYOR_BUILD_NUMBER)</CI_BUILD_NUMBER>
-		<CI_BUILD_NUMBER Condition="'$(CI_BUILD_NUMBER)' == ''">0</CI_BUILD_NUMBER>
+		<CI_BUILD_NUMBER Condition="'$(CI_BUILD_NUMBER)' == ''">100</CI_BUILD_NUMBER>
 		<CI_BUILD_REVISION Condition=" '$(CI_BUILD_REVISION)' == '' AND '$(APPVEYOR)' != 'True' ">0</CI_BUILD_REVISION>
 		<CI_BUILD_REVISION Condition =" '$(CI_BUILD_REVISION)' == ''">0</CI_BUILD_REVISION>
 
@@ -135,7 +135,7 @@
 			<Output PropertyName="CI_BUILD_VERSION" TaskParameter="Value" />
 		</CreateProperty>
 
-		<SetEnvironmentVariable Name="CI_BUILD_VERSION" Value="$(CI_BUILD_VERSION)" Condition=" '$(CI_BUILD_NUMBER)' != '' " />
+		<!--<SetEnvironmentVariable Name="CI_BUILD_VERSION" Value="$(CI_BUILD_VERSION)" Condition=" '$(CI_BUILD_NUMBER)' != '' " />-->
 
 	</Target>
 
@@ -285,7 +285,15 @@
 		<XmlUpdate
 			XPath="/package/metadata/version"
 			XmlFileName="$(PackagePath)\$(NuSpecFile)"
-			Value="$(CI_BUILD_VERSION)"/>
+			Value="$(CI_BUILD_VERSION)" Condition=" '$(APPVEYOR_REPO_BRANCH)' == 'master' "/>
+		<XmlUpdate
+			XPath="/package/metadata/version"
+			XmlFileName="$(PackagePath)\$(NuSpecFile)"
+			Value="$(CI_BUILD_VERSION)-beta" Condition=" '$(APPVEYOR_REPO_BRANCH)' == 'develop' "/>
+		<XmlUpdate
+			XPath="/package/metadata/version"
+			XmlFileName="$(PackagePath)\$(NuSpecFile)"
+			Value="$(CI_BUILD_VERSION)-alpha" Condition=" '$(APPVEYOR_REPO_BRANCH)' != 'develop' AND '$(APPVEYOR_REPO_BRANCH)' != 'master' "/>
 		<XmlUpdate
 			XPath="/package/metadata/id"
 			XmlFileName="$(PackagePath)\$(NuSpecFile)"
