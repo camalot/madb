@@ -45,7 +45,7 @@ deploy:
     secure: /M57OlSjcpugJFARA+j30alG5I+J1QxfRCDi5lWU3YhhzE1kxqLiAxtO+Bu7bQJt
   artifact: Nupkg
   on:
-    branch: master
+    branch: /^(master|develop)$/
     CI_DEPLOY_NUGET: True
 - provider: GitHub
   tag: $(APPVEYOR_PROJECT_NAME)-v$(CI_BUILD_VERSION)-prerelease
