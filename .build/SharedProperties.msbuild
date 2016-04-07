@@ -12,10 +12,10 @@
 		<SharedProperties>SharedProperties</SharedProperties>
 
 		<CI Condition=" '$(CI)' == '' ">False</CI>
-		<CI_BUILD_MAJOR Condition=" '$(CI_BUILD_MAJOR)' == '' ">0</CI_BUILD_MAJOR>
-		<CI_BUILD_MINOR Condition=" '$(CI_BUILD_MINOR)' == '' ">10</CI_BUILD_MINOR>
+		<CI_BUILD_MAJOR Condition=" '$(CI_BUILD_MAJOR)' == '' ">2</CI_BUILD_MAJOR>
+		<CI_BUILD_MINOR Condition=" '$(CI_BUILD_MINOR)' == '' ">1</CI_BUILD_MINOR>
 		<CI_BUILD_NUMBER Condition="'$(CI_BUILD_NUMBER)' == '' AND '$(APPVEYOR)' == 'True' AND '$(APPVEYOR_BUILD_NUMBER)' != '' ">$(APPVEYOR_BUILD_NUMBER)</CI_BUILD_NUMBER>
-		<CI_BUILD_NUMBER Condition="'$(CI_BUILD_NUMBER)' == ''">0</CI_BUILD_NUMBER>
+		<CI_BUILD_NUMBER Condition="'$(CI_BUILD_NUMBER)' == ''">100</CI_BUILD_NUMBER>
 		<CI_BUILD_REVISION Condition=" '$(CI_BUILD_REVISION)' == '' AND '$(APPVEYOR)' != 'True' ">0</CI_BUILD_REVISION>
 		<CI_BUILD_REVISION Condition =" '$(CI_BUILD_REVISION)' == ''">0</CI_BUILD_REVISION>
 
@@ -34,6 +34,9 @@
 		<CI_BUILD_CONDITION Condition=" '$(CI)' == 'True' AND '$(APPVEYOR_RE_BUILD)' == 'True' ">Rebuild</CI_BUILD_CONDITION>
 		<CI_BUILD_CONDITION Condition=" '$(CI)' == 'True' AND '$(APPVEYOR_REPO_TAG)' == 'True' ">Tag</CI_BUILD_CONDITION>
 		<CI_BUILD_CONDITION Condition=" '$(CI)' == 'True' AND '$(APPVEYOR_PULL_REQUEST_NUMBER)' == 'True' ">PullRequest</CI_BUILD_CONDITION>
+
+		<CI_REPO_BRANCH Condition=" '$(CI)' == 'True' AND '$(APPVEYOR_REPO_BRANCH)' != '' ">$(APPVEYOR_REPO_BRANCH)</CI_REPO_BRANCH>
+		<CI_REPO_BRANCH Condition=" '$(CI_REPO_BRANCH)' == '' ">feature/foo</CI_REPO_BRANCH>
 
 		<Major>$(CI_BUILD_MAJOR)</Major>
 		<Minor>$(CI_BUILD_MINOR)</Minor>
@@ -135,7 +138,7 @@
 			<Output PropertyName="CI_BUILD_VERSION" TaskParameter="Value" />
 		</CreateProperty>
 
-		<SetEnvironmentVariable Name="CI_BUILD_VERSION" Value="$(CI_BUILD_VERSION)" Condition=" '$(CI_BUILD_NUMBER)' != '' " />
+		<!--<SetEnvironmentVariable Name="CI_BUILD_VERSION" Value="$(CI_BUILD_VERSION)" Condition=" '$(CI_BUILD_NUMBER)' != '' " />-->
 
 	</Target>
 
@@ -219,7 +222,15 @@
 	</Target>
 
 	<Target Name="NugetPublish" Condition=" '$(PublishMode)' == 'NuGet' " DependsOnTargets="NuGetPackage">
-		<CreateProperty Value="$(NugetPackageId).$(CI_BUILD_VERSION).nupkg">
+		<CreateProperty Value="$(NugetPackageId).$(CI_BUILD_VERSION)-alpha.nupkg" Condition=" '$(CI_REPO_BRANCH)' != 'develop' AND '$(CI_REPO_BRANCH)' != 'master' ">
+			<Output TaskParameter="Value" PropertyName="NugetPackage" />
+		</CreateProperty>
+		
+		<CreateProperty Value="$(NugetPackageId).$(CI_BUILD_VERSION)-beta.nupkg" Condition=" '$(CI_REPO_BRANCH)' == 'develop' ">
+			<Output TaskParameter="Value" PropertyName="NugetPackage" />
+		</CreateProperty>
+		
+		<CreateProperty Value="$(NugetPackageId).$(CI_BUILD_VERSION).nupkg" Condition=" '$(CI_REPO_BRANCH)' == 'master' ">
 			<Output TaskParameter="Value" PropertyName="NugetPackage" />
 		</CreateProperty>
 
@@ -285,7 +296,15 @@
 		<XmlUpdate
 			XPath="/package/metadata/version"
 			XmlFileName="$(PackagePath)\$(NuSpecFile)"
-			Value="$(CI_BUILD_VERSION)"/>
+			Value="$(CI_BUILD_VERSION)-alpha" Condition=" '$(CI_REPO_BRANCH)' != 'develop' AND '$(CI_REPO_BRANCH)' != 'master' "/>
+		<XmlUpdate
+			XPath="/package/metadata/version"
+			XmlFileName="$(PackagePath)\$(NuSpecFile)"
+			Value="$(CI_BUILD_VERSION)-beta" Condition=" '$(CI_REPO_BRANCH)' == 'develop' "/>
+		<XmlUpdate
+			XPath="/package/metadata/version"
+			XmlFileName="$(PackagePath)\$(NuSpecFile)"
+			Value="$(CI_BUILD_VERSION)" Condition=" '$(CI_REPO_BRANCH)' == 'master' "/>
 		<XmlUpdate
 			XPath="/package/metadata/id"
 			XmlFileName="$(PackagePath)\$(NuSpecFile)"
