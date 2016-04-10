@@ -25,5 +25,21 @@ namespace Managed.Adb.Tests.ForLinuxPath {
 			var result = LinuxPath.GetPathWithoutFile ( p );
 			Assert.Equal ( "/{0}/{1}/".With ( p1, p2 ), result );
 		}
+
+		[Fact]
+		public void WhenPathContainsInvalidCharacter_ShouldThrowArgumentException ( ) {
+			var fixture = new Fixture ( );
+			int errorCount = 0;
+			for ( var x = 0; x < LinuxPathConsts.InvalidPathChars.Length; ++x ) {
+				try {
+					string result = LinuxPath.GetPathWithoutFile ( "/{0}-{1}/".With ( LinuxPathConsts.InvalidPathChars[x], fixture.Create ( "path1" ) ) );
+				} catch ( ArgumentException ) {
+					errorCount++;
+				}
+			}
+
+			Assert.Equal ( LinuxPathConsts.InvalidPathChars.Length, errorCount );
+
+		}
 	}
 }

@@ -104,14 +104,18 @@
   <ItemGroup>
     <Compile Include="ForLinuxPath\ChangeExtensionTests.cs" />
     <Compile Include="ForLinuxPath\CombineTests.cs" />
+    <Compile Include="ForLinuxPath\Escape.cs" />
     <Compile Include="ForLinuxPath\GetDirectoryNameTests.cs" />
+    <Compile Include="ForLinuxPath\GetExtension.cs" />
     <Compile Include="ForLinuxPath\GetFileName.cs" />
+    <Compile Include="ForLinuxPath\GetFileNameWithoutExtension.cs" />
     <Compile Include="ForLinuxPath\GetInvalidFileNameChars.cs" />
     <Compile Include="ForLinuxPath\GetInvalidPathChars.cs" />
     <Compile Include="ForLinuxPath\GetPathRoot.cs" />
     <Compile Include="ForLinuxPath\GetPathWithoutFile.cs" />
     <Compile Include="ForLinuxPath\HasExtension.cs" />
     <Compile Include="ForLinuxPath\LinuxPathConsts.cs" />
+    <Compile Include="ForLinuxPath\Quote.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

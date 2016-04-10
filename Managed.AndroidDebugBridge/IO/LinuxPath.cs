@@ -15,7 +15,7 @@ namespace Managed.Adb.IO {
 		/// <summary>
 		/// Pattern to escape filenames for shell command consumption.
 		/// </summary>
-		private const string ESCAPEPATTERN = "([\\\\()*+?\"'#/\\s])";
+		private const string ESCAPEPATTERN = @"([\\\(\)*+?""'\#/])";
 
 		/// <summary>
 		/// The directory separator character
@@ -394,9 +394,10 @@ namespace Managed.Adb.IO {
 		/// </summary>
 		/// <param name="path">The path.</param>
 		/// <returns></returns>
+		/// <exception cref="ArgumentNullException">When path is null.</exception>
 		public static string Escape ( string path ) {
-			return new Regex ( ESCAPEPATTERN ).Replace ( path, new MatchEvaluator ( delegate ( Match m ) {
-				return m.Result ( "\\\\$1" );
+			return path.Require ( ).REReplace(ESCAPEPATTERN, new MatchEvaluator ( delegate ( Match m) {
+				return m.Result ( "\\$1" );
 			} ) );
 		}
 
@@ -406,8 +407,12 @@ namespace Managed.Adb.IO {
 		/// <param name="path">The path.</param>
 		/// <returns></returns>
 		public static string Quote ( string path ) {
-			if ( path.Contains ( " " ) ) {
-				return string.Format ( "\"{0}\"", path );
+			if ( string.IsNullOrEmpty(path) ) {
+				return path;
+			}
+
+			if(path.IsMatch(@"\s")) {
+				return "\"{0}\"".With ( path );
 			} else {
 				return path;
 			}
