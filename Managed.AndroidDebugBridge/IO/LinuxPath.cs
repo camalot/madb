@@ -92,54 +92,6 @@ namespace Managed.Adb.IO {
 		}
 
 		/// <summary>
-		/// Checks if the char array starts with ordinal
-		/// </summary>
-		/// <param name="array">The array.</param>
-		/// <param name="numChars">The num chars.</param>
-		/// <param name="compareTo">The compare to.</param>
-		/// <param name="ignoreCase">if set to <c>true</c> [ignore case].</param>
-		/// <returns></returns>
-		private static unsafe bool CharArrayStartsWithOrdinal ( char* array, int numChars, string compareTo, bool ignoreCase ) {
-			if ( numChars < compareTo.Length ) {
-				return false;
-			}
-			if ( ignoreCase ) {
-				string str = new string ( array, 0, compareTo.Length );
-				return compareTo.Equals ( str, StringComparison.OrdinalIgnoreCase );
-			}
-			for ( int i = 0; i < compareTo.Length; i++ ) {
-				if ( array[i] != compareTo[i] ) {
-					return false;
-				}
-			}
-			return true;
-		}
-
-		/// <summary>
-		/// Checks if the char array starts with ordinal
-		/// </summary>
-		/// <param name="array">The array.</param>
-		/// <param name="numChars">The num chars.</param>
-		/// <param name="compareTo">The compare to.</param>
-		/// <param name="ignoreCase">if set to <c>true</c> [ignore case].</param>
-		/// <returns></returns>
-		private static bool CharArrayStartsWithOrdinal ( char[] array, int numChars, string compareTo, bool ignoreCase ) {
-			if ( numChars < compareTo.Length ) {
-				return false;
-			}
-			if ( ignoreCase ) {
-				string str = new string ( array, 0, compareTo.Length );
-				return compareTo.Equals ( str, StringComparison.OrdinalIgnoreCase );
-			}
-			for ( int i = 0; i < compareTo.Length; i++ ) {
-				if ( array[i] != compareTo[i] ) {
-					return false;
-				}
-			}
-			return true;
-		}
-
-		/// <summary>
 		/// Checks the invalid path chars.
 		/// </summary>
 		/// <param name="path">The path.</param>
@@ -150,57 +102,6 @@ namespace Managed.Adb.IO {
 					throw new ArgumentException ( "Path contains invalid characters" );
 				}
 			}
-		}
-
-		/// <summary>Combines two path strings.</summary>
-		/// <returns>A string containing the combined paths. If one of the specified paths is a zero-length string, this method returns the other path. If path2 contains an absolute path, this method returns path2.</returns>
-		/// <param name="path2">The second path. </param>
-		/// <param name="path1">The first path. </param>
-		/// <exception cref="T:System.ArgumentNullException">path1 or path2 is null. </exception>
-		/// <exception cref="T:System.ArgumentException">path1 or path2 contain one or more of the invalid characters defined in <see cref="F:System.IO.Path.InvalidPathChars"></see>, or contains a wildcard character. </exception>
-		public static string Combine ( string path1, string path2 ) {
-			if ( ( path1 == null ) || ( path2 == null ) ) {
-				throw new ArgumentNullException ( ( path1 == null ) ? "path1" : "path2" );
-			}
-			CheckInvalidPathChars ( path1 );
-			CheckInvalidPathChars ( path2 );
-			return CombineNoChecks ( path1, path2 );
-		}
-
-		/// <summary>
-		/// Combine the specified paths to form one path
-		/// </summary>
-		/// <param name="path1">The path1.</param>
-		/// <param name="path2">The path2.</param>
-		/// <param name="path3">The path3.</param>
-		/// <returns></returns>
-		public static string Combine ( string path1, string path2, string path3 ) {
-			if ( ( ( path1 == null ) || ( path2 == null ) ) || ( path3 == null ) ) {
-				throw new ArgumentNullException ( ( path1 == null ) ? "path1" : ( ( path2 == null ) ? "path2" : "path3" ) );
-			}
-			CheckInvalidPathChars ( path1 );
-			CheckInvalidPathChars ( path2 );
-			CheckInvalidPathChars ( path3 );
-			return CombineNoChecks ( CombineNoChecks ( path1, path2 ), path3 );
-		}
-
-		/// <summary>
-		/// Combine the specified paths to form one path
-		/// </summary>
-		/// <param name="path1">The path1.</param>
-		/// <param name="path2">The path2.</param>
-		/// <param name="path3">The path3.</param>
-		/// <param name="path4">The path4.</param>
-		/// <returns></returns>
-		public static string Combine ( string path1, string path2, string path3, string path4 ) {
-			if ( ( ( path1 == null ) || ( path2 == null ) ) || ( ( path3 == null ) || ( path4 == null ) ) ) {
-				throw new ArgumentNullException ( ( path1 == null ) ? "path1" : ( ( path2 == null ) ? "path2" : ( ( path3 == null ) ? "path3" : "path4" ) ) );
-			}
-			CheckInvalidPathChars ( path1 );
-			CheckInvalidPathChars ( path2 );
-			CheckInvalidPathChars ( path3 );
-			CheckInvalidPathChars ( path4 );
-			return CombineNoChecks ( CombineNoChecks ( CombineNoChecks ( path1, path2 ), path3 ), path4 );
 		}
 
 		/// <summary>
@@ -480,35 +381,6 @@ namespace Managed.Adb.IO {
 				}
 			}
 			return false;
-		}
-
-		/// <summary>
-		/// Combine the specified paths to form one path
-		/// </summary>
-		/// <param name="path1">The path1.</param>
-		/// <param name="path2">The path2.</param>
-		/// <returns></returns>
-		internal static string InternalCombine ( string path1, string path2 ) {
-			if ( ( path1 == null ) || ( path2 == null ) ) {
-				throw new ArgumentNullException ( ( path1 == null ) ? "path1" : "path2" );
-			}
-			CheckInvalidPathChars ( path1 );
-			CheckInvalidPathChars ( path2 );
-			if ( path2.Length == 0 ) {
-				throw new ArgumentException ( "Path can not empty", "path2" );
-			}
-			if ( IsPathRooted ( path2 ) ) {
-				throw new ArgumentException ( "Path is already rooted", "path2" );
-			}
-			int length = path1.Length;
-			if ( length == 0 ) {
-				return path2;
-			}
-			char ch = path1[length - 1];
-			if ( ( ( ch != DirectorySeparatorChar ) && ( ch != AltDirectorySeparatorChar ) ) ) {
-				return ( path1 + DirectorySeparatorChar + path2 );
-			}
-			return ( path1 + path2 );
 		}
 
 		internal static bool IsDirectorySeparator ( char c ) {
