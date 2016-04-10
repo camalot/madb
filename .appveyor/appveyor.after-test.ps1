@@ -1,0 +1,3 @@
+.\packages\OpenCover.4.6.519\OpenCover.Console.exe -register:user -target:".\packages\xunit.runner.console.2.1.0\tools\xunit.console" -targetargs:".\Managed.Adb.Tests\bin\Debug\Managed.Adb.Tests.dll -nologo -noshadow -notrait ""category=IntegrationTest""" -filter:"+[Managed.Adb]*  -[Managed.Adb]Managed.Adb.Properties.*" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -output:.\managed.adb.coverage.xml
+pip install codecov
+codecov -f "managed.adb.coverage.xml"

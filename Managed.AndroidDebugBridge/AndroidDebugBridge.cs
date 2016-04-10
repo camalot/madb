@@ -106,7 +106,6 @@ namespace Managed.Adb {
 		public const int ADB_PORT = 5037;
 
 
-		#region statics
 		/// <summary>
 		/// 
 		/// </summary>
@@ -311,10 +310,6 @@ namespace Managed.Adb {
 			return Instance;
 		}
 
-		#endregion
-
-		#region constructors
-
 		/// <summary>
 		/// Creates a new bridge.
 		/// </summary>
@@ -341,10 +336,6 @@ namespace Managed.Adb {
 		/// </summary>
 		private AndroidDebugBridge ( ) {
 		}
-
-		#endregion
-
-		#region Event "Raisers"
 		/// <summary>
 		/// Raises the <see cref="E:BridgeChanged"/> event.
 		/// </summary>
@@ -394,9 +385,7 @@ namespace Managed.Adb {
 				this.DeviceDisconnected ( this, e );
 			}
 		}
-		#endregion
 
-		#region public methods
 		/// <summary>
 		/// Starts the debug bridge.
 		/// </summary>
@@ -466,9 +455,7 @@ namespace Managed.Adb {
 				return restart;
 			}
 		}
-		#endregion
 
-		#region public properties
 
 		/// <summary>
 		/// Gets or Sets the adb location on the OS.
@@ -583,9 +570,6 @@ namespace Managed.Adb {
 		/// Gets the result of the version check
 		/// </summary>
 		private bool VersionCheck { get; set; }
-		#endregion
-
-		#region private methods
 
 		/// <summary>
 		/// Queries adb for its version number and checks it against #MIN_VERSION_NUMBER and MAX_VERSION_NUMBER
@@ -839,7 +823,6 @@ namespace Managed.Adb {
 			process.WaitForExit ( );
 			return process.ExitCode;
 		}
-		#endregion
 
 	}
 }

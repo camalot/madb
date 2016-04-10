@@ -15,7 +15,7 @@
 		<OutputPath>bin\</OutputPath>
 		
 		<DeleteFirst Condition="'$(DeleteFirst)' == ''">True</DeleteFirst>
-		<MSBuildProperties>Configuration=$(Configuration);Platform=$(Platform);OutputPath=$(OutputPath);VisualStudioVersion=12.0;DefineConstants=MVC5</MSBuildProperties>
+		<MSBuildProperties>Configuration=$(Configuration);Platform=$(Platform);OutputPath=$(OutputPath);VisualStudioVersion=14.0;DefineConstants=MVC5</MSBuildProperties>
 
 	</PropertyGroup>
 
