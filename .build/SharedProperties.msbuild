@@ -84,7 +84,7 @@
 		<PublishNuGet Condition=" '$(PublishMode)' == 'NuGet' ">PublishNuGet</PublishNuGet>
 		<NugetPath>$(MSBuildProjectDirectory)\..\.nuget</NugetPath>
 		<Platform Condition=" '$(Platform)' == '' OR '$(Platform)' == 'AnyCPU' ">x86</Platform>
-		<LocalDeploy Condition=" '$(LocalDeploy)' == '' ">E:\Development\deploy\nuget</LocalDeploy>
+		<LocalDeploy Condition=" '$(LocalDeploy)' == '' AND '$(CI)' == 'False'">E:\Development\deploy\nuget</LocalDeploy>
 		<ProjectFriendlyName>madbee</ProjectFriendlyName>
 		<NugetPackageId>$(CI_PROJECT_FRIENDLY_NAME).$(Platform)</NugetPackageId>
 		<NugetPackageId Condition=" '$(Platform)' == 'x86' ">$(CI_PROJECT_FRIENDLY_NAME)</NugetPackageId>
@@ -243,8 +243,8 @@
 		<MakeDir Directories="$(ReleasesPath)" Condition="!Exists('$(ReleasesPath)')" />
 		<Copy SourceFiles="$(OutputPath)\$(NugetPackage)" DestinationFiles="$(ReleasesPath)\$(NugetPackage)" />
 
-		<MakeDir Directories="$(LocalDeploy)" Condition=" '$(LocalDeploy)' != '' AND !Exists('$(LocalDeploy)')" ContinueOnError="true" />
-		<Copy SourceFiles="$(ReleasesPath)\$(NugetPackage)" DestinationFolder="$(LocalDeploy)" Condition=" '$(LocalDeploy)' != '' AND Exists('$(LocalDeploy)') " />
+		<MakeDir Directories="$(LocalDeploy)" Condition=" '$(LocalDeploy)' != '' AND !Exists('$(LocalDeploy)') AND '$(CI)' == 'False' " ContinueOnError="true" />
+		<Copy SourceFiles="$(ReleasesPath)\$(NugetPackage)" DestinationFolder="$(LocalDeploy)" Condition=" '$(LocalDeploy)' != '' AND Exists('$(LocalDeploy)') AND '$(CI)' == 'False' " />
 
 		<Delete Files="$(OutputPath)\$(NugetPackage)" />
 	</Target>
