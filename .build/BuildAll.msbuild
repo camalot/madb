@@ -15,7 +15,7 @@
 
 
 		<MSBuild Projects="$(MSBuildProjectDirectory)\..\Managed.Adb.Tests\*.csproj"
-						 Properties="">
+						 Properties="PublishMode=Nuget;">
 			<Output ItemName="OutputFiles" TaskParameter="TargetOutputs"/>
 		</MSBuild>
 	</Target>
