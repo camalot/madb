@@ -58,16 +58,6 @@ namespace Managed.Adb.IO {
 						'\x001c', '\x001d', '\x001e', '\x001f'
 				 };
 
-		/// <summary>
-		/// Determines whether this instance [can path circumvent security native] the specified part of path.
-		/// </summary>
-		/// <param name="partOfPath">The part of path.</param>
-		/// <returns>
-		///   <c>true</c> if this instance [can path circumvent security native] the specified part of path; otherwise, <c>false</c>.
-		/// </returns>
-		[MethodImpl ( MethodImplOptions.InternalCall )]
-		private static extern bool CanPathCircumventSecurityNative ( string partOfPath );
-
 		/// <summary>Changes the extension of a path string.</summary>
 		/// <returns>A string containing the modified path information.On Windows-based desktop platforms, if path is null or an empty string (""), the path information is returned unmodified. If extension is null, the returned string contains the specified path with its extension removed. If path has no extension, and extension is not null, the returned path string contains extension appended to the end of path.</returns>
 		/// <param name="extension">The new extension (with a leading period). Specify null to remove an existing extension from path. </param>
