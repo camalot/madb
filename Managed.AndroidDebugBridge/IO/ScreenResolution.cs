@@ -113,6 +113,12 @@ namespace Managed.Adb.IO {
 		}
 
 		private static ScreenResolution _instance = null;
+		/// <summary>
+		/// Gets the instance.
+		/// </summary>
+		/// <value>
+		/// The instance.
+		/// </value>
 		public static ScreenResolution Instance {
 			get {
 				if ( _instance == null ) {
@@ -122,9 +128,21 @@ namespace Managed.Adb.IO {
 			}
 		}
 
+		/// <summary>
+		/// Gets the sizes.
+		/// </summary>
+		/// <value>
+		/// The sizes.
+		/// </value>
 		public Dictionary<int, Size> Sizes { get; private set; }
 
 
+		/// <summary>
+		/// Calculates the size.
+		/// </summary>
+		/// <param name="pixels">The pixels.</param>
+		/// <returns></returns>
+		/// <exception cref="System.IndexOutOfRangeException"></exception>
 		public Size CalculateSize ( long pixels ) {
 			// this doesnt work very well, unless the number of pixels is exact!
 			List<int> ordered = new List<int> ( Sizes.Keys );
@@ -143,6 +161,12 @@ namespace Managed.Adb.IO {
 
 		}
 
+		/// <summary>
+		/// Pixelses from size.
+		/// </summary>
+		/// <param name="size">The size.</param>
+		/// <returns></returns>
+		/// <exception cref="System.IndexOutOfRangeException"></exception>
 		public int PixelsFromSize ( Size size ) {
 
 			foreach ( var item in Sizes.Keys ) {

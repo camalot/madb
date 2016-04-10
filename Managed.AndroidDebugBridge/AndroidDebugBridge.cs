@@ -110,10 +110,10 @@ namespace Managed.Adb {
 		/// 
 		/// </summary>
 		private static AndroidDebugBridge _instance;
-		/// <summary>
-		/// 
-		/// </summary>
-		private static bool _clientSupport;
+		// <summary>
+		// 
+		// </summary>
+		//private static bool _clientSupport;
 
 		/// <summary>
 		/// Gets or sets the socket address.

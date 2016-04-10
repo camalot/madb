@@ -67,6 +67,11 @@ namespace Managed.Adb {
 		/// <value>The levels.</value>
 		public static Dictionary<String, LogLevelInfo> Levels { get; private set; }
 
+		/// <summary>
+		/// Gets the by string.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <returns></returns>
 		public static LogLevelInfo GetByString ( String value ) {
 
 			foreach ( LogLevelInfo item in Values ) {

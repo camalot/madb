@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 
 namespace Managed.Adb {
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <ignore>true</ignore>
 	public static class ErrorCodeHelper {
 		/** Result code for transfer success. */
     public const int RESULT_OK = 0;
@@ -37,6 +41,11 @@ namespace Managed.Adb {
     public const int RESULT_BUFFER_OVERRUN = 14;
 
 
+		/// <summary>
+		/// Errors the code to string.
+		/// </summary>
+		/// <param name="code">The code.</param>
+		/// <returns></returns>
 		public static String ErrorCodeToString ( int code ) {
 			switch ( code ) {
 				case RESULT_OK:

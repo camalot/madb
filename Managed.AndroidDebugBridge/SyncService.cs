@@ -9,6 +9,10 @@ using Managed.Adb.IO;
 using Camalot.Common.Extensions;
 
 namespace Managed.Adb {
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <seealso cref="System.IDisposable" />
 	public class SyncService : IDisposable {
 		private const String OKAY = "OKAY";
 		private const String FAIL = "FAIL";
@@ -20,6 +24,9 @@ namespace Managed.Adb {
 		private const String LIST = "LIST";
 		private const String DENT = "DENT";
 		private const string TAG = "sync";
+		/// <summary>
+		/// 
+		/// </summary>
 		[Flags]
 		public enum FileMode {
 			/// <summary>
@@ -83,7 +90,9 @@ namespace Managed.Adb {
 		private const int SYNC_DATA_MAX = 64 * 1024;
 		private const int REMOTE_PATH_MAX_LENGTH = 1024;
 
-		#region static members
+		/// <summary>
+		/// Initializes the <see cref="SyncService"/> class.
+		/// </summary>
 		static SyncService ( ) {
 			NullProgressMonitor = new NullSyncProgressMonitor ( );
 		}
@@ -95,6 +104,12 @@ namespace Managed.Adb {
 		/// The null progress monitor.
 		/// </value>
 		public static NullSyncProgressMonitor NullProgressMonitor { get; private set; }
+		/// <summary>
+		/// Gets or sets the data buffer.
+		/// </summary>
+		/// <value>
+		/// The data buffer.
+		/// </value>
 		private static byte[] DataBuffer { get; set; }
 
 		/// <summary>
@@ -206,10 +221,24 @@ namespace Managed.Adb {
 			return array;
 		}
 
+		/// <summary>
+		/// Creates the send file request.
+		/// </summary>
+		/// <param name="command">The command.</param>
+		/// <param name="path">The path.</param>
+		/// <param name="mode">The mode.</param>
+		/// <returns></returns>
 		private static byte[] CreateSendFileRequest ( String command, String path, FileMode mode ) {
 			return CreateSendFileRequest ( Encoding.Default.GetBytes ( command ), Encoding.Default.GetBytes ( path ), mode );
 		}
 
+		/// <summary>
+		/// Creates the send file request.
+		/// </summary>
+		/// <param name="command">The command.</param>
+		/// <param name="path">The path.</param>
+		/// <param name="mode">The mode.</param>
+		/// <returns></returns>
 		private static byte[] CreateSendFileRequest ( byte[] command, byte[] path, FileMode mode ) {
 			String modeString = String.Format ( ",{0}", ( (int)mode & 0777 ) );
 			byte[] modeContent = null;
@@ -227,7 +256,6 @@ namespace Managed.Adb {
 
 			return array;
 		}
-		#endregion
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SyncService"/> class.
@@ -263,6 +291,12 @@ namespace Managed.Adb {
 		/// The device.
 		/// </value>
 		public Device Device { get; private set; }
+		/// <summary>
+		/// Gets or sets the channel.
+		/// </summary>
+		/// <value>
+		/// The channel.
+		/// </value>
 		private Socket Channel { get; set; }
 		/// <summary>
 		/// Gets a value indicating whether this instance is open.
@@ -644,6 +678,14 @@ namespace Managed.Adb {
 			return new SyncResult ( ErrorCodeHelper.RESULT_OK );
 		}
 
+		/// <summary>
+		/// Does the push.
+		/// </summary>
+		/// <param name="files">The files.</param>
+		/// <param name="remotePath">The remote path.</param>
+		/// <param name="monitor">The monitor.</param>
+		/// <returns></returns>
+		/// <exception cref="System.ArgumentNullException">monitor;Monitor cannot be null</exception>
 		private SyncResult DoPush ( IEnumerable<FileSystemInfo> files, string remotePath, ISyncProgressMonitor monitor ) {
 			if ( monitor == null ) {
 				throw new ArgumentNullException ( "monitor", "Monitor cannot be null" );
@@ -802,15 +844,15 @@ namespace Managed.Adb {
 		}
 
 		/// <summary>
-		/// 
+		/// Does the pull.
 		/// </summary>
-		/// <param name="entries"></param>
-		/// <param name="localPath"></param>
-		/// <param name="fls"></param>
-		/// <param name="monitor"></param>
+		/// <param name="entries">The entries.</param>
+		/// <param name="localPath">The local path.</param>
+		/// <param name="fileListingService">The file listing service.</param>
+		/// <param name="monitor">The monitor.</param>
 		/// <returns></returns>
-		/// <exception cref="System.IO.IOException">Throws if unable to create a file or folder</exception>
 		/// <exception cref="System.ArgumentNullException">Throws if the ISyncProgressMonitor is null</exception>
+		/// <exception cref="System.IO.IOException">Throws if unable to create a file or folder</exception>
 		private SyncResult DoPull ( IEnumerable<FileEntry> entries, string localPath, FileListingService fileListingService, ISyncProgressMonitor monitor ) {
 			if ( monitor == null ) {
 				throw new ArgumentNullException ( "monitor", "Monitor cannot be null" );
@@ -896,9 +938,13 @@ namespace Managed.Adb {
 		/// <summary>
 		/// compute the recursive file size of all the files in the list. Folders have a weight of 1.
 		/// </summary>
-		/// <param name="files">The local files / folders</param>
-		/// <returns>The total number of bytes</returns>
-		/// <remarks>This does not check for circular links.</remarks>
+		/// <param name="fsis">The fsis.</param>
+		/// <returns>
+		/// The total number of bytes
+		/// </returns>
+		/// <remarks>
+		/// This does not check for circular links.
+		/// </remarks>
 		private long GetTotalLocalFileSize ( IEnumerable<FileSystemInfo> fsis ) {
 			long count = 0;
 

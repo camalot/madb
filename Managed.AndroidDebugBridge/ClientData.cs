@@ -13,6 +13,9 @@ namespace Managed.Adb {
 		/// </summary>
 		private const String PRE_INITIALIZED = "<pre-initialized>";
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public enum DebuggerStatus {
 			/// <summary>
 			/// Debugger connection status: not waiting on one, not connected to one, but accepting

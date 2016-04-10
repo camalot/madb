@@ -7,10 +7,26 @@ using System.Net.Sockets;
 using System.Net;
 
 namespace Managed.Adb {
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <seealso cref="Managed.Adb.IPacketConsumer" />
 	public class Debugger : IPacketConsumer {
+		/// <summary>
+		/// 
+		/// </summary>
 		public enum ConnectionStates {
+			/// <summary>
+			/// not connected
+			/// </summary>
 			NotConnected = 1,
+			/// <summary>
+			/// await shake
+			/// </summary>
 			AwaitShake = 2,
+			/// <summary>
+			/// ready
+			/// </summary>
 			Ready = 3
 		}
 		private const int INITIAL_BUF_SIZE = 1 * 1024;
@@ -18,6 +34,11 @@ namespace Managed.Adb {
 
 		private const int PRE_DATA_BUF_SIZE = 256;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Debugger"/> class.
+		/// </summary>
+		/// <param name="client">The client.</param>
+		/// <param name="listenPort">The listen port.</param>
 		public Debugger ( IClient client, int listenPort ) {
 			this.Client = client;
 			this.ListenPort = listenPort;
@@ -33,20 +54,72 @@ namespace Managed.Adb {
 		}
 
 
+		/// <summary>
+		/// Gets or sets the read buffer.
+		/// </summary>
+		/// <value>
+		/// The read buffer.
+		/// </value>
 		public BinaryReader ReadBuffer { get; set; }
+		/// <summary>
+		/// Gets or sets the pre data buffer.
+		/// </summary>
+		/// <value>
+		/// The pre data buffer.
+		/// </value>
 		public BinaryWriter PreDataBuffer { get; set; }
+		/// <summary>
+		/// Gets or sets the listen channel.
+		/// </summary>
+		/// <value>
+		/// The listen channel.
+		/// </value>
 		public Socket ListenChannel { get; set; }
+		/// <summary>
+		/// Gets or sets the channel.
+		/// </summary>
+		/// <value>
+		/// The channel.
+		/// </value>
 		public Socket Channel { get; set; }
+		/// <summary>
+		/// Gets or sets the client.
+		/// </summary>
+		/// <value>
+		/// The client.
+		/// </value>
 		public IClient Client { get; set; }
+		/// <summary>
+		/// Gets or sets the listen port.
+		/// </summary>
+		/// <value>
+		/// The listen port.
+		/// </value>
 		public int ListenPort { get; set; }
+		/// <summary>
+		/// Gets or sets the state of the connection.
+		/// </summary>
+		/// <value>
+		/// The state of the connection.
+		/// </value>
 		public ConnectionStates ConnectionState { get; set; }
 
+		/// <summary>
+		/// Gets a value indicating whether this instance is debugger attached.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance is debugger attached; otherwise, <c>false</c>.
+		/// </value>
 		public bool IsDebuggerAttached { get; private set; }
 
 
+		/// <summary>
+		/// Reads this instance.
+		/// </summary>
+		/// <exception cref="System.NotImplementedException"></exception>
 		public void Read ( ) {
 			throw new NotImplementedException ( );
-			int count;
+			//int count;
 
 			/*if ( mReadBuffer.position ( ) == mReadBuffer.capacity ( ) ) {
 				if ( mReadBuffer.capacity ( ) * 2 > MAX_BUF_SIZE ) {
@@ -68,6 +141,11 @@ namespace Managed.Adb {
 			if ( count < 0 ) throw new IOException ( "read failed" );*/
 		}
 
+		/// <summary>
+		/// Gets the JDWP packet.
+		/// </summary>
+		/// <returns></returns>
+		/// <exception cref="System.NotImplementedException"></exception>
 		public /*JdwpPacket*/ Object GetJdwpPacket ( ) {
 			throw new NotImplementedException ( );
 
@@ -112,10 +190,19 @@ namespace Managed.Adb {
 		}
 
 		// TODO: JdwpPacket
+		/// <summary>
+		/// Forwards the packet to client.
+		/// </summary>
+		/// <param name="packet">The packet.</param>
 		public void ForwardPacketToClient ( /*JdwpPacket*/ Object packet ) {
 			Client.SendAndConsume ( packet );
 		}
 
+		/// <summary>
+		/// Sends the handshake.
+		/// </summary>
+		/// <returns></returns>
+		/// <exception cref="System.NotImplementedException"></exception>
 		public bool SendHandshake ( ) {
 			throw new NotImplementedException ( );
 			/*ByteBuffer tempBuffer = ByteBuffer.allocate ( JdwpPacket.HANDSHAKE_LEN );
@@ -139,6 +226,10 @@ namespace Managed.Adb {
 		}
 
 		//TODO: JdwpPacket
+		/// <summary>
+		/// Sends the and consume.
+		/// </summary>
+		/// <param name="packet">The packet.</param>
 		public void SendAndConsume ( /*JdwpPacket*/ Object packet ) {
 			if ( Channel == null ) {
 				/*
@@ -158,10 +249,19 @@ namespace Managed.Adb {
 
 		//		public voidr RegisterListener
 
+		/// <summary>
+		/// Accepts this instance.
+		/// </summary>
+		/// <returns></returns>
 		public Socket Accept ( ) {
 			return Accept ( ListenChannel );
 		}
 
+		/// <summary>
+		/// Accepts the specified listen chan.
+		/// </summary>
+		/// <param name="listenChan">The listen chan.</param>
+		/// <returns></returns>
 		public Socket Accept ( Socket listenChan ) {
 			lock ( listenChan ) {
 				if ( listenChan != null ) {
@@ -182,6 +282,9 @@ namespace Managed.Adb {
 			}
 		}
 
+		/// <summary>
+		/// Closes the data.
+		/// </summary>
 		public void CloseData ( ) {
 			try {
 				if ( Channel != null ) {
@@ -200,6 +303,9 @@ namespace Managed.Adb {
 			}
 		}
 
+		/// <summary>
+		/// Closes this instance.
+		/// </summary>
 		public void Close ( ) {
 			try {
 				if ( ListenChannel != null ) {
@@ -212,6 +318,12 @@ namespace Managed.Adb {
 			}
 		}
 
+		/// <summary>
+		/// Returns a <see cref="System.String" /> that represents this instance.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.String" /> that represents this instance.
+		/// </returns>
 		public override string ToString ( ) {
 			// mChannel != null means we have connection, ST_READY means it's going
 			return "[Debugger " + ListenPort + "-->" + Client.ClientData/*.Pid*/

@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 
 namespace Managed.Adb {
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <ignore>true</ignore>
 	public static class DdmPreferences {
 		/** Default value for thread update flag upon client connection. */
 		public const bool DEFAULT_INITIAL_THREAD_UPDATE = false;
@@ -21,6 +25,9 @@ namespace Managed.Adb {
 		private static int _selectedDebugPort;
 		private static LogLevel.LogLevelInfo _logLevel;
 
+		/// <summary>
+		/// Initializes the <see cref="DdmPreferences"/> class.
+		/// </summary>
 		static DdmPreferences ( ) {
 			Timeout = DEFAULT_TIMEOUT;
 			LogLevel = DEFAULT_LOG_LEVEL;
@@ -30,7 +37,19 @@ namespace Managed.Adb {
 			InitialHeapUpdate = DEFAULT_INITIAL_HEAP_UPDATE;
 		}
 
+		/// <summary>
+		/// Gets or sets the timeout.
+		/// </summary>
+		/// <value>
+		/// The timeout.
+		/// </value>
 		public static int Timeout { get; set; }
+		/// <summary>
+		/// Gets or sets the log level.
+		/// </summary>
+		/// <value>
+		/// The log level.
+		/// </value>
 		public static LogLevel.LogLevelInfo LogLevel {
 			get {
 				return _logLevel;
@@ -40,7 +59,19 @@ namespace Managed.Adb {
 				Log.Level = value ;
 			}
 		}
+		/// <summary>
+		/// Gets or sets the debug port base.
+		/// </summary>
+		/// <value>
+		/// The debug port base.
+		/// </value>
 		public static int DebugPortBase { get; set; }
+		/// <summary>
+		/// Gets or sets the selected debug port.
+		/// </summary>
+		/// <value>
+		/// The selected debug port.
+		/// </value>
 		public static int SelectedDebugPort {
 			get {
 				return _selectedDebugPort;
@@ -54,7 +85,19 @@ namespace Managed.Adb {
 				}
 			}
 		}
+		/// <summary>
+		/// Gets or sets a value indicating whether [initial thread update].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [initial thread update]; otherwise, <c>false</c>.
+		/// </value>
 		public static bool InitialThreadUpdate { get; set; }
+		/// <summary>
+		/// Gets or sets a value indicating whether [initial heap update].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [initial heap update]; otherwise, <c>false</c>.
+		/// </value>
 		public static bool InitialHeapUpdate { get; set; }
 	}
 }

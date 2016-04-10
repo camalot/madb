@@ -47,8 +47,6 @@ namespace Managed.Adb {
 		public StackTrace StackTrace { get; private set; }
 
 
-		#region IComparable<AllocationInfo> Members
-
 		/// <summary>
 		/// Compares the current object with another object of the same type.
 		/// </summary>
@@ -60,6 +58,5 @@ namespace Managed.Adb {
 			return other.AllocationSize - AllocationSize;
 		}
 
-		#endregion
 	}
 }

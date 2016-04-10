@@ -4,7 +4,11 @@ using System.Linq;
 using System.Text;
 
 namespace Managed.Adb {
-		public class DeviceEventArgs : EventArgs {
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <seealso cref="System.EventArgs" />
+	public class DeviceEventArgs : EventArgs {
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DeviceEventArgs"/> class.

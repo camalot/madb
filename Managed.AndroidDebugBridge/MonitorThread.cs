@@ -71,6 +71,11 @@ namespace Managed.Adb {
 			//throw new NotImplementedException ( );
 		}
 
+		/// <summary>
+		/// Drops the client.
+		/// </summary>
+		/// <param name="client">The client.</param>
+		/// <param name="notify">if set to <c>true</c> [notify].</param>
 		public void DropClient ( IClient client, bool notify ) {
 
 		}
