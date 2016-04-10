@@ -14,7 +14,10 @@
 		</MSBuild>
 
 
-
+		<MSBuild Projects="$(MSBuildProjectDirectory)\..\Managed.Adb.Tests\*.csproj"
+						 Properties="">
+			<Output ItemName="OutputFiles" TaskParameter="TargetOutputs"/>
+		</MSBuild>
 	</Target>
 
 </Project>

@@ -20,6 +20,8 @@ build:
   verbosity: detailed
 after_build:
 - ps: .\.appveyor\appveyor.after-build.ps1
+test_script:
+- ps: ./.appveyor/appveyor.test.ps1
 artifacts:
 - path: '**\Managed.Adb.*.zip'
   name: Zips
