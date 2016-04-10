@@ -63,15 +63,15 @@ namespace Managed.Adb.Tests.ForLinuxPath {
 		public void When2ArgsAndPath1ContainsInvalidCharacter_ShouldThrowArgumentException ( ) {
 			var fixture = new Fixture ( );
 			int errorCount = 0;
-			for ( var x = 0; x < LinuxPathConsts.InvalidChars.Length; ++x ) {
+			for ( var x = 0; x < LinuxPathConsts.InvalidPathChars.Length; ++x ) {
 				try {
-					string result = LinuxPath.Combine ( "/{0}-{1}".With ( LinuxPathConsts.InvalidChars[x], fixture.Create ( "path1" ) ), fixture.Create ( "path2" ) );
+					string result = LinuxPath.Combine ( "/{0}-{1}".With ( LinuxPathConsts.InvalidPathChars[x], fixture.Create ( "path1" ) ), fixture.Create ( "path2" ) );
 				} catch ( ArgumentException ) {
 					errorCount++;
 				}
 			}
 
-			Assert.Equal ( LinuxPathConsts.InvalidChars.Length, errorCount );
+			Assert.Equal ( LinuxPathConsts.InvalidPathChars.Length, errorCount );
 
 		}
 
@@ -79,15 +79,15 @@ namespace Managed.Adb.Tests.ForLinuxPath {
 		public void When2ArgsAndPath2ContainsInvalidCharacter_ShouldThrowArgumentException ( ) {
 			var fixture = new Fixture ( );
 			int errorCount = 0;
-			for ( var x = 0; x < LinuxPathConsts.InvalidChars.Length; ++x ) {
+			for ( var x = 0; x < LinuxPathConsts.InvalidPathChars.Length; ++x ) {
 				try {
-					string result = LinuxPath.Combine ( "/{0}".With ( fixture.Create ( "path1" ) ), "{0}-{1}".With ( fixture.Create ( "path2" ), LinuxPathConsts.InvalidChars[x] ) );
+					string result = LinuxPath.Combine ( "/{0}".With ( fixture.Create ( "path1" ) ), "{0}-{1}".With ( fixture.Create ( "path2" ), LinuxPathConsts.InvalidPathChars[x] ) );
 				} catch ( ArgumentException ) {
 					errorCount++;
 				}
 			}
 
-			Assert.Equal ( LinuxPathConsts.InvalidChars.Length, errorCount );
+			Assert.Equal ( LinuxPathConsts.InvalidPathChars.Length, errorCount );
 
 		}
 
@@ -146,15 +146,15 @@ namespace Managed.Adb.Tests.ForLinuxPath {
 		public void When3ArgsAndPath1ContainsInvalidCharacter_ShouldThrowArgumentException ( ) {
 			var fixture = new Fixture ( );
 			int errorCount = 0;
-			for ( var x = 0; x < LinuxPathConsts.InvalidChars.Length; ++x ) {
+			for ( var x = 0; x < LinuxPathConsts.InvalidPathChars.Length; ++x ) {
 				try {
-					string result = LinuxPath.Combine ( "/{0}-{1}".With ( LinuxPathConsts.InvalidChars[x], fixture.Create ( "path1" ) ), fixture.Create ( "path2" ) );
+					string result = LinuxPath.Combine ( "/{0}-{1}".With ( LinuxPathConsts.InvalidPathChars[x], fixture.Create ( "path1" ) ), fixture.Create ( "path2" ) );
 				} catch ( ArgumentException ) {
 					errorCount++;
 				}
 			}
 
-			Assert.Equal ( LinuxPathConsts.InvalidChars.Length, errorCount );
+			Assert.Equal ( LinuxPathConsts.InvalidPathChars.Length, errorCount );
 
 		}
 
@@ -162,15 +162,15 @@ namespace Managed.Adb.Tests.ForLinuxPath {
 		public void When3ArgsAndPath2ContainsInvalidCharacter_ShouldThrowArgumentException ( ) {
 			var fixture = new Fixture ( );
 			int errorCount = 0;
-			for ( var x = 0; x < LinuxPathConsts.InvalidChars.Length; ++x ) {
+			for ( var x = 0; x < LinuxPathConsts.InvalidPathChars.Length; ++x ) {
 				try {
-					string result = LinuxPath.Combine ( "/{0}".With ( fixture.Create ( "path1" ) ), "{0}-{1}".With ( fixture.Create ( "path2" ), LinuxPathConsts.InvalidChars[x] ) );
+					string result = LinuxPath.Combine ( "/{0}".With ( fixture.Create ( "path1" ) ), "{0}-{1}".With ( fixture.Create ( "path2" ), LinuxPathConsts.InvalidPathChars[x] ) );
 				} catch ( ArgumentException ) {
 					errorCount++;
 				}
 			}
 
-			Assert.Equal ( LinuxPathConsts.InvalidChars.Length, errorCount );
+			Assert.Equal ( LinuxPathConsts.InvalidPathChars.Length, errorCount );
 
 		}
 
@@ -178,15 +178,15 @@ namespace Managed.Adb.Tests.ForLinuxPath {
 		public void When3ArgsAndPath3ContainsInvalidCharacter_ShouldThrowArgumentException ( ) {
 			var fixture = new Fixture ( );
 			int errorCount = 0;
-			for ( var x = 0; x < LinuxPathConsts.InvalidChars.Length; ++x ) {
+			for ( var x = 0; x < LinuxPathConsts.InvalidPathChars.Length; ++x ) {
 				try {
-					string result = LinuxPath.Combine ( "/{0}".With ( fixture.Create ( "path1" ) ), fixture.Create ( "path2" ), "{0}-{1}".With ( fixture.Create ( "path3" ), LinuxPathConsts.InvalidChars[x] ) );
+					string result = LinuxPath.Combine ( "/{0}".With ( fixture.Create ( "path1" ) ), fixture.Create ( "path2" ), "{0}-{1}".With ( fixture.Create ( "path3" ), LinuxPathConsts.InvalidPathChars[x] ) );
 				} catch ( ArgumentException ) {
 					errorCount++;
 				}
 			}
 
-			Assert.Equal ( LinuxPathConsts.InvalidChars.Length, errorCount );
+			Assert.Equal ( LinuxPathConsts.InvalidPathChars.Length, errorCount );
 
 		}
 
@@ -235,15 +235,15 @@ namespace Managed.Adb.Tests.ForLinuxPath {
 		public void When4ArgsAndPath1ContainsInvalidCharacter_ShouldThrowArgumentException ( ) {
 			var fixture = new Fixture ( );
 			int errorCount = 0;
-			for ( var x = 0; x < LinuxPathConsts.InvalidChars.Length; ++x ) {
+			for ( var x = 0; x < LinuxPathConsts.InvalidPathChars.Length; ++x ) {
 				try {
-					string result = LinuxPath.Combine ( "/{0}-{1}".With ( LinuxPathConsts.InvalidChars[x], fixture.Create ( "path1" ) ), fixture.Create ( "path2" ) );
+					string result = LinuxPath.Combine ( "/{0}-{1}".With ( LinuxPathConsts.InvalidPathChars[x], fixture.Create ( "path1" ) ), fixture.Create ( "path2" ) );
 				} catch ( ArgumentException ) {
 					errorCount++;
 				}
 			}
 
-			Assert.Equal ( LinuxPathConsts.InvalidChars.Length, errorCount );
+			Assert.Equal ( LinuxPathConsts.InvalidPathChars.Length, errorCount );
 
 		}
 
@@ -251,15 +251,15 @@ namespace Managed.Adb.Tests.ForLinuxPath {
 		public void When4ArgsAndPath2ContainsInvalidCharacter_ShouldThrowArgumentException ( ) {
 			var fixture = new Fixture ( );
 			int errorCount = 0;
-			for ( var x = 0; x < LinuxPathConsts.InvalidChars.Length; ++x ) {
+			for ( var x = 0; x < LinuxPathConsts.InvalidPathChars.Length; ++x ) {
 				try {
-					string result = LinuxPath.Combine ( "/{0}".With ( fixture.Create ( "path1" ) ), "{0}-{1}".With ( fixture.Create ( "path2" ), LinuxPathConsts.InvalidChars[x] ) );
+					string result = LinuxPath.Combine ( "/{0}".With ( fixture.Create ( "path1" ) ), "{0}-{1}".With ( fixture.Create ( "path2" ), LinuxPathConsts.InvalidPathChars[x] ) );
 				} catch ( ArgumentException ) {
 					errorCount++;
 				}
 			}
 
-			Assert.Equal ( LinuxPathConsts.InvalidChars.Length, errorCount );
+			Assert.Equal ( LinuxPathConsts.InvalidPathChars.Length, errorCount );
 
 		}
 
@@ -267,15 +267,15 @@ namespace Managed.Adb.Tests.ForLinuxPath {
 		public void When4ArgsAndPath3ContainsInvalidCharacter_ShouldThrowArgumentException ( ) {
 			var fixture = new Fixture ( );
 			int errorCount = 0;
-			for ( var x = 0; x < LinuxPathConsts.InvalidChars.Length; ++x ) {
+			for ( var x = 0; x < LinuxPathConsts.InvalidPathChars.Length; ++x ) {
 				try {
-					string result = LinuxPath.Combine ( "/{0}".With ( fixture.Create ( "path1" ) ), fixture.Create ( "path2" ), "{0}-{1}".With ( fixture.Create ( "path3" ), LinuxPathConsts.InvalidChars[x] ) );
+					string result = LinuxPath.Combine ( "/{0}".With ( fixture.Create ( "path1" ) ), fixture.Create ( "path2" ), "{0}-{1}".With ( fixture.Create ( "path3" ), LinuxPathConsts.InvalidPathChars[x] ) );
 				} catch ( ArgumentException ) {
 					errorCount++;
 				}
 			}
 
-			Assert.Equal ( LinuxPathConsts.InvalidChars.Length, errorCount );
+			Assert.Equal ( LinuxPathConsts.InvalidPathChars.Length, errorCount );
 
 		}
 
@@ -283,15 +283,15 @@ namespace Managed.Adb.Tests.ForLinuxPath {
 		public void When4ArgsAndPath4ContainsInvalidCharacter_ShouldThrowArgumentException ( ) {
 			var fixture = new Fixture ( );
 			int errorCount = 0;
-			for ( var x = 0; x < LinuxPathConsts.InvalidChars.Length; ++x ) {
+			for ( var x = 0; x < LinuxPathConsts.InvalidPathChars.Length; ++x ) {
 				try {
-					string result = LinuxPath.Combine ( "/{0}".With ( fixture.Create ( "path1" ) ), fixture.Create ( "path2" ), fixture.Create ( "path3" ), "{0}-{1}".With ( fixture.Create ( "path4" ), LinuxPathConsts.InvalidChars[x] ) );
+					string result = LinuxPath.Combine ( "/{0}".With ( fixture.Create ( "path1" ) ), fixture.Create ( "path2" ), fixture.Create ( "path3" ), "{0}-{1}".With ( fixture.Create ( "path4" ), LinuxPathConsts.InvalidPathChars[x] ) );
 				} catch ( ArgumentException ) {
 					errorCount++;
 				}
 			}
 
-			Assert.Equal ( LinuxPathConsts.InvalidChars.Length, errorCount );
+			Assert.Equal ( LinuxPathConsts.InvalidPathChars.Length, errorCount );
 
 		}
 

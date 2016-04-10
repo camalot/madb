@@ -20,15 +20,15 @@ namespace Managed.Adb.Tests.ForLinuxPath {
 		[Fact]
 		public void WhenPathContainsInvalidCharacters_ShouldThrowException ( ) {
 			int errorCount = 0;
-			for ( var x = 0; x < LinuxPathConsts.InvalidChars.Length; ++x ) {
+			for ( var x = 0; x < LinuxPathConsts.InvalidPathChars.Length; ++x ) {
 				try {
-					string result = LinuxPath.GetDirectoryName ( "/my-invalid-path/f-{0}".With ( LinuxPathConsts.InvalidChars[x] ) );
+					string result = LinuxPath.GetDirectoryName ( "/my-invalid-path/f-{0}".With ( LinuxPathConsts.InvalidPathChars[x] ) );
 				} catch ( ArgumentException ) {
 					errorCount++;
 				}
 			}
 
-			Assert.Equal ( LinuxPathConsts.InvalidChars.Length, errorCount );
+			Assert.Equal ( LinuxPathConsts.InvalidPathChars.Length, errorCount );
 		}
 
 		[Fact]

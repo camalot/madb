@@ -3,9 +3,9 @@
   <Import Project="..\packages\xunit.core.2.0.0\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\xunit.core.props" Condition="Exists('..\packages\xunit.core.2.0.0\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\xunit.core.props')" />
   <Import Project="..\packages\xunit.runner.visualstudio.2.0.1\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.2.0.1\build\net20\xunit.runner.visualstudio.props')" />
   <PropertyGroup>
-		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-		<Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-		<ProjectGuid>{2E3DF5C2-8A38-4A03-86D7-8D463C917E47}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{2E3DF5C2-8A38-4A03-86D7-8D463C917E47}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Managed.Adb.Tests</RootNamespace>
@@ -20,35 +20,35 @@
     <TestProjectType>UnitTest</TestProjectType>
     <NuGetPackageImportStamp>b0edf53b</NuGetPackageImportStamp>
     <TargetFrameworkProfile />
-		<DebugSymbols>true</DebugSymbols>
-		<DefineConstants>TRACE;DEBUG;PLATFORMX86</DefineConstants>
-		<DebugType>full</DebugType>
-		<CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-		<CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-		<ErrorReport>prompt</ErrorReport>
-		<Optimize>false</Optimize>
-		<CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
-	</PropertyGroup>
+    <DebugSymbols>true</DebugSymbols>
+    <DefineConstants>TRACE;DEBUG;PLATFORMX86</DefineConstants>
+    <DebugType>full</DebugType>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <Optimize>false</Optimize>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-		<OutputPath>bin\x64\Debug\</OutputPath>
-		<DefineConstants>TRACE;DEBUG;PLATFORMX64</DefineConstants>
-		<PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;PLATFORMX64</DefineConstants>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-		<OutputPath>bin\x64\Release\</OutputPath>
-		<DefineConstants>TRACE;PLATFORMX64</DefineConstants>
-		<PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;PLATFORMX64</DefineConstants>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-		<OutputPath>bin\x86\Debug\</OutputPath>
-		<DefineConstants>TRACE;DEBUG;PLATFORMX86</DefineConstants>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;PLATFORMX86</DefineConstants>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-		<OutputPath>bin\x86\Release\</OutputPath>
-		<DefineConstants>TRACE;PLATFORMX86</DefineConstants>
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;PLATFORMX86</DefineConstants>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
@@ -105,7 +105,12 @@
     <Compile Include="ForLinuxPath\ChangeExtensionTests.cs" />
     <Compile Include="ForLinuxPath\CombineTests.cs" />
     <Compile Include="ForLinuxPath\GetDirectoryNameTests.cs" />
+    <Compile Include="ForLinuxPath\GetFileName.cs" />
+    <Compile Include="ForLinuxPath\GetInvalidFileNameChars.cs" />
+    <Compile Include="ForLinuxPath\GetInvalidPathChars.cs" />
+    <Compile Include="ForLinuxPath\GetPathRoot.cs" />
     <Compile Include="ForLinuxPath\GetPathWithoutFile.cs" />
+    <Compile Include="ForLinuxPath\HasExtension.cs" />
     <Compile Include="ForLinuxPath\LinuxPathConsts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
