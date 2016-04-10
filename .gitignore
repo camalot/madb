@@ -5,6 +5,7 @@
 **/.vs/*
 # Generated Version File:
 */VersionAssemblyInfo.cs
+**/*.coverage.xml
 
 #nuget
 [pP]ackages/*
