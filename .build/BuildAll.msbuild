@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0" DefaultTargets="BuildAll">
 
-
 	<Target Name="BuildAll">
 		<MSBuild Projects="$(MSBuildProjectDirectory)\BuildMadBee.msbuild" ContinueOnError="false"
 				 Properties="Platform=x86;PublishMode=Nuget;SignAssembly=true">
@@ -19,6 +18,11 @@
 		<MSBuild Projects="@(TestProjects)" Properties="PublishMode=Nuget;Platform=x86;Configuration=Debug;">
 			<Output ItemName="OutputFiles" TaskParameter="TargetOutputs"/>
 		</MSBuild>
+
+		
+		<Exec Command="$(MSBuildProjectDirectory)\..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -log:All -register:user -target:$(MSBuildProjectDirectory)\..\packages\xunit.runner.console.2.1.0\tools\xunit.console.x86.exe -filter:&quot;+[Managed.Adb]* -[Managed.Adb]Managed.Adb.Properties.*&quot; -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -output:&quot;$(MSBuildProjectDirectory)\..\managed.adb.coverage.xml&quot; -targetargs:&quot;\&quot;$(MSBuildProjectDirectory)\..\Managed.Adb.Tests\bin\x86\Debug\Managed.Adb.Tests.dll\&quot; -verbose -noshadow&quot;"
+					WorkingDirectory="$(MSBuildProjectDirectory)\..\"
+					Condition=" '$(CI)' == 'False' OR '$(CI)' == '' " />
 	</Target>
 
 </Project>

@@ -32,19 +32,23 @@
 		<OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
 	</PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+		<OutputPath>bin\x64\Debug\</OutputPath>
 		<DefineConstants>TRACE;DEBUG;PLATFORMX64</DefineConstants>
 		<PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-		<DefineConstants>TRACE;DEBUG;PLATFORMX64</DefineConstants>
+		<OutputPath>bin\x64\Release\</OutputPath>
+		<DefineConstants>TRACE;PLATFORMX64</DefineConstants>
 		<PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+		<OutputPath>bin\x86\Debug\</OutputPath>
 		<DefineConstants>TRACE;DEBUG;PLATFORMX86</DefineConstants>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-		<DefineConstants>TRACE;DEBUG;PLATFORMX86</DefineConstants>
+		<OutputPath>bin\x86\Release\</OutputPath>
+		<DefineConstants>TRACE;PLATFORMX86</DefineConstants>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
