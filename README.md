@@ -118,3 +118,13 @@ PM> Install-Package Managed.Adb.x64
 * PullFile 
 * Push 
 * PushFile
+
+
+
+### Copyright
+Copyright (c) 2010-2016 Ryan Conrad
+
+Portions are:
+  
+Copyright (c) 2004-2008 Jon Skeet and Marc Gravell  
+Copyright (c) 2007 The Android Open Source Project  
