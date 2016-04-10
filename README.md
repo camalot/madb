@@ -1,6 +1,7 @@
 [![MadBee](http://i.imgur.com/UxO8Lrj.png)](http://madb.bit13.com/)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/dn8mjauo4i5ghwlg?svg=true)](https://ci.appveyor.com/project/camalot/madb)
+[![Code Coverage by CodeCov](https://codecov.io/github/camalot/madb/coverage.svg)](https://codecov.io/github/camalot/madb)
 
 This is a Managed port of the Android Debug Bridge to allow communication from .NET applications to Android devices. 
 This wraps the same methods that the ddms uses to directly communicate with ADB. 
