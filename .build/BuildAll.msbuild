@@ -16,7 +16,7 @@
 		<CreateItem Include="$(MSBuildProjectDirectory)\..\Managed.Adb.Tests\*.csproj">
 			<Output ItemName="TestProjects" TaskParameter="Include"/>
 		</CreateItem>
-		<MSBuild Projects="@(TestProjects)" Properties="PublishMode=Nuget;">
+		<MSBuild Projects="@(TestProjects)" Properties="PublishMode=Nuget;Platform=x86;">
 			<Output ItemName="OutputFiles" TaskParameter="TargetOutputs"/>
 		</MSBuild>
 	</Target>
