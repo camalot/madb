@@ -99,6 +99,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="xunit.runner.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Managed.AndroidDebugBridge\Managed.Adb.csproj">
