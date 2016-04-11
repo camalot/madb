@@ -7,7 +7,7 @@ using Camalot.Common.Extensions;
 using Managed.Adb.IO;
 using Xunit;
 
-namespace Managed.Adb.Tests.ForLinuxPath {
+namespace Managed.Adb.Tests.ForIOLinuxPath {
 	public class ChangeExtensionTests {
 
 		[Fact]

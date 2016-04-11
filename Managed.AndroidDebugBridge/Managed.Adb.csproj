@@ -205,7 +205,6 @@
     <Compile Include="DeviceEventArgs.cs" />
     <Compile Include="ErrorCodeHelper.cs" />
     <Compile Include="Extensions\FileInfoHelper.cs" />
-    <Compile Include="Extensions\PathHelper.cs" />
     <Compile Include="Extensions\StringHelper.cs" />
     <Compile Include="FileEntry.cs" />
     <Compile Include="FileListingService.cs" />

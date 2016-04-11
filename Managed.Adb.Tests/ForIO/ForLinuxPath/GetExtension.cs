@@ -8,7 +8,7 @@ using Managed.Adb.IO;
 using Ploeh.AutoFixture;
 using Xunit;
 
-namespace Managed.Adb.Tests.ForLinuxPath {
+namespace Managed.Adb.Tests.ForIOLinuxPath {
 	public class GetExtension {
 		[Fact]
 		public void WhenPathIsNull_ShouldReturnNull () {

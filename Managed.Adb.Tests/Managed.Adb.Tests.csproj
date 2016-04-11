@@ -102,20 +102,24 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="ForLinuxPath\ChangeExtensionTests.cs" />
-    <Compile Include="ForLinuxPath\CombineTests.cs" />
-    <Compile Include="ForLinuxPath\Escape.cs" />
-    <Compile Include="ForLinuxPath\GetDirectoryNameTests.cs" />
-    <Compile Include="ForLinuxPath\GetExtension.cs" />
-    <Compile Include="ForLinuxPath\GetFileName.cs" />
-    <Compile Include="ForLinuxPath\GetFileNameWithoutExtension.cs" />
-    <Compile Include="ForLinuxPath\GetInvalidFileNameChars.cs" />
-    <Compile Include="ForLinuxPath\GetInvalidPathChars.cs" />
-    <Compile Include="ForLinuxPath\GetPathRoot.cs" />
-    <Compile Include="ForLinuxPath\GetPathWithoutFile.cs" />
-    <Compile Include="ForLinuxPath\HasExtension.cs" />
-    <Compile Include="ForLinuxPath\LinuxPathConsts.cs" />
-    <Compile Include="ForLinuxPath\Quote.cs" />
+    <Compile Include="ForIO\ForByteOrder\ByteOrder.cs" />
+    <Compile Include="ForIO\ForLinuxPath\ChangeExtensionTests.cs" />
+    <Compile Include="ForIO\ForLinuxPath\CombineTests.cs" />
+    <Compile Include="ForIO\ForLinuxPath\Escape.cs" />
+    <Compile Include="ForIO\ForLinuxPath\GetDirectoryNameTests.cs" />
+    <Compile Include="ForIO\ForLinuxPath\GetExtension.cs" />
+    <Compile Include="ForIO\ForLinuxPath\GetFileName.cs" />
+    <Compile Include="ForIO\ForLinuxPath\GetFileNameWithoutExtension.cs" />
+    <Compile Include="ForIO\ForLinuxPath\GetInvalidFileNameChars.cs" />
+    <Compile Include="ForIO\ForLinuxPath\GetInvalidPathChars.cs" />
+    <Compile Include="ForIO\ForLinuxPath\GetPathRoot.cs" />
+    <Compile Include="ForIO\ForLinuxPath\GetPathWithoutFile.cs" />
+    <Compile Include="ForIO\ForLinuxPath\HasExtension.cs" />
+    <Compile Include="ForIO\ForLinuxPath\LinuxPathConsts.cs" />
+    <Compile Include="ForIO\ForLinuxPath\Quote.cs" />
+    <Compile Include="ForManagedAdbExtenstions\Swap32bitFromArray.cs" />
+    <Compile Include="ForManagedAdbExtenstions\Swap32bitsToArray.cs" />
+    <Compile Include="ForManagedAdbExtenstions\SwapU16bitFromArray.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -128,6 +132,9 @@
       <Project>{65473257-e70f-410b-9269-d0c0f771ea87}</Project>
       <Name>Managed.Adb</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ForIO\ForRgb565\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Managed.Adb.IO;
 using Xunit;
 
-namespace Managed.Adb.Tests.ForLinuxPath {
+namespace Managed.Adb.Tests.ForIOLinuxPath {
 	public class GetInvalidFileNameChars {
 		[Fact]
 		public void WhenGetttingInvalidFileNameChars_ShouldEqualExpected () {

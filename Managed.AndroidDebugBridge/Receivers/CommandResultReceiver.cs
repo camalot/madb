@@ -14,8 +14,8 @@ namespace Managed.Adb {
 		/// <param name="lines">The lines.</param>
 		protected override void ProcessNewLines ( string[] lines ) {
 			var result = new StringBuilder ( );
-			foreach ( String line in lines ) {
-				if ( String.IsNullOrEmpty ( line ) || line.StartsWith ( "#" ) || line.StartsWith ( "$" ) ) {
+			foreach ( string line in lines ) {
+				if ( string.IsNullOrWhiteSpace ( line ) || line.StartsWith ( "#" ) || line.StartsWith ( "$" ) ) {
 					continue;
 				}
 
@@ -31,6 +31,6 @@ namespace Managed.Adb {
 		/// <value>
 		/// The result.
 		/// </value>
-		public String Result { get; private set; }
+		public string Result { get; private set; }
 	}
 }

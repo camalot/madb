@@ -12,10 +12,10 @@ namespace Managed.Adb.Logs {
 		/// The entr y_ heade r_ size
 		/// </summary>
 		private const int ENTRY_HEADER_SIZE = 20; // 2*2 + 4*4; see LogEntry.
-																							/// <summary>
-																							/// Initializes a new instance of the <see cref="LogReceiver"/> class.
-																							/// </summary>
-																							/// <param name="listener">The listener.</param>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LogReceiver"/> class.
+		/// </summary>
+		/// <param name="listener">The listener.</param>
 		public LogReceiver ( ILogListener listener ) {
 			EntryDataOffset = 0;
 			EntryHeaderBuffer = new byte[ENTRY_HEADER_SIZE];

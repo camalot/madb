@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Managed.Adb.Tests.ForLinuxPath {
+namespace Managed.Adb.Tests.ForIOLinuxPath {
 	internal class LinuxPathConsts {
 		internal static readonly char[] InvalidPathChars = new char[] {
 			'"', '<', '>', '|', '\0', '\x0001', '\x0002', '\x0003', '\x0004', '\x0005', '\x0006', '\a', '\b', '\t', '\n', '\v',

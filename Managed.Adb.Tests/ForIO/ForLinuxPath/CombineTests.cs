@@ -8,7 +8,7 @@ using Managed.Adb.IO;
 using Ploeh.AutoFixture;
 using Xunit;
 
-namespace Managed.Adb.Tests.ForLinuxPath {
+namespace Managed.Adb.Tests.ForIOLinuxPath {
 	public class CombineTests {
 		[Fact]
 		public void When2ArgsAndPath1IsNull_ShouldThrowArgumentNullException ( ) {
