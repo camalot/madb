@@ -14,7 +14,7 @@ namespace Managed.Adb.IO {
 	public static class Rgb565 {
 
 		/// <summary>
-		/// To the image.
+		/// Reads the file and returns the RGB565 Image
 		/// </summary>
 		/// <param name="file">The file.</param>
 		/// <returns></returns>
@@ -25,7 +25,7 @@ namespace Managed.Adb.IO {
 		}
 
 		/// <summary>
-		/// To the image.
+		/// Reads the file and returns the RGB565 Image
 		/// </summary>
 		/// <param name="stream">The stream.</param>
 		/// <returns></returns>
@@ -44,7 +44,7 @@ namespace Managed.Adb.IO {
 		}
 
 		/// <summary>
-		/// To the image.
+		/// Reads the file and returns the RGB565 Image
 		/// </summary>
 		/// <param name="buffer">The buffer.</param>
 		/// <returns></returns>
@@ -53,7 +53,7 @@ namespace Managed.Adb.IO {
 		}
 
 		/// <summary>
-		/// To the image.
+		/// Reads the file and returns the RGB565 Image
 		/// </summary>
 		/// <param name="format">The format.</param>
 		/// <param name="buffer">The buffer.</param>

@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 
 namespace Managed.Adb {
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <seealso cref="Managed.Adb.MultiLineReceiver" />
 	internal class CommandErrorReceiver : MultiLineReceiver {
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CommandErrorReceiver" /> class.

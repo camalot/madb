@@ -5,6 +5,10 @@ using System.Text;
 using System.Runtime.Serialization;
 
 namespace Managed.Adb.Exceptions {
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <seealso cref="System.Exception" />
 	public class PermissionDeniedException : Exception {
 
 		/// <summary>

@@ -84,11 +84,11 @@
 		<PublishNuGet Condition=" '$(PublishMode)' == 'NuGet' ">PublishNuGet</PublishNuGet>
 		<NugetPath>$(MSBuildProjectDirectory)\..\.nuget</NugetPath>
 		<Platform Condition=" '$(Platform)' == '' OR '$(Platform)' == 'AnyCPU' ">x86</Platform>
-		<LocalDeploy Condition=" '$(LocalDeploy)' == '' ">E:\Development\deploy\nuget</LocalDeploy>
+		<LocalDeploy Condition=" '$(LocalDeploy)' == '' AND '$(CI)' == 'False'">E:\Development\deploy\nuget</LocalDeploy>
 		<ProjectFriendlyName>madbee</ProjectFriendlyName>
 		<NugetPackageId>$(CI_PROJECT_FRIENDLY_NAME).$(Platform)</NugetPackageId>
 		<NugetPackageId Condition=" '$(Platform)' == 'x86' ">$(CI_PROJECT_FRIENDLY_NAME)</NugetPackageId>
-		<DescriptionFile>$(MSBuildProjectDirectory)\Build\publish-changelog.txt</DescriptionFile>
+		<DescriptionFile>$(MSBuildProjectDirectory)\Build\publishChangelog.txt</DescriptionFile>
 		<ReleasesPath>$(CI_ARTIFACT_PATH)\$(Configuration)\nuget\</ReleasesPath>
 
 
@@ -115,7 +115,7 @@
 		</CreateProperty>
 
 
-		<CreateProperty Value="DefineConstants=$(DefineConstants) $(PlatformConstant);OSPlatform=$(OSPlatform);ReleasePlatform=$(ReleasePlatform);SignAssemblies=$(SignAssemblies);Configuration=$(Configuration);OutputPath=$(OutputPath);CI_BUILD_VERSION=$(CI_BUILD_VERSION);CI_BUILD_CONDITION=$(CI_BUILD_CONDITION);CI_PROJECT_NAME=$(CI_PROJECT_NAME);CI_PROJECT_FRIENDLY_NAME=$(CI_PROJECT_FRIENDLY_NAME);CI_BUILD_DATE=$(CI_BUILD_DATE);CI_BUILD_TIME=$(CI_BUILD_TIME);CI_ARTIFACT_PATH=$(CI_ARTIFACT_PATH);CI_PROJECT_PATH=$(CI_PROJECT_PATH);">
+		<CreateProperty Value="DefineConstants=$(DefineConstants) $(PlatformConstant);OSPlatform=$(OSPlatform);ReleasePlatform=$(ReleasePlatform);SignAssemblies=$(SignAssemblies);Configuration=$(Configuration);OutputPath=$(OutputPath);CI_BUILD_VERSION=$(CI_BUILD_VERSION);CI_BUILD_CONDITION=$(CI_BUILD_CONDITION);CI_PROJECT_NAME=$(CI_PROJECT_NAME);CI_PROJECT_FRIENDLY_NAME=$(CI_PROJECT_FRIENDLY_NAME);CI_BUILD_DATE=$(CI_BUILD_DATE);CI_BUILD_TIME=$(CI_BUILD_TIME);CI_ARTIFACT_PATH=$(CI_ARTIFACT_PATH);CI_PROJECT_PATH=$(CI_PROJECT_PATH);CI_REPO_BRANCH=$(CI_REPO_BRANCH)">
 			<Output PropertyName="MSBuildProperties" TaskParameter="Value" />
 		</CreateProperty>
 	</Target>
@@ -243,8 +243,8 @@
 		<MakeDir Directories="$(ReleasesPath)" Condition="!Exists('$(ReleasesPath)')" />
 		<Copy SourceFiles="$(OutputPath)\$(NugetPackage)" DestinationFiles="$(ReleasesPath)\$(NugetPackage)" />
 
-		<MakeDir Directories="$(LocalDeploy)" Condition=" '$(LocalDeploy)' != '' AND !Exists('$(LocalDeploy)')" ContinueOnError="true" />
-		<Copy SourceFiles="$(ReleasesPath)\$(NugetPackage)" DestinationFolder="$(LocalDeploy)" Condition=" '$(LocalDeploy)' != '' AND Exists('$(LocalDeploy)') " />
+		<MakeDir Directories="$(LocalDeploy)" Condition=" '$(LocalDeploy)' != '' AND !Exists('$(LocalDeploy)') AND '$(CI)' == 'False' " ContinueOnError="true" />
+		<Copy SourceFiles="$(ReleasesPath)\$(NugetPackage)" DestinationFolder="$(LocalDeploy)" Condition=" '$(LocalDeploy)' != '' AND Exists('$(LocalDeploy)') AND '$(CI)' == 'False' " />
 
 		<Delete Files="$(OutputPath)\$(NugetPackage)" />
 	</Target>

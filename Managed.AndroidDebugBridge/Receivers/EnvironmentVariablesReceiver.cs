@@ -36,15 +36,15 @@ namespace Managed.Adb {
 		/// </summary>
 		/// <param name="lines">The lines.</param>
 		protected override void ProcessNewLines ( string[] lines ) {
-			foreach ( String line in lines ) {
-				if ( String.IsNullOrEmpty ( line ) || line.StartsWith ( "#" ) ) {
+			foreach ( string line in lines ) {
+				if ( string.IsNullOrWhiteSpace ( line ) || line.StartsWith ( "#" ) || line.StartsWith ( "$" ) ) {
 					continue;
 				}
 
-				Match m = Regex.Match ( line, ENV_PATTERN );
+				var m = Regex.Match ( line, ENV_PATTERN );
 				if ( m.Success ) {
-					String label = m.Groups[1].Value.Trim ( );
-					String value = m.Groups[2].Value.Trim ( );
+					var label = m.Groups[1].Value.Trim ( );
+					var value = m.Groups[2].Value.Trim ( );
 
 					if ( label.Length > 0 ) {
 						if ( Device.EnvironmentVariables.ContainsKey ( label ) ) {

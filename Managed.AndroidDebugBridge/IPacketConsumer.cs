@@ -13,12 +13,17 @@ namespace Managed.Adb {
 		/// </summary>
 		void Read ( );
 		// TODO: JdwpPacket
-		/*JdwpPacket*/ Object GetJdwpPacket ( );
+		/// <summary>
+		/// Gets the JDWP packet.
+		/// </summary>
+		/// <returns></returns>
+		/*JdwpPacket*/
+		object GetJdwpPacket ( );
 		/// <summary>
 		/// Forwards the packet to client.
 		/// </summary>
 		/// <param name="packet">The packet.</param>
-		void ForwardPacketToClient ( /*JdwpPacket*/ Object packet );
+		void ForwardPacketToClient ( /*JdwpPacket*/ object packet );
 		/// <summary>
 		/// Sends the handshake.
 		/// </summary>
@@ -27,6 +32,6 @@ namespace Managed.Adb {
 		/// Sends the and consume.
 		/// </summary>
 		/// <param name="packet">The packet.</param>
-		void SendAndConsume ( /*JdwpPacket*/ Object packet );
+		void SendAndConsume ( /*JdwpPacket*/ object packet );
 	}
 }

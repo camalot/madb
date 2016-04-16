@@ -10,7 +10,11 @@ namespace Managed.Adb.IO {
 	/// <ignore>true</ignore>
 	public class ByteOrder {
 
-		private ByteOrder ( String name ) {
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ByteOrder"/> class.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		private ByteOrder ( string name ) {
 			this.Name = name;
 		}
 
@@ -29,14 +33,14 @@ namespace Managed.Adb.IO {
 		/// <value>
 		/// The name.
 		/// </value>
-		public String Name { get; private set; }
+		public string Name { get; private set; }
 		/// <summary>
 		/// Returns a <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
 		/// </summary>
 		/// <returns>
 		/// A <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
 		/// </returns>
-		public String ToString ( ) {
+		public override string ToString ( ) {
 			return Name;
 		}
 	}

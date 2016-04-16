@@ -8,8 +8,14 @@ namespace Managed.Adb {
 	/// Centralized point to provide a IDebugPortProvider to ddmlib.
 	/// </summary>
 	public class DebugPortManager {
+		/// <summary>
+		/// no static port
+		/// </summary>
 		public const int NO_STATIC_PORT = -1;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DebugPortManager"/> class.
+		/// </summary>
 		public DebugPortManager ( ) {
 
 		}
@@ -19,6 +25,9 @@ namespace Managed.Adb {
 		/// </summary>
 		public IDebugPortProvider Provider { get; set; }
 
+		/// <summary>
+		/// The _instance
+		/// </summary>
 		private static DebugPortManager _instance;
 		/// <summary>
 		/// Returns an instance of the debug port manager
