@@ -274,6 +274,14 @@ namespace Managed.Adb {
 		/// <param name="remotePort">the remote port.</param>
 		/// <returns><code>true</code> if success.</returns>
 		bool CreateForward(int localPort, int remotePort);
+		
+		/// <summary>
+		/// Creates a reverse port forwarding between a local and a remote port.
+		/// </summary>
+		/// <param name="remotePort">the remote port to forward</param>
+		/// <param name="localPort">the local port.</param>
+		/// <returns><code>true</code> if success.</returns>
+		bool CreateReverseForward(int remotePort, int localPort);
 
 		/// <summary>
 		/// Removes a port forwarding between a local and a remote port.
