@@ -57,6 +57,7 @@
     <Optimize>true</Optimize>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <PlatformTarget>x86</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
@@ -88,7 +89,6 @@
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
     <PlatformTarget>x86</PlatformTarget>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
@@ -124,8 +124,8 @@
     <Reference Include="MoreLinq">
       <HintPath>..\packages\morelinq.1.1.0\lib\net35\MoreLinq.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -173,9 +173,6 @@
     <Compile Include="Extensions\BytesHelper.cs" />
     <Compile Include="Extensions\IntegerHelper.cs" />
     <Compile Include="Extensions\ReflectionHelper.cs" />
-    <Compile Include="IO\BEBinaryReader.cs" />
-    <Compile Include="IO\BEBinaryWriter.cs" />
-    <Compile Include="IO\ByteBuffer.cs" />
     <Compile Include="IO\ByteOrder.cs" />
     <Compile Include="IO\ScreenResolution.cs" />
     <Compile Include="Logs\ILogListener.cs" />
@@ -208,7 +205,6 @@
     <Compile Include="DeviceEventArgs.cs" />
     <Compile Include="ErrorCodeHelper.cs" />
     <Compile Include="Extensions\FileInfoHelper.cs" />
-    <Compile Include="Extensions\PathHelper.cs" />
     <Compile Include="Extensions\StringHelper.cs" />
     <Compile Include="FileEntry.cs" />
     <Compile Include="FileListingService.cs" />

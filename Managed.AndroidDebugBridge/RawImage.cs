@@ -102,6 +102,12 @@ namespace Managed.Adb {
 		 * @param buf the buffer to read from.
 		 * @return true if success
 		 */
+		/// <summary>
+		/// Reads the header.
+		/// </summary>
+		/// <param name="version">The version.</param>
+		/// <param name="buf">The buf.</param>
+		/// <returns></returns>
 		public bool ReadHeader ( int version, BinaryReader buf ) {
 			this.Version = version;
 			// https://github.com/android/platform_system_core/blob/master/adb/framebuffer_service.c
@@ -146,11 +152,11 @@ namespace Managed.Adb {
 			return true;
 		}
 
-		/**
-		 * Returns the size of the header for a specific version of the framebuffer adb protocol.
-		 * @param version the version of the protocol
-		 * @return the number of int that makes up the header.
-		 */
+		/// <summary>
+		/// Returns the size of the header for a specific version of the framebuffer adb protocol.
+		/// </summary>
+		/// <param name="version">the version of the protocol.</param>
+		/// <returns>the number of int that makes up the header.</returns>
 		public static int GetHeaderSize ( int version ) {
 			switch ( version ) {
 				case 16: // compatibility mode
@@ -166,10 +172,11 @@ namespace Managed.Adb {
 			return 0;
 		}
 
-		/**
-		 * Returns a rotated version of the image
-		 * The image is rotated counter-clockwise.
-		 */
+		/// <summary>
+		/// Returns a rotated version of the image
+		/// The image is rotated counter-clockwise.
+		/// </summary>
+		/// <returns></returns>
 		public RawImage GetRotated ( ) {
 			RawImage rotated = new RawImage ( );
 			rotated.Version = this.Version;
@@ -258,6 +265,11 @@ namespace Managed.Adb {
 			return ToImage ( this.Bpp == 32 ? PixelFormat.Format32bppArgb : PixelFormat.Format16bppRgb565 );
 		}
 
+		/// <summary>
+		/// Swaps the specified b.
+		/// </summary>
+		/// <param name="b">The b.</param>
+		/// <returns></returns>
 		private byte[] Swap ( byte[] b ) {
 			var clone = new List<byte> ( );
 			b.IntReverseForRawImage ( bitem => {

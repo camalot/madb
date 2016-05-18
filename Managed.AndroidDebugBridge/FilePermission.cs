@@ -4,12 +4,23 @@ using System.Linq;
 using System.Text;
 
 namespace Managed.Adb {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class FilePermissions {
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FilePermissions"/> class.
+		/// </summary>
 		public FilePermissions ( ) : this("---------") {
 			
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FilePermissions"/> class.
+		/// </summary>
+		/// <param name="permissions">The permissions.</param>
+		/// <exception cref="System.ArgumentException"></exception>
 		public FilePermissions ( String permissions ) {
 			if ( permissions.Length > 9 ) {
 				permissions = permissions.Substring ( 1,9 );
@@ -24,14 +35,38 @@ namespace Managed.Adb {
 			Other = new FilePermission ( permissions.Substring ( 6, 3 ) );
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FilePermissions"/> class.
+		/// </summary>
+		/// <param name="user">The user.</param>
+		/// <param name="group">The group.</param>
+		/// <param name="other">The other.</param>
 		public FilePermissions ( FilePermission user, FilePermission group, FilePermission other ) {
 			User = user;
 			Group = group;
 			Other = other;
-		} 
+		}
 
+		/// <summary>
+		/// Gets or sets the user permission.
+		/// </summary>
+		/// <value>
+		/// The user.
+		/// </value>
 		public FilePermission User { get; set; }
+		/// <summary>
+		/// Gets or sets the group permission.
+		/// </summary>
+		/// <value>
+		/// The group.
+		/// </value>
 		public FilePermission Group { get; set; }
+		/// <summary>
+		/// Gets or sets the other permission.
+		/// </summary>
+		/// <value>
+		/// The other.
+		/// </value>
 		public FilePermission Other { get; set; }
 
 
@@ -129,7 +164,13 @@ namespace Managed.Adb {
 		/// </value>
 		public bool CanDelete { get; private set; }
 
-		public String ToString ( ) {
+		/// <summary>
+		/// Returns a string that represents the current object.
+		/// </summary>
+		/// <returns>
+		/// A string that represents the current object.
+		/// </returns>
+		public override string ToString ( ) {
 			StringBuilder perm = new StringBuilder ( );
 			return perm.AppendFormat ( "{0}", CanRead ? "r" : "-" ).AppendFormat ( "{0}", CanWrite ? "w" : "-" ).AppendFormat ( "{0}", CanExecute ? CanDelete ? "x" : "t" : "-" ).ToString ( );
 		}

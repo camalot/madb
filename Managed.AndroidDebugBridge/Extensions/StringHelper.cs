@@ -9,15 +9,6 @@ namespace Managed.Adb {
 	/// <ignore>true</ignore>
 	public static partial class ManagedAdbExtenstions {
 		/// <summary>
-		/// To the argument safe quoted string.
-		/// </summary>
-		/// <param name="s">The s.</param>
-		/// <returns></returns>
-		public static string ToArgumentSafe ( this string s ) {
-			return "{0}{1}{0}".With ( s.Contains ( " " ) ? "\"" : string.Empty, s );
-		}
-
-		/// <summary>
 		/// Gets the bytes from a string.
 		/// </summary>
 		/// <param name="str">The string.</param>

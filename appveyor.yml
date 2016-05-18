@@ -20,11 +20,15 @@ build:
   verbosity: detailed
 after_build:
 - ps: .\.appveyor\appveyor.after-build.ps1
+test_script:
+- ps: ./.appveyor/appveyor.test.ps1
 artifacts:
 - path: '**\Managed.Adb.*.zip'
   name: Zips
 - path: '**\Managed.Adb.*.nupkg'
   name: Nupkg
+- path: '*.coverage.xml'
+  name: Coverage
 before_deploy:
 - ps: .\.appveyor\appveyor.before-deployment.ps1
 deploy:
@@ -34,6 +38,7 @@ deploy:
   description: $(CI_RELEASE_DESCRIPTION)
   auth_token:
     secure: UEgy2H9zJKLi599QoO3qVf5BKFqloRQ246ez9cEgsfV3vooAUfVopMS9+IjRtArL
+  artifact: Zips
   draft: true
   force_update: true
   on:
@@ -44,8 +49,21 @@ deploy:
     secure: /M57OlSjcpugJFARA+j30alG5I+J1QxfRCDi5lWU3YhhzE1kxqLiAxtO+Bu7bQJt
   artifact: Nupkg
   on:
-    branch: master
+    branch: /^(master|develop)$/
     CI_DEPLOY_NUGET: True
+- provider: GitHub
+  tag: $(APPVEYOR_PROJECT_NAME)-v$(CI_BUILD_VERSION)-prerelease
+  release: $(APPVEYOR_PROJECT_NAME)-v$(CI_BUILD_VERSION)-prerelease
+  description: $(CI_RELEASE_DESCRIPTION)
+  auth_token:
+    secure: UEgy2H9zJKLi599QoO3qVf5BKFqloRQ246ez9cEgsfV3vooAUfVopMS9+IjRtArL
+  draft: true
+  artifact: Zips
+  prerelease: true
+  force_update: true
+  on:
+    branch: develop
+    CI_DEPLOY_GITHUB_PRE: True
 after_deploy:
 - ps: .\.appveyor\appveyor.after-deployment.ps1
 notifications:

@@ -15,7 +15,7 @@ namespace Managed.Adb.IO {
 		/// <summary>
 		/// Pattern to escape filenames for shell command consumption.
 		/// </summary>
-		private const String ESCAPEPATTERN = "([\\\\()*+?\"'#/\\s])";
+		private const string ESCAPEPATTERN = @"([\\\(\)*+?""'\#/])";
 
 		/// <summary>
 		/// The directory separator character
@@ -28,9 +28,9 @@ namespace Managed.Adb.IO {
 		/// <summary>
 		/// Invalid characters for a file name
 		/// </summary>
-		private static readonly char[] InvalidFileNameChars = new char[] { 
-						'"', '<', '>', '|', '\0', '\x0001', '\x0002', '\x0003', '\x0004', '\x0005', '\x0006', '\a', '\b', '\t', '\n', '\v', 
-						'\f', '\r', '\x000e', '\x000f', '\x0010', '\x0011', '\x0012', '\x0013', '\x0014', '\x0015', '\x0016', '\x0017', '\x0018', '\x0019', '\x001a', '\x001b', 
+		private static readonly char[] InvalidFileNameChars = new char[] {
+						'"', '<', '>', '|', '\0', '\x0001', '\x0002', '\x0003', '\x0004', '\x0005', '\x0006', '\a', '\b', '\t', '\n', '\v',
+						'\f', '\r', '\x000e', '\x000f', '\x0010', '\x0011', '\x0012', '\x0013', '\x0014', '\x0015', '\x0016', '\x0017', '\x0018', '\x0019', '\x001a', '\x001b',
 						'\x001c', '\x001d', '\x001e', '\x001f', '*', '?', '\\', '/'
 				 };
 		/// <summary>
@@ -52,21 +52,11 @@ namespace Managed.Adb.IO {
 		/// <summary>
 		/// Invalid characters for a file/directory path
 		/// </summary>
-		private static readonly char[] RealInvalidPathChars = new char[] { 
-						'"', '<', '>', '|', '\0', '\x0001', '\x0002', '\x0003', '\x0004', '\x0005', '\x0006', '\a', '\b', '\t', '\n', '\v', 
-						'\f', '\r', '\x000e', '\x000f', '\x0010', '\x0011', '\x0012', '\x0013', '\x0014', '\x0015', '\x0016', '\x0017', '\x0018', '\x0019', '\x001a', '\x001b', 
+		private static readonly char[] RealInvalidPathChars = new char[] {
+						'"', '<', '>', '|', '\0', '\x0001', '\x0002', '\x0003', '\x0004', '\x0005', '\x0006', '\a', '\b', '\t', '\n', '\v',
+						'\f', '\r', '\x000e', '\x000f', '\x0010', '\x0011', '\x0012', '\x0013', '\x0014', '\x0015', '\x0016', '\x0017', '\x0018', '\x0019', '\x001a', '\x001b',
 						'\x001c', '\x001d', '\x001e', '\x001f'
 				 };
-
-		/// <summary>
-		/// Determines whether this instance [can path circumvent security native] the specified part of path.
-		/// </summary>
-		/// <param name="partOfPath">The part of path.</param>
-		/// <returns>
-		///   <c>true</c> if this instance [can path circumvent security native] the specified part of path; otherwise, <c>false</c>.
-		/// </returns>
-		[MethodImpl ( MethodImplOptions.InternalCall )]
-		private static extern bool CanPathCircumventSecurityNative ( string partOfPath );
 
 		/// <summary>Changes the extension of a path string.</summary>
 		/// <returns>A string containing the modified path information.On Windows-based desktop platforms, if path is null or an empty string (""), the path information is returned unmodified. If extension is null, the returned string contains the specified path with its extension removed. If path has no extension, and extension is not null, the returned path string contains extension appended to the end of path.</returns>
@@ -87,12 +77,12 @@ namespace Managed.Adb.IO {
 					str = path.Substring ( 0, length );
 					break;
 				}
-				if ( ( ( ch == DirectorySeparatorChar ) || ( ch == AltDirectorySeparatorChar ) ) ) {
+				if ( IsDirectorySeparator(ch) ) {
 					break;
 				}
 			}
-			if ( String.IsNullOrEmpty ( extension ) || path.Length == 0 ) {
-				return str;
+			if ( string.IsNullOrWhiteSpace ( extension ) || path.Length == 0 ) {
+				return path;
 			}
 			if ( extension.Length > 0 && extension[0] != '.' ) {
 				str = str + ".";
@@ -102,58 +92,10 @@ namespace Managed.Adb.IO {
 		}
 
 		/// <summary>
-		/// Checks if the char array starts with ordinal
-		/// </summary>
-		/// <param name="array">The array.</param>
-		/// <param name="numChars">The num chars.</param>
-		/// <param name="compareTo">The compare to.</param>
-		/// <param name="ignoreCase">if set to <c>true</c> [ignore case].</param>
-		/// <returns></returns>
-		private static unsafe bool CharArrayStartsWithOrdinal ( char* array, int numChars, string compareTo, bool ignoreCase ) {
-			if ( numChars < compareTo.Length ) {
-				return false;
-			}
-			if ( ignoreCase ) {
-				string str = new string ( array, 0, compareTo.Length );
-				return compareTo.Equals ( str, StringComparison.OrdinalIgnoreCase );
-			}
-			for ( int i = 0; i < compareTo.Length; i++ ) {
-				if ( array[i] != compareTo[i] ) {
-					return false;
-				}
-			}
-			return true;
-		}
-
-		/// <summary>
-		/// Checks if the char array starts with ordinal
-		/// </summary>
-		/// <param name="array">The array.</param>
-		/// <param name="numChars">The num chars.</param>
-		/// <param name="compareTo">The compare to.</param>
-		/// <param name="ignoreCase">if set to <c>true</c> [ignore case].</param>
-		/// <returns></returns>
-		private static bool CharArrayStartsWithOrdinal ( char[] array, int numChars, string compareTo, bool ignoreCase ) {
-			if ( numChars < compareTo.Length ) {
-				return false;
-			}
-			if ( ignoreCase ) {
-				string str = new string ( array, 0, compareTo.Length );
-				return compareTo.Equals ( str, StringComparison.OrdinalIgnoreCase );
-			}
-			for ( int i = 0; i < compareTo.Length; i++ ) {
-				if ( array[i] != compareTo[i] ) {
-					return false;
-				}
-			}
-			return true;
-		}
-
-		/// <summary>
 		/// Checks the invalid path chars.
 		/// </summary>
 		/// <param name="path">The path.</param>
-		internal static void CheckInvalidPathChars( string path ) {
+		internal static void CheckInvalidPathChars ( string path ) {
 			for ( int i = 0; i < path.Length; i++ ) {
 				int num2 = path[i];
 				if ( ( ( num2 == 0x22 ) || ( num2 == 60 ) ) || ( ( ( num2 == 0x3e ) || ( num2 == 0x7c ) ) || ( num2 < 0x20 ) ) ) {
@@ -162,63 +104,12 @@ namespace Managed.Adb.IO {
 			}
 		}
 
-		/// <summary>Combines two path strings.</summary>
-		/// <returns>A string containing the combined paths. If one of the specified paths is a zero-length string, this method returns the other path. If path2 contains an absolute path, this method returns path2.</returns>
-		/// <param name="path2">The second path. </param>
-		/// <param name="path1">The first path. </param>
-		/// <exception cref="T:System.ArgumentNullException">path1 or path2 is null. </exception>
-		/// <exception cref="T:System.ArgumentException">path1 or path2 contain one or more of the invalid characters defined in <see cref="F:System.IO.Path.InvalidPathChars"></see>, or contains a wildcard character. </exception>
-		public static string Combine ( string path1, string path2 ) {
-			if ( ( path1 == null ) || ( path2 == null ) ) {
-				throw new ArgumentNullException ( ( path1 == null ) ? "path1" : "path2" );
-			}
-			CheckInvalidPathChars ( path1 );
-			CheckInvalidPathChars ( path2 );
-			return CombineNoChecks ( path1, path2 );
-		}
-
-		/// <summary>
-		/// Combine the specified paths to form one path
-		/// </summary>
-		/// <param name="path1">The path1.</param>
-		/// <param name="path2">The path2.</param>
-		/// <param name="path3">The path3.</param>
-		/// <returns></returns>
-		public static string Combine ( string path1, string path2, string path3 ) {
-			if ( ( ( path1 == null ) || ( path2 == null ) ) || ( path3 == null ) ) {
-				throw new ArgumentNullException ( ( path1 == null ) ? "path1" : ( ( path2 == null ) ? "path2" : "path3" ) );
-			}
-			CheckInvalidPathChars ( path1 );
-			CheckInvalidPathChars ( path2 );
-			CheckInvalidPathChars ( path3 );
-			return CombineNoChecks ( CombineNoChecks ( path1, path2 ), path3 );
-		}
-
-		/// <summary>
-		/// Combine the specified paths to form one path
-		/// </summary>
-		/// <param name="path1">The path1.</param>
-		/// <param name="path2">The path2.</param>
-		/// <param name="path3">The path3.</param>
-		/// <param name="path4">The path4.</param>
-		/// <returns></returns>
-		public static string Combine ( string path1, string path2, string path3, string path4 ) {
-			if ( ( ( path1 == null ) || ( path2 == null ) ) || ( ( path3 == null ) || ( path4 == null ) ) ) {
-				throw new ArgumentNullException ( ( path1 == null ) ? "path1" : ( ( path2 == null ) ? "path2" : ( ( path3 == null ) ? "path3" : "path4" ) ) );
-			}
-			CheckInvalidPathChars ( path1 );
-			CheckInvalidPathChars ( path2 );
-			CheckInvalidPathChars ( path3 );
-			CheckInvalidPathChars ( path4 );
-			return CombineNoChecks ( CombineNoChecks ( CombineNoChecks ( path1, path2 ), path3 ), path4 );
-		}
-
 		/// <summary>
 		/// Combine the specified paths to form one path
 		/// </summary>
 		/// <param name="paths">The paths.</param>
 		/// <returns></returns>
-		public static String Combine ( params String[] paths ) {
+		public static string Combine ( params string[] paths ) {
 			if ( paths == null ) {
 				throw new ArgumentNullException ( "paths" );
 			}
@@ -237,54 +128,28 @@ namespace Managed.Adb.IO {
 						capacity += paths[i].Length;
 					}
 					char ch = paths[i][paths[i].Length - 1];
-					if ( ( ( ch != DirectorySeparatorChar ) && ( ch != AltDirectorySeparatorChar ) ) ) {
+					if ( !IsDirectorySeparator(ch) ) {
 						capacity++;
 					}
 				}
 			}
-			StringBuilder builder = new StringBuilder ( capacity );
+			var builder = new StringBuilder ( capacity );
 			for ( int j = num2; j < paths.Length; j++ ) {
 				if ( paths[j].Length != 0 ) {
 					if ( builder.Length == 0 ) {
 						builder.Append ( FixupPath ( paths[j] ) );
 					} else {
 						char ch2 = builder[builder.Length - 1];
-						if ( ( ( ch2 != DirectorySeparatorChar ) && ( ch2 != AltDirectorySeparatorChar ) ) ) {
+						if ( !IsDirectorySeparator(ch2) ) {
 							builder.Append ( DirectorySeparatorChar );
 						}
-							builder.Append ( paths[j] );
+						builder.Append ( paths[j] );
 					}
 				}
 			}
 			return builder.ToString ( );
 
 		}
-
-		/// <summary>
-		/// Combines the path with no checks.
-		/// </summary>
-		/// <param name="path1">The path1.</param>
-		/// <param name="path2">The path2.</param>
-		/// <returns></returns>
-		private static string CombineNoChecks ( string path1, string path2 ) {
-			if ( path2.Length == 0 ) {
-				return FixupPath ( path1 );
-			}
-			if ( path1.Length == 0 ) {
-				return FixupPath ( path2 );
-			}
-			if ( IsPathRooted ( path2 ) ) {
-				return FixupPath ( path2 );
-			}
-			char ch = path1[path1.Length - 1];
-			char ch2 = path2[0];
-			if ( ch != DirectorySeparatorChar && ch != AltDirectorySeparatorChar &&
-				ch2 != DirectorySeparatorChar && ch2 != AltDirectorySeparatorChar ) {
-				return ( FixupPath ( path1 ) + path2 );
-			}
-			return ( FixupPath ( path1 ) + path2 );
-		}
-
 
 
 		/// <summary>Returns the directory information for the specified path string.</summary>
@@ -293,22 +158,16 @@ namespace Managed.Adb.IO {
 		/// <exception cref="T:System.ArgumentException">The path parameter contains invalid characters, is empty, or contains only white spaces, or contains a wildcard character. </exception>
 		/// <exception cref="T:System.IO.PathTooLongException">The path parameter is longer than the system-defined maximum length.</exception>
 		/// <filterpriority>1</filterpriority>
-		public static string GetDirectoryName ( String path ) {
+		public static string GetDirectoryName ( string path ) {
 			if ( path != null ) {
 				CheckInvalidPathChars ( path );
-				//path = FixupPath ( path );
-
-				String tpath = path;
-				if ( tpath.Length > 1 ) {
-					if ( tpath.EndsWith ( new String ( new char[] { DirectorySeparatorChar } ) ) ) {
-						return tpath.Substring ( 0, tpath.Length );
-					}
-
-					tpath = tpath.Substring ( 0, tpath.LastIndexOf ( DirectorySeparatorChar ) + 1 );
-
+				var tpath = path;
+				if ( EndsWithDirectorySeparator(tpath) ) {
 					return FixupPath ( tpath );
-				} else if ( tpath.Length == 1 ) {
-					return new String ( new char[] { DirectorySeparatorChar } );
+				} else {
+					var end = tpath.LastIndexOfAny ( new char[] { DirectorySeparatorChar, AltDirectorySeparatorChar } );
+					end = end < 0 ? tpath.Length : end;
+					return FixupPath ( tpath.Substring ( 0, end ) );
 				}
 			}
 			return null;
@@ -325,7 +184,7 @@ namespace Managed.Adb.IO {
 				string tfilename = GetFileName ( path );
 				string tpath = path.Substring ( 0, path.Length - tfilename.Length );
 				tpath = FixupPath ( tpath );
-				return tpath.Substring ( 0, tpath.LastIndexOf ( DirectorySeparatorChar ) + 1 );
+				return tpath.Substring ( 0, tpath.LastIndexOfAny ( new char[] { DirectorySeparatorChar, AltDirectorySeparatorChar } ) + 1 );
 			}
 			return null;
 		}
@@ -340,11 +199,11 @@ namespace Managed.Adb.IO {
 			sb = sb.Replace ( System.IO.Path.DirectorySeparatorChar, DirectorySeparatorChar );
 
 
-			if ( !sb.StartsWith ( new String ( new char[] { DirectorySeparatorChar } ) ) ) {
+			if ( !StartsWithDirectorySeparator(sb) ) {
 				sb = string.Format ( ".{0}{1}", DirectorySeparatorChar, sb );
 			}
 
-			if ( !sb.EndsWith ( new String ( new char[] { DirectorySeparatorChar } ) ) ) {
+			if ( !EndsWithDirectorySeparator(sb) ) {
 				sb = string.Format ( "{0}{1}", sb, DirectorySeparatorChar );
 			}
 
@@ -373,7 +232,7 @@ namespace Managed.Adb.IO {
 					}
 					return string.Empty;
 				}
-				if ( ( ( ch == DirectorySeparatorChar ) || ( ch == AltDirectorySeparatorChar ) ) ) {
+				if ( IsDirectorySeparator ( ch ) ) {
 					break;
 				}
 			}
@@ -392,7 +251,7 @@ namespace Managed.Adb.IO {
 				int num2 = length;
 				while ( --num2 >= 0 ) {
 					char ch = path[num2];
-					if ( ( ( ch == DirectorySeparatorChar ) || ( ch == AltDirectorySeparatorChar ) ) ) {
+					if ( IsDirectorySeparator ( ch ) ) {
 						return path.Substring ( num2 + 1, ( length - num2 ) - 1 );
 					}
 				}
@@ -457,7 +316,7 @@ namespace Managed.Adb.IO {
 				if ( ( length >= 2 ) && IsDirectorySeparator ( path[1] ) ) {
 					num = 2;
 					int num3 = 2;
-					while ( ( num < length ) && ( ( ( path[num] != DirectorySeparatorChar ) && ( path[num] != AltDirectorySeparatorChar ) ) || ( --num3 > 0 ) ) ) {
+					while ( ( num < length ) && !IsDirectorySeparator(path[num] ) || ( --num3 > 0 ) ) {
 						num++;
 					}
 				}
@@ -480,7 +339,7 @@ namespace Managed.Adb.IO {
 		public static bool HasExtension ( string path ) {
 			if ( path != null ) {
 				CheckInvalidPathChars ( path );
-				if ( path.EndsWith ( new String ( new char[] { DirectorySeparatorChar } ) ) || path.EndsWith ( new String ( new char[] { AltDirectorySeparatorChar } ) ) ) {
+				if ( EndsWithDirectorySeparator ( path ) ) {
 					return false;
 				}
 
@@ -490,7 +349,7 @@ namespace Managed.Adb.IO {
 					if ( ch == '.' ) {
 						return ( length != ( path.Length - 1 ) );
 					}
-					if ( ( ( ch == DirectorySeparatorChar ) || ( ch == AltDirectorySeparatorChar ) ) ) {
+					if ( IsDirectorySeparator ( ch ) ) {
 						break;
 					}
 				}
@@ -498,40 +357,19 @@ namespace Managed.Adb.IO {
 			return false;
 		}
 
-		/// <summary>
-		/// Combine the specified paths to form one path
-		/// </summary>
-		/// <param name="path1">The path1.</param>
-		/// <param name="path2">The path2.</param>
-		/// <returns></returns>
-		internal static string InternalCombine ( string path1, string path2 ) {
-			if ( ( path1 == null ) || ( path2 == null ) ) {
-				throw new ArgumentNullException ( ( path1 == null ) ? "path1" : "path2" );
-			}
-			CheckInvalidPathChars ( path1 );
-			CheckInvalidPathChars ( path2 );
-			if ( path2.Length == 0 ) {
-				throw new ArgumentException ( "Path can not empty", "path2" );
-			}
-			if ( IsPathRooted ( path2 ) ) {
-				throw new ArgumentException ( "Path is already rooted", "path2" );
-			}
-			int length = path1.Length;
-			if ( length == 0 ) {
-				return path2;
-			}
-			char ch = path1[length - 1];
-			if ( ( ( ch != DirectorySeparatorChar ) && ( ch != AltDirectorySeparatorChar ) ) ) {
-				return ( path1 + DirectorySeparatorChar + path2 );
-			}
-			return ( path1 + path2 );
-		}
-
 		internal static bool IsDirectorySeparator ( char c ) {
 			if ( c != DirectorySeparatorChar ) {
 				return ( c == AltDirectorySeparatorChar );
 			}
 			return true;
+		}
+
+		internal static bool EndsWithDirectorySeparator ( string path ) {
+			return path.EndsWith ( new string ( new char[] { DirectorySeparatorChar } ) ) || path.EndsWith ( new string ( new char[] { AltDirectorySeparatorChar } ) );
+		}
+
+		internal static bool StartsWithDirectorySeparator ( string path ) {
+			return path.StartsWith ( new string ( new char[] { DirectorySeparatorChar } ) ) || path.StartsWith ( new string ( new char[] { AltDirectorySeparatorChar } ) );
 		}
 
 		/// <summary>Gets a value indicating whether the specified path string contains absolute or relative path information.</summary>
@@ -543,7 +381,7 @@ namespace Managed.Adb.IO {
 			if ( path != null ) {
 				CheckInvalidPathChars ( path );
 				int length = path.Length;
-				if ( ( length >= 1 && ( path[0] == DirectorySeparatorChar || path[0] == AltDirectorySeparatorChar ) ) ||
+				if ( ( length >= 1 && IsDirectorySeparator ( path[0] ) ) ||
 					( length == 1 ) ) {
 					return true;
 				}
@@ -556,9 +394,10 @@ namespace Managed.Adb.IO {
 		/// </summary>
 		/// <param name="path">The path.</param>
 		/// <returns></returns>
-		public static String Escape( String path ) {
-			return new Regex ( ESCAPEPATTERN ).Replace ( path, new MatchEvaluator ( delegate ( Match m ) {
-				return m.Result ( "\\\\$1" );
+		/// <exception cref="ArgumentNullException">When path is null.</exception>
+		public static string Escape ( string path ) {
+			return path.Require ( ).REReplace(ESCAPEPATTERN, new MatchEvaluator ( delegate ( Match m) {
+				return m.Result ( "\\$1" );
 			} ) );
 		}
 
@@ -567,9 +406,13 @@ namespace Managed.Adb.IO {
 		/// </summary>
 		/// <param name="path">The path.</param>
 		/// <returns></returns>
-		public static String Quote( String path ) {
-			if ( path.Contains ( " " ) ) {
-				return String.Format ( "\"{0}\"", path );
+		public static string Quote ( string path ) {
+			if ( string.IsNullOrEmpty(path) ) {
+				return path;
+			}
+
+			if(path.IsMatch(@"\s")) {
+				return "\"{0}\"".With ( path );
 			} else {
 				return path;
 			}

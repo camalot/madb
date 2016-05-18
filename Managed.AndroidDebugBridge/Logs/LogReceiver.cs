@@ -4,8 +4,18 @@ using System.Linq;
 using System.Text;
 
 namespace Managed.Adb.Logs {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class LogReceiver {
+		/// <summary>
+		/// The entr y_ heade r_ size
+		/// </summary>
 		private const int ENTRY_HEADER_SIZE = 20; // 2*2 + 4*4; see LogEntry.
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LogReceiver"/> class.
+		/// </summary>
+		/// <param name="listener">The listener.</param>
 		public LogReceiver ( ILogListener listener ) {
 			EntryDataOffset = 0;
 			EntryHeaderBuffer = new byte[ENTRY_HEADER_SIZE];
@@ -13,18 +23,63 @@ namespace Managed.Adb.Logs {
 			Listener = listener;
 		}
 
+		/// <summary>
+		/// Gets or sets the entry data offset.
+		/// </summary>
+		/// <value>
+		/// The entry data offset.
+		/// </value>
 		private int EntryDataOffset { get; set; }
+		/// <summary>
+		/// Gets or sets the entry header offset.
+		/// </summary>
+		/// <value>
+		/// The entry header offset.
+		/// </value>
 		private int EntryHeaderOffset { get; set; }
+		/// <summary>
+		/// Gets or sets the entry header buffer.
+		/// </summary>
+		/// <value>
+		/// The entry header buffer.
+		/// </value>
 		private byte[] EntryHeaderBuffer { get; set; }
 
+		/// <summary>
+		/// Gets or sets the current entry.
+		/// </summary>
+		/// <value>
+		/// The current entry.
+		/// </value>
 		private LogEntry CurrentEntry { get; set; }
+		/// <summary>
+		/// Gets or sets the listener.
+		/// </summary>
+		/// <value>
+		/// The listener.
+		/// </value>
 		private ILogListener Listener { get; set; }
+		/// <summary>
+		/// Gets a value indicating whether this instance is cancelled.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance is cancelled; otherwise, <c>false</c>.
+		/// </value>
 		public bool IsCancelled { get; private set; }
 
+		/// <summary>
+		/// Cancels this instance.
+		/// </summary>
 		public void Cancel ( ) {
 			this.IsCancelled = true;
 		}
 
+		/// <summary>
+		/// Parses the new data.
+		/// </summary>
+		/// <param name="data">The data.</param>
+		/// <param name="offset">The offset.</param>
+		/// <param name="length">The length.</param>
 		public void ParseNewData ( byte[] data, int offset, int length ) {
 			// notify the listener of new raw data
 			if ( Listener != null ) {
@@ -108,6 +163,13 @@ namespace Managed.Adb.Logs {
 		}
 
 
+		/// <summary>
+		/// Creates the entry.
+		/// </summary>
+		/// <param name="data">The data.</param>
+		/// <param name="offset">The offset.</param>
+		/// <returns></returns>
+		/// <exception cref="System.ArgumentException">Buffer not big enough to hold full LoggerEntry header</exception>
 		private LogEntry CreateEntry ( byte[] data, int offset ) {
 			if ( data.Length < offset + ENTRY_HEADER_SIZE ) {
 				throw new ArgumentException ( "Buffer not big enough to hold full LoggerEntry header" );

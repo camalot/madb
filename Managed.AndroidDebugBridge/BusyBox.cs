@@ -39,7 +39,7 @@ namespace Managed.Adb {
 		/// </summary>
 		/// <param name="busybox">The path to the busybox binary to install.</param>
 		/// <returns><c>true</c>, if successful; otherwise, <c>false</c></returns>
-		public bool Install ( String busybox ) {
+		public bool Install ( string busybox ) {
 			busybox.ThrowIfNullOrWhiteSpace ( "busybox" );
 
 			FileEntry bb = null;

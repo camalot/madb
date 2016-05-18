@@ -19,18 +19,34 @@ namespace Managed.Adb {
 			}
 		}
 
+		/// <summary>
+		/// Throws if null.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="argument">The argument.</param>
+		/// <param name="func">The function.</param>
 		public static void ThrowIfNull<T> ( this T argument, Expression<Func<T, string>> func ) where T : class {
 			if ( argument == null ) {
 				ThrowException ( s => new ArgumentNullException ( s ), func );
 			}
 		}
 
+		/// <summary>
+		/// Throws if null or empty.
+		/// </summary>
+		/// <param name="argument">The argument.</param>
+		/// <param name="func">The function.</param>
 		public static void ThrowIfNullOrEmpty ( this String argument, Expression<Func<String, string>> func ) {
 			if ( String.IsNullOrEmpty(argument) ) {
 				ThrowException ( s => new ArgumentNullException ( s ), func );
 			}
 		}
 
+		/// <summary>
+		/// Throws if null or white space.
+		/// </summary>
+		/// <param name="argument">The argument.</param>
+		/// <param name="func">The function.</param>
 		public static void ThrowIfNullOrWhiteSpace ( this String argument, Expression<Func<String, string>> func ) {
 			if ( String.IsNullOrEmpty ( argument ) || String.IsNullOrEmpty(argument.Trim()) ) {
 				ThrowException ( s => new ArgumentNullException ( s ), func );

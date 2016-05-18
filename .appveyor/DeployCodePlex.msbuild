@@ -23,7 +23,7 @@
 		<ReleaseTimeout>120</ReleaseTimeout>
 		<UploadTimeout>1200</UploadTimeout>
 
-		<ChangeLogFile>$(MSBuildProjectDirectory)\..\.build\publish-changelog.txt</ChangeLogFile>
+		<ChangeLogFile>$(MSBuildProjectDirectory)\..\.build\publishChangelog.txt</ChangeLogFile>
 		<ReleaseInfoFile>$(MSBuildProjectDirectory)\codeplex-release.txt</ReleaseInfoFile>
 	</PropertyGroup>
 
@@ -105,6 +105,7 @@
 		<Exec Command="appveyor SetVariable -Name CP_RELEASE_ID -Value &quot;$(ReleaseId)&quot;" Condition=" '$(APPVEYOR)' == 'True' AND '$(Platform)' == 'x86' AND '$(ReleaseId)' != '' " />
 		<Exec Command="appveyor SetVariable -Name CP_RELEASE_URL -Value &quot;$(ReleaseUrl)&quot;" Condition=" '$(APPVEYOR)' == 'True' AND '$(Platform)' == 'x86' AND '$(ReleaseUrl)' != '' " />
 		<Exec Command="appveyor SetVariable -Name CP_RELEASE_PROJECT -Value &quot;$(CodePlexProject)&quot;" Condition=" '$(APPVEYOR)' == 'True' AND '$(Platform)' == 'x86' AND '$(CodePlexProject)' != '' " />
+		<Exec Command="appveyor SetVariable -Name CI_RELEASE_DESCRIPTION -Value &quot;$(CI_RELEASE_DESCRIPTION)&quot;" Condition=" '$(APPVEYOR)' == 'True' AND '$(Platform)' == 'x86' AND '$(CI_RELEASE_DESCRIPTION)' != '' " />
 	</Target>
 
 	<Target Name="Upload" DependsOnTargets="CreateRelease">

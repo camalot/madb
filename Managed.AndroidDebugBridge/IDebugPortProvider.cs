@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 
 namespace Managed.Adb {
+	/// <summary>
+	/// 
+	/// </summary>
 	public interface IDebugPortProvider {
 		/// <summary>
 		/// Returns a non-random debugger port for the specified application running on the specified Device.

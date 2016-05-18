@@ -401,6 +401,10 @@ namespace Managed.Adb {
 			}
 		}
 
+		/// <summary>
+		/// Queries the new device for environment variables.
+		/// </summary>
+		/// <param name="device">The device.</param>
 		private void QueryNewDeviceForEnvironmentVariables( Device device ) {
 			try {
 				if ( device.State != DeviceState.Offline && device.State != DeviceState.Unknown ) {
@@ -411,6 +415,10 @@ namespace Managed.Adb {
 			}
 		}
 
+		/// <summary>
+		/// Queries the new device for mounting point.
+		/// </summary>
+		/// <param name="device">The device.</param>
 		private void QueryNewDeviceForMountingPoint( Device device ) {
 			try {
 				if ( device.State != DeviceState.Offline && device.State != DeviceState.Unknown ) {
@@ -421,6 +429,11 @@ namespace Managed.Adb {
 			}
 		}
 
+		/// <summary>
+		/// Starts the monitoring device.
+		/// </summary>
+		/// <param name="device">The device.</param>
+		/// <returns></returns>
 		private bool StartMonitoringDevice( Device device ) {
 			Socket socket = OpenAdbConnection ( );
 
@@ -451,7 +464,7 @@ namespace Managed.Adb {
 					try {
 						// attempt to close the socket if needed.
 						socket.Close ( );
-					} catch ( IOException e1 ) {
+					} catch ( IOException ) {
 						// we can ignore that one. It may already have been closed.
 					}
 					Log.d ( TAG, "Connection Failure when starting to monitor device '{0}' : {1}", device, e.Message );
@@ -461,6 +474,9 @@ namespace Managed.Adb {
 			return false;
 		}
 
+		/// <summary>
+		/// Starts the device monitor thread.
+		/// </summary>
 		private void StartDeviceMonitorThread( ) {
 			//Selector = Selector.Open();
 			Thread t = new Thread ( new ThreadStart ( DeviceClientMonitorLoop ) );
@@ -468,6 +484,9 @@ namespace Managed.Adb {
 			t.Start ( );
 		}
 
+		/// <summary>
+		/// Devices the client monitor loop.
+		/// </summary>
 		private void DeviceClientMonitorLoop( ) {
 			do {
 				try {
@@ -555,7 +574,7 @@ namespace Managed.Adb {
 									}
 							}
 					}*/
-				} catch ( IOException e ) {
+				} catch ( IOException ) {
 					if ( !IsRunning ) {
 
 					}
@@ -724,7 +743,7 @@ namespace Managed.Adb {
 				try {
 					int len = int.Parse ( msg, System.Globalization.NumberStyles.HexNumber );
 					return len;
-				} catch ( FormatException nfe ) {
+				} catch ( FormatException ) {
 					// we'll throw an exception below.
 				}
 			}
@@ -739,7 +758,7 @@ namespace Managed.Adb {
 		/// <param name="socket">The socket.</param>
 		/// <param name="data">The data.</param>
 		/// <returns></returns>
-		private String Read( Socket socket, byte[] data ) {
+		private string Read( Socket socket, byte[] data ) {
 			int count = -1;
 			int totalRead = 0;
 

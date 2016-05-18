@@ -8,6 +8,9 @@ using MoreLinq;
 using System.Text.RegularExpressions;
 
 namespace Managed.Adb {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class FileSystem {
 
 		/// <summary>
@@ -83,7 +86,7 @@ namespace Managed.Adb {
 				try {
 					FileEntry fe = Device.FileListingService.FindFileEntry ( path );
 					return fe != null;
-				} catch ( FileNotFoundException e ) {
+				} catch ( FileNotFoundException ) {
 					return false;
 				}
 			} else {
@@ -259,12 +262,9 @@ namespace Managed.Adb {
 		/// </summary>
 		/// <param name="fileEntry">The file entry.</param>
 		/// <exception cref="System.IO.IOException">If the command fails.</exception>
+		/// <exception cref="System.ArgumentNullException">If device is null or if path is null or empty.</exception>
+
 		public void Delete ( FileEntry fileEntry ) {
-			/// <exception cref="System.ArgumentNullException">
-			/// If device is null
-			/// or
-			/// If path is null or empty.
-			/// </exception>
 			Device.ThrowIfNull("Device");
 			fileEntry.ThrowIfNull ( "fileEntry" );
 			if ( fileEntry.Exists ) {
@@ -428,7 +428,7 @@ namespace Managed.Adb {
 						return ( string.IsNullOrWhiteSpace ( cresult.Result ) ) ? path : cresult.Result;
 					}
 					return cresult.Result;
-				} catch ( Exception e ) {
+				} catch ( Exception ) {
 					// if the command doesn't exist then we just return the path.
 				}
 				return path;
