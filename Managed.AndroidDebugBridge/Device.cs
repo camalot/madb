@@ -739,6 +739,22 @@ namespace Managed.Adb {
  		}
  
 		/// <summary>
+		/// Creates a reverse port forwarding between a local and a remote port.
+		/// </summary>
+		/// <param name="remotePort">the remote port to forward</param>
+		/// <param name="localPort">the local port.</param>
+		/// <returns><code>true</code> if success.</returns>
+		public bool CreateReverseForward(int remotePort, int localPort)
+		{
+			try {
+				return AdbHelper.Instance.CreateReverseForward(AndroidDebugBridge.SocketAddress, this, remotePort, localPort);
+			} catch(IOException e) {
+				Log.w("ddms", e);
+				return false;
+			}
+		}
+
+		/// <summary>
 		/// Removes a port forwarding between a local and a remote port.
 		/// </summary>
 		/// <param name="localPort">the local port to forward</param>

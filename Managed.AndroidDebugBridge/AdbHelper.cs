@@ -593,6 +593,50 @@ namespace Managed.Adb {
 
 
 		/// <summary>
+		/// Creates the reverse forward.
+		/// </summary>
+		/// <param name="adbSockAddr">The adb sock addr.</param>
+		/// <param name="device">The device.</param>
+		/// <param name="remotePort">The remote port.</param>
+		/// <param name="localPort">The local port.</param>
+		/// <returns></returns>
+		/// <exception cref="Managed.Adb.Exceptions.AdbException">
+		/// failed to submit the forward command.
+		/// or
+		/// Device rejected command:  + resp.Message
+		/// </exception>
+		public bool CreateReverseForward(IPEndPoint adbSockAddr, Device device, int remotePort, int localPort) {
+
+			Socket adbChan = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+			try {
+				adbChan.Connect(adbSockAddr);
+				adbChan.Blocking = true;
+
+				// if the device is not -1, then we first tell adb we're looking to talk
+				// to a specific device
+				SetDevice(adbChan, device);
+
+				byte[] request = FormAdbRequest(String.Format("reverse:forward:tcp:{0};tcp:{1}", //$NON-NLS-1$
+								remotePort, localPort));
+
+				if(!Write(adbChan, request)) {
+					throw new AdbException("failed to submit the reverse forward command.");
+				}
+
+				AdbResponse resp = ReadAdbResponse(adbChan, false /* readDiagString */);
+				if(!resp.IOSuccess || !resp.Okay) {
+					throw new AdbException("Device rejected command: " + resp.Message);
+				}
+			} finally {
+				if(adbChan != null) {
+					adbChan.Close();
+				}
+			}
+
+			return true;
+		}
+
+		/// <summary>
 		/// Lists the forward.
 		/// </summary>
 		/// <param name="address">The address.</param>
