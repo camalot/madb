@@ -150,8 +150,6 @@ namespace Managed.Adb {
 			EnvironmentVariables = new Dictionary<string, string> ( );
 			Clients = new List<IClient> ( );
 			FileSystem = new FileSystem ( this );
-			BusyBox = new BusyBox ( this );
-
 			Model = model;
 			Product = product;
 			DeviceProperty = device;
@@ -380,6 +378,7 @@ namespace Managed.Adb {
 		/// <summary>
 		/// Gets the busy box object for this device.
 		/// </summary>
+		[Obsolete ( "Newer versions of android have all the commands that busybox used to provide", true )]
 		public BusyBox BusyBox { get; private set; }
 
 		/// <summary>

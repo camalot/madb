@@ -168,24 +168,14 @@ namespace Managed.Adb {
 		/// </summary>
 		private FileEntry _root = null;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="FileListingService"/> class.
-		/// </summary>
-		/// <param name="device">The device.</param>
-		/// <param name="forceBusyBox">if set to <c>true</c> [force busy box].</param>
-		public FileListingService ( Device device, bool forceBusyBox ) {
-			this.Device = device;
-			this.Threads = new List<Thread> ( );
-			this.ForceBusyBox = forceBusyBox && device.BusyBox.Available;
-		}
+
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FileListingService"/> class.
 		/// </summary>
 		/// <param name="device">The device.</param>
-		public FileListingService ( Device device )
-			: this ( device, device.BusyBox.Available ) {
-
+		public FileListingService ( Device device ) {
+			Device = device;
 		}
 
 		/// <summary>
@@ -211,13 +201,6 @@ namespace Managed.Adb {
 				_root = value;
 			}
 		}
-
-		/// <summary>
-		/// Gets or sets a value indicating whether [force busy box].
-		/// </summary>
-		/// <value><c>true</c> if [force busy box]; otherwise, <c>false</c>.</value>
-		public bool ForceBusyBox { get; set; }
-
 
 		/// <summary>
 		/// Gets the children.
@@ -321,7 +304,8 @@ namespace Managed.Adb {
 
 			try {
 				// create the command
-				var command = string.Format ( ForceBusyBox ? BUSYBOX_LS : TOOLBOX_LS, entry.FullPath );
+				//var command = string.Format ( ForceBusyBox ? BUSYBOX_LS : TOOLBOX_LS, entry.FullPath );
+				var command = string.Format ( TOOLBOX_LS, entry.FullPath );
 				// create the receiver object that will parse the result from ls
 				var receiver = new ListingServiceReceiver ( entry, entryList, linkList );
 
@@ -364,7 +348,7 @@ namespace Managed.Adb {
 		/// <param name="path">The file path of</param>
 		/// <returns>The FileEntry</returns>
 		/// <exception cref="FileNotFoundException">Throws if unable to locate the file or directory</exception>
-		public FileEntry FindFileEntry ( String path ) {
+		public FileEntry FindFileEntry ( string path ) {
 			return FindFileEntry ( this.Root, path );
 		}
 
@@ -374,7 +358,7 @@ namespace Managed.Adb {
 		/// <param name="parent">The parent.</param>
 		/// <param name="path">The path.</param>
 		/// <returns></returns>
-		public FileEntry FindFileEntry ( FileEntry parent, String path ) {
+		public FileEntry FindFileEntry ( FileEntry parent, string path ) {
 			var rpath = Device.FileSystem.ResolveLink ( path );
 			var entriesString = rpath.Split ( new char[] { LinuxPath.DirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries );
 			FileEntry current = parent;

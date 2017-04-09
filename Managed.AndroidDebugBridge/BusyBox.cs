@@ -12,6 +12,7 @@ namespace Managed.Adb {
 	/// <summary>
 	/// A class to help with working with BusyBox
 	/// </summary>
+	[Obsolete("Newer versions of android have all the commands that busybox used to provide", false)]
 	public class BusyBox {
 		/// <summary>
 		/// 
@@ -33,6 +34,8 @@ namespace Managed.Adb {
 			CheckForBusyBox ( );
 
 		}
+
+		private bool BusyboxChecked { get; set; } = false;
 
 		/// <summary>
 		/// Attempts to install on the device
@@ -101,7 +104,7 @@ namespace Managed.Adb {
 			} catch ( Exception ) {
 				throw;
 			}
-
+			BusyboxChecked = false;
 			CheckForBusyBox ( );
 			return true;
 		}
@@ -110,16 +113,20 @@ namespace Managed.Adb {
 		/// Checks for busy box.
 		/// </summary>
 		private void CheckForBusyBox ( ) {
-			if ( this.Device.IsOnline ) {
-				try {
-					Commands.Clear ( );
-					Device.ExecuteShellCommand ( BUSYBOX_COMMAND, new BusyBoxCommandsReceiver ( this ) );
-					Available = true;
-				} catch ( FileNotFoundException ) {
+			if ( !BusyboxChecked && !Available ) {
+				if ( this.Device.IsOnline ) {
+					try {
+						Commands.Clear ( );
+						Device.ExecuteShellCommand ( BUSYBOX_COMMAND, new BusyBoxCommandsReceiver ( this ) );
+						Available = true;
+					} catch ( FileNotFoundException ) {
+						Available = false;
+					} finally {
+						BusyboxChecked = true;
+					}
+				} else {
 					Available = false;
 				}
-			} else {
-				Available = false;
 			}
 		}
 

@@ -37,16 +37,15 @@ namespace Managed.Adb {
 				} else {
 					var cer = new CommandErrorReceiver ( );
 					var escaped = LinuxPath.Escape ( path );
-					// use native touch command if its available.
-					var cmd = Device.BusyBox.Available ? "touch" : ">";
-					var command = String.Format ( "{0} {1}", cmd, escaped );
+					var cmd = "touch";
+					var command = $"{cmd} {escaped}";
 					if ( Device.CanSU ( ) ) {
 						Device.ExecuteRootShellCommand ( command, cer );
 					} else {
 						Device.ExecuteShellCommand ( command, cer );
 					}
-					if ( !String.IsNullOrEmpty ( cer.ErrorMessage ) ) {
-						throw new IOException ( String.Format ( "Error creating file: {0}", cer.ErrorMessage ) );
+					if ( !string.IsNullOrEmpty ( cer.ErrorMessage ) ) {
+						throw new IOException ( $"Error creating file: {cer.ErrorMessage}" );
 					} else {
 						// at this point, the newly created file should exist.
 						return Device.FileListingService.FindFileEntry ( path );
@@ -114,7 +113,7 @@ namespace Managed.Adb {
 		/// Makes the directory.
 		/// </summary>
 		/// <param name="path">The path.</param>
-		/// <param name="forceDeviceMethod">if set to <c>true</c> forces the use of the "non-busybox" method.</param>
+		/// <param name="forceDeviceMethod">No longer has any difference to what is executed.</param>
 		public void MakeDirectory ( String path, bool forceDeviceMethod ) {
 			Device.ThrowIfNull ( "Device" );
 			path.ThrowIfNullOrWhiteSpace ( "path" );
@@ -122,24 +121,16 @@ namespace Managed.Adb {
 			CommandErrorReceiver cer = new CommandErrorReceiver ( );
 			try {
 				//var fileEntry = FileEntry.FindOrCreate ( Device, path );
-				// if we have busybox we can use the mkdir in there as it supports --parents
-				if ( Device.BusyBox.Available && !forceDeviceMethod ) {
+				try {
+					Device.ExecuteShellCommand ( "mkdir -p {0}", cer, path );
+				} catch {
 					try {
-						Device.BusyBox.ExecuteShellCommand ( "mkdir -p {0}", cer, path );
-					} catch {
-						try {
-							// if there was an error, then fallback too.
-							MakeDirectoryFallbackInternal ( path, cer );
-						} catch { }
-					}
-				} else {
-					// if busybox is not available then we have to fallback
-					MakeDirectoryFallbackInternal ( path, cer );
+						// if there was an error, then fallback too.
+						MakeDirectoryFallbackInternal ( path, cer );
+					} catch { }
 				}
-			} catch {
-
-			}
-			if ( !String.IsNullOrEmpty ( cer.ErrorMessage ) ) {
+			} catch {}
+			if ( !string.IsNullOrEmpty ( cer.ErrorMessage ) ) {
 				throw new IOException ( cer.ErrorMessage );
 			}
 		}
@@ -149,7 +140,7 @@ namespace Managed.Adb {
 		/// </summary>
 		/// <param name="path"></param>
 		/// <param name="cer"></param>
-		internal void MakeDirectoryFallbackInternal ( String path, CommandErrorReceiver cer ) {
+		internal void MakeDirectoryFallbackInternal ( string path, CommandErrorReceiver cer ) {
 			Device.ExecuteShellCommand ( "mkdir {0}", cer, path );
 		}
 
@@ -158,7 +149,7 @@ namespace Managed.Adb {
 		/// </summary>
 		/// <param name="source">The source.</param>
 		/// <param name="destination">The destination.</param>
-		public void Copy ( String source, String destination ) {
+		public void Copy ( string source, string destination ) {
 			Device.ThrowIfNull ( "Device" );
 			source.ThrowIfNullOrWhiteSpace ( "source" );
 			destination.ThrowIfNullOrWhiteSpace ( "destination" );
@@ -167,7 +158,7 @@ namespace Managed.Adb {
 			FileEntry sfe = Device.FileListingService.FindFileEntry ( source );
 
 			Device.ExecuteShellCommand ( "cat {0} > {1}", cer, sfe.FullEscapedPath, destination );
-			if ( !String.IsNullOrEmpty ( cer.ErrorMessage ) ) {
+			if ( !string.IsNullOrEmpty ( cer.ErrorMessage ) ) {
 				throw new IOException ( cer.ErrorMessage );
 			}
 		}
@@ -249,7 +240,7 @@ namespace Managed.Adb {
 		/// </exception>
 		/// <gist id="adee6a11c5441da61af8" />
 		/// <exception cref="System.IO.IOException">If the command fails.</exception>
-		public void Delete(String path) {
+		public void Delete ( String path ) {
 			Device.ThrowIfNull ( "Device" );
 			path.ThrowIfNullOrWhiteSpace ( "path" );
 			FileEntry entry = Device.FileListingService.FindFileEntry ( path );
@@ -265,7 +256,7 @@ namespace Managed.Adb {
 		/// <exception cref="System.ArgumentNullException">If device is null or if path is null or empty.</exception>
 
 		public void Delete ( FileEntry fileEntry ) {
-			Device.ThrowIfNull("Device");
+			Device.ThrowIfNull ( "Device" );
 			fileEntry.ThrowIfNull ( "fileEntry" );
 			if ( fileEntry.Exists ) {
 				CommandErrorReceiver cer = new CommandErrorReceiver ( );
@@ -281,8 +272,10 @@ namespace Managed.Adb {
 		/// Gets the dev blocks for the device.
 		/// </summary>
 		/// <exception cref="System.IO.FileNotFoundException">Throws if unable to locate /dev/block </exception>
-		public IEnumerable<FileEntry> DeviceBlocks {
-			get {
+		public IEnumerable<FileEntry> DeviceBlocks
+		{
+			get
+			{
 				Device.ThrowIfNull ( "Device" );
 
 				var blocks = FileEntry.Find ( Device, "/dev/block/" );
@@ -301,15 +294,15 @@ namespace Managed.Adb {
 			Device.ThrowIfNull ( "Device" );
 
 			CommandErrorReceiver cer = new CommandErrorReceiver ( );
-			if ( Device.BusyBox.Available ) {
-				Device.ExecuteShellCommand ( "busybox mount {0} {4} -t {1} {2} {3}", cer, mountPoint.IsReadOnly ? "-r" : "-w",
-					mountPoint.FileSystem, mountPoint.Block, mountPoint.Name,
-					!String.IsNullOrEmpty ( options ) ? String.Format ( "-o {0}", options ) : String.Empty );
-			} else {
+			//if ( Device.BusyBox.Available ) {
+			//	Device.ExecuteShellCommand ( "busybox mount {0} {4} -t {1} {2} {3}", cer, mountPoint.IsReadOnly ? "-r" : "-w",
+			//		mountPoint.FileSystem, mountPoint.Block, mountPoint.Name,
+			//		!String.IsNullOrEmpty ( options ) ? String.Format ( "-o {0}", options ) : String.Empty );
+			//} else {
 				Device.ExecuteShellCommand ( "mount {0} {4} -t {1} {2} {3}", cer, mountPoint.IsReadOnly ? "-r" : "-w",
 					mountPoint.FileSystem, mountPoint.Block, mountPoint.Name,
 					!String.IsNullOrEmpty ( options ) ? String.Format ( "-o {0}", options ) : String.Empty );
-			}
+			//}
 		}
 
 		/// <summary>
@@ -322,11 +315,11 @@ namespace Managed.Adb {
 			Device.ThrowIfNull ( "Device" );
 
 			CommandErrorReceiver cer = new CommandErrorReceiver ( );
-			if ( Device.BusyBox.Available ) {
-				Device.ExecuteShellCommand ( "busybox mount {0}", cer, mountPoint );
-			} else {
+			//if ( Device.BusyBox.Available ) {
+			//	Device.ExecuteShellCommand ( "busybox mount {0}", cer, mountPoint );
+			//} else {
 				Device.ExecuteShellCommand ( "mount {0}", cer, mountPoint );
-			}
+			//}
 		}
 
 		/// <summary>
@@ -398,11 +391,11 @@ namespace Managed.Adb {
 			Device.ThrowIfNull ( "Device" );
 
 			CommandErrorReceiver cer = new CommandErrorReceiver ( );
-			if ( Device.BusyBox.Available ) {
-				Device.ExecuteShellCommand ( "busybox umount {1} {0}", cer, !String.IsNullOrEmpty ( options ) ? String.Format ( "-o {0}", options ) : String.Empty, mountPoint );
-			} else {
+			//if ( Device.BusyBox.Available ) {
+			//	Device.ExecuteShellCommand ( "busybox umount {1} {0}", cer, !String.IsNullOrEmpty ( options ) ? String.Format ( "-o {0}", options ) : String.Empty, mountPoint );
+			//} else {
 				Device.ExecuteShellCommand ( "umount {1} {0}", cer, !String.IsNullOrEmpty ( options ) ? String.Format ( "-o {0}", options ) : String.Empty, mountPoint );
-			}
+			//}
 		}
 
 		/// <summary>
@@ -411,18 +404,18 @@ namespace Managed.Adb {
 		/// <param name="path">The path.</param>
 		/// <returns></returns>
 		/// <workitem id="19712">Uses "ls -l" to resolve links</workitem>
-		public String ResolveLink ( String path ) {
-			if ( this.Device.BusyBox.Available ) {
-				var cresult = new CommandResultReceiver ( );
-				this.Device.BusyBox.ExecuteShellCommand ( "readlink -f {0}", cresult, path );
-				// if cresult is empty, return the path
-				return ( cresult == null || String.IsNullOrEmpty ( cresult.Result ) ) ? path : cresult.Result;
-			} else {
+		public string ResolveLink ( String path ) {
+			//if ( this.Device.BusyBox.Available ) {
+			//	var cresult = new CommandResultReceiver ( );
+			//	this.Device.BusyBox.ExecuteShellCommand ( "readlink -f {0}", cresult, path );
+			//	// if cresult is empty, return the path
+			//	return ( cresult == null || String.IsNullOrEmpty ( cresult.Result ) ) ? path : cresult.Result;
+			//} else {
 				try {
 					// have to try 2 ways because why the hell would it just work...
 					var cresult = new CommandResultReceiver ( );
 					this.Device.ExecuteShellCommand ( "readlink -f {0}", cresult, path );
-					if(string.IsNullOrWhiteSpace(cresult.Result)) {
+					if ( string.IsNullOrWhiteSpace ( cresult.Result ) ) {
 						cresult = new CommandResultReceiver ( );
 						this.Device.ExecuteShellCommand ( "readlink {0}", cresult, path );
 						return ( string.IsNullOrWhiteSpace ( cresult.Result ) ) ? path : cresult.Result;
@@ -432,7 +425,7 @@ namespace Managed.Adb {
 					// if the command doesn't exist then we just return the path.
 				}
 				return path;
-			}
+			//}
 		}
 
 	}
