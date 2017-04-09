@@ -81,6 +81,7 @@ namespace Managed.Adb {
 			}
 		}
 
+
 		/// <summary>
 		/// Opens the specified address on the device on the specified port.
 		/// </summary>

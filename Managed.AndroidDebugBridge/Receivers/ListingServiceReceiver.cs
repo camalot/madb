@@ -25,7 +25,7 @@ namespace Managed.Adb {
 		/// pointed to a file or to a directory.</param>
 		public ListingServiceReceiver ( FileEntry parent, List<FileEntry> entries, List<String> links ) {
 			Parent = parent;
-			Entries = entries ?? new List<FileEntry>();
+			Entries = entries ?? new List<FileEntry> ( );
 			Links = links ?? new List<String> ( );
 			CurrentChildren = Parent.Children.ToArray ( );
 		}
@@ -56,20 +56,27 @@ namespace Managed.Adb {
 		/// </summary>
 		/// <param name="lines">The lines.</param>
 		protected override void ProcessNewLines ( string[] lines ) {
-			foreach ( string line in lines ) {
+			foreach ( string line in lines.SelectMany ( x => x.Split ( '\n' ) ) ) {
+
 				// no need to handle empty lines.
 				if ( line.Length == 0 ) {
 					continue;
 				}
+
 				// maybe parse out the folder name and show it, but 'locked'?
-				var deniedMatch = line.Match ( @"^l?stat\s'(.*?)'\failed:\spermission\sdenied" );
+				var deniedMatch = line.Match ( @"^(?:l?stat|ls:)\s'?(.*?)?:?\s(?:failed:\s)?permission\sdenied" );
+
 				if ( ( deniedMatch.Success ) ) {
-					Console.Write ( $"Permission Denied: {deniedMatch.Groups[2].Value}" );
+					var ename = deniedMatch.Groups[1].Value.REReplace ( "^//", "" );
+					Console.WriteLine ( ename );
+					var edenied = new FileEntry ( Parent.Device, Parent, ename, FileListingService.FileTypes.Other, false /* isRoot */);
+					edenied.Permissions = new FilePermissions ( "----------" );
+					Entries.Add ( edenied );
 					continue;
 				}
 
 				// run the line through the regexp
-				var m = line.Trim ( ).Match ( FileListingService.LS_PATTERN_EX, RegexOptions.Compiled );
+				var m = line.Trim ( ).Match ( FileListingService.LS_PATTERN_EX, RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace );
 				if ( !m.Success ) {
 					Log.v ( "madb", "no match on file pattern: {0}", line );
 					continue;
@@ -95,16 +102,16 @@ namespace Managed.Adb {
 				string date3 = m.Groups[7].Value.Trim ( );
 
 				DateTime date = DateTime.Now.GetEpoch ( );
-				string time = m.Groups[8].Value.Trim();
+				string time = m.Groups[8].Value.Trim ( );
 				if ( string.IsNullOrWhiteSpace ( time ) ) {
 					time = date.ToString ( "HH:mm" );
 				}
 				if ( date1.Length == 3 ) {
 					// check if we don't have a year and use current if we don't
 					string tyear = string.IsNullOrWhiteSpace ( date3 ) ? DateTime.Now.Year.ToString ( ) : date3;
-					date = DateTime.ParseExact ( string.Format ( "{0}-{1}-{2} {3}", date1, date2.PadLeft(2,'0'), tyear, time ), "MMM-dd-yyyy HH:mm", CultureInfo.CreateSpecificCulture("en-US"));
+					date = DateTime.ParseExact ( string.Format ( "{0}-{1}-{2} {3}", date1, date2.PadLeft ( 2, '0' ), tyear, time ), "MMM-dd-yyyy HH:mm", CultureInfo.CreateSpecificCulture ( "en-US" ) );
 				} else if ( date1.Length == 4 ) {
-					date = DateTime.ParseExact( string.Format("{0}-{1}-{2} {3}", date1, date2.PadLeft(2, '0'), date3, time), "yyyy-MM-dd HH:mm", CultureInfo.CreateSpecificCulture("en-US"));
+					date = DateTime.ParseExact ( string.Format ( "{0}-{1}-{2} {3}", date1, date2.PadLeft ( 2, '0' ), date3, time ), "yyyy-MM-dd HH:mm", CultureInfo.CreateSpecificCulture ( "en-US" ) );
 				}
 
 				string info = null;
@@ -168,7 +175,7 @@ namespace Managed.Adb {
 							size = 0;
 						}
 					} else {
-						
+
 					}
 
 					linkName = info;
@@ -187,13 +194,12 @@ namespace Managed.Adb {
 				entry.Size = size;
 				entry.Date = date;
 				entry.Owner = owner;
-				entry.Group =  group;
+				entry.Group = group;
 				entry.IsExecutable = isExec;
 				entry.LinkName = linkName;
 				if ( objectType == FileListingService.FileTypes.Link || objectType == FileListingService.FileTypes.DirectoryLink ) {
 					entry.Info = info;
 				}
-
 				Entries.Add ( entry );
 			}
 		}
@@ -205,8 +211,10 @@ namespace Managed.Adb {
 		/// <value>
 		/// 	<c>true</c> if this instance is cancelled; otherwise, <c>false</c>.
 		/// </value>
-		public override bool IsCancelled {
-			get {
+		public override bool IsCancelled
+		{
+			get
+			{
 				return false;
 			}
 		}

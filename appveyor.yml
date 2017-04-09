@@ -7,7 +7,7 @@ environment:
   MADB_PFX_KEY:
     secure: FJBT+POuE4uUdLGJRsmNsw==
   VS_PFX_KEY:
-    secure: LYUvBEhpB5ZzJT6ij5xnSQ4QoeasERP+iATMxhRqNhs=
+    secure: PFLEITKFJmQxgW8Ke7GgCyHZ+KAIJWzJOROkzrrGIbg=
   PUSHBULLET_API_TOKEN:
     secure: 2MwCYfQNYPfPjDqNJ1EL8VrIydQNRz3MfhnuI9dzSZag9JwCnqk5k3mMYTFn4ORk
   CI_PROJECT_FRIENDLY_NAME: Managed.Adb

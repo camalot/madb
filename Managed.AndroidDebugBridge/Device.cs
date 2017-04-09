@@ -37,6 +37,7 @@ namespace Managed.Adb {
 		/// 
 		/// </summary>
 		Download,
+		Device,
 		/// <summary>
 		/// 
 		/// </summary>

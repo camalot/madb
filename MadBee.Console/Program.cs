@@ -28,13 +28,13 @@ namespace MadBee.Console {
 							break;
 						case Actions.Monitor:
 							bridge.DeviceChanged += delegate ( object sender, DeviceEventArgs e ) {
-								System.Console.WriteLine ( "Changed: {0}\t{1}", e.Device.SerialNumber, e.Device.State );
+								System.Console.WriteLine ( "Changed: {0}\t{1}", e.Device, e.State );
 							};
 							bridge.DeviceConnected += delegate ( object sender, DeviceEventArgs e ) {
-								System.Console.WriteLine ( "{0}\t{1}", e.Device.SerialNumber, e.Device.State );
+								System.Console.WriteLine ( "{0}\t{1}", e.Device, e.State );
 							};
 							bridge.DeviceDisconnected += delegate ( object sender, DeviceEventArgs e ) {
-								System.Console.WriteLine ( "{0}\t{1}", e.Device.SerialNumber, e.Device.State );
+								System.Console.WriteLine ( "{0}\t{1}", e.Device, e.State );
 							};
 							System.Console.ReadLine ( );
 							break;

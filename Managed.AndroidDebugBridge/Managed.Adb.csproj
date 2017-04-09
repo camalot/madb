@@ -54,7 +54,7 @@
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <PlatformTarget>x86</PlatformTarget>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -67,14 +67,15 @@
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
     <PlatformTarget>x64</PlatformTarget>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
-    <DefineConstants>TRACE;PLATFORMX64</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <DefineConstants>TRACE;PLATFORMX64;DEBUG</DefineConstants>
+    <Optimize>false</Optimize>
+    <DebugType>full</DebugType>
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
@@ -89,15 +90,16 @@
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <PlatformTarget>x86</PlatformTarget>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <DefineConstants>TRACE;PLATFORMX86</DefineConstants>
+    <DefineConstants>TRACE;PLATFORMX86;DEBUG</DefineConstants>
+    <DebugSymbols>true</DebugSymbols>
     <Optimize>false</Optimize>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>full</DebugType>
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
@@ -166,6 +168,7 @@
     <Compile Include="Conversion\EndianBitConverter.cs" />
     <Compile Include="Conversion\Endianness.cs" />
     <Compile Include="Conversion\LittleEndianBitConverter.cs" />
+    <Compile Include="DeviceMonitor2.cs" />
     <Compile Include="Exceptions\AdbCommandRejectedException.cs" />
     <Compile Include="Exceptions\CommandAbortingException.cs" />
     <Compile Include="Exceptions\ShellCommandUnresponsiveException.cs" />
@@ -173,6 +176,7 @@
     <Compile Include="Extensions\BytesHelper.cs" />
     <Compile Include="Extensions\IntegerHelper.cs" />
     <Compile Include="Extensions\ReflectionHelper.cs" />
+    <Compile Include="IDeviceMonitor.cs" />
     <Compile Include="IO\ByteOrder.cs" />
     <Compile Include="IO\ScreenResolution.cs" />
     <Compile Include="Logs\ILogListener.cs" />
