@@ -72,8 +72,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
-		<DebugSymbols>true</DebugSymbols>
-		<DefineConstants>TRACE;PLATFORMX64;DEBUG</DefineConstants>
+    <DebugSymbols>true</DebugSymbols>
+    <DefineConstants>TRACE;PLATFORMX64;DEBUG</DefineConstants>
     <Optimize>false</Optimize>
     <DebugType>full</DebugType>
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
@@ -97,8 +97,8 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DefineConstants>TRACE;PLATFORMX86;DEBUG</DefineConstants>
-		<DebugSymbols>true</DebugSymbols>
-		<Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
     <DebugType>full</DebugType>
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
@@ -168,6 +168,7 @@
     <Compile Include="Conversion\EndianBitConverter.cs" />
     <Compile Include="Conversion\Endianness.cs" />
     <Compile Include="Conversion\LittleEndianBitConverter.cs" />
+    <Compile Include="DeviceMonitor2.cs" />
     <Compile Include="Exceptions\AdbCommandRejectedException.cs" />
     <Compile Include="Exceptions\CommandAbortingException.cs" />
     <Compile Include="Exceptions\ShellCommandUnresponsiveException.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="Extensions\BytesHelper.cs" />
     <Compile Include="Extensions\IntegerHelper.cs" />
     <Compile Include="Extensions\ReflectionHelper.cs" />
+    <Compile Include="IDeviceMonitor.cs" />
     <Compile Include="IO\ByteOrder.cs" />
     <Compile Include="IO\ScreenResolution.cs" />
     <Compile Include="Logs\ILogListener.cs" />

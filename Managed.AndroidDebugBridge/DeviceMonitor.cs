@@ -324,7 +324,7 @@ namespace Managed.Adb {
 							RemoveDevice ( device );
 							device.State = DeviceState.Offline;
 							device.OnStateChanged ( EventArgs.Empty );
-							Server.OnDeviceDisconnected ( new DeviceEventArgs ( device ) );
+							//Server.OnDeviceDisconnected ( new DeviceEventArgs ( device.SerialNumber, DeviceState.Offline ) );
 						} else {
 							// process the next one
 							d++;
@@ -339,7 +339,7 @@ namespace Managed.Adb {
 						if ( Server != null ) {
 							newDevice.State = DeviceState.Online;
 							newDevice.OnStateChanged ( EventArgs.Empty );
-							Server.OnDeviceConnected ( new DeviceEventArgs ( newDevice ) );
+							//Server.OnDeviceConnected ( new DeviceEventArgs ( newDevice.SerialNumber, DeviceState.Online ) );
 						}
 
 						// start monitoring them.

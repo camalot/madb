@@ -356,35 +356,35 @@ namespace Managed.Adb {
 			}
 		}
 
-		/// <summary>
-		/// Raises the <see cref="E:DeviceChanged"/> event.
-		/// </summary>
-		/// <param name="e">The <see cref="Managed.Adb.DeviceEventArgs"/> instance containing the event data.</param>
-		internal void OnDeviceChanged ( DeviceEventArgs e ) {
-			if ( this.DeviceChanged != null ) {
-				this.DeviceChanged ( this, e );
-			}
-		}
+		///// <summary>
+		///// Raises the <see cref="E:DeviceChanged"/> event.
+		///// </summary>
+		///// <param name="e">The <see cref="Managed.Adb.DeviceEventArgs"/> instance containing the event data.</param>
+		//internal void OnDeviceChanged ( DeviceEventArgs e ) {
+		//	if ( this.DeviceChanged != null ) {
+		//		this.DeviceChanged ( this, e );
+		//	}
+		//}
 
-		/// <summary>
-		/// Raises the <see cref="E:DeviceConnected"/> event.
-		/// </summary>
-		/// <param name="e">The <see cref="Managed.Adb.DeviceEventArgs"/> instance containing the event data.</param>
-		internal void OnDeviceConnected ( DeviceEventArgs e ) {
-			if ( this.DeviceConnected != null ) {
-				this.DeviceConnected ( this, e );
-			}
-		}
+		///// <summary>
+		///// Raises the <see cref="E:DeviceConnected"/> event.
+		///// </summary>
+		///// <param name="e">The <see cref="Managed.Adb.DeviceEventArgs"/> instance containing the event data.</param>
+		//internal void OnDeviceConnected ( DeviceEventArgs e ) {
+		//	if ( this.DeviceConnected != null ) {
+		//		this.DeviceConnected ( this, e );
+		//	}
+		//}
 
-		/// <summary>
-		/// Raises the <see cref="E:DeviceDisconnected"/> event.
-		/// </summary>
-		/// <param name="e">The <see cref="Managed.Adb.DeviceEventArgs"/> instance containing the event data.</param>
-		internal void OnDeviceDisconnected ( DeviceEventArgs e ) {
-			if ( this.DeviceDisconnected != null ) {
-				this.DeviceDisconnected ( this, e );
-			}
-		}
+		///// <summary>
+		///// Raises the <see cref="E:DeviceDisconnected"/> event.
+		///// </summary>
+		///// <param name="e">The <see cref="Managed.Adb.DeviceEventArgs"/> instance containing the event data.</param>
+		//internal void OnDeviceDisconnected ( DeviceEventArgs e ) {
+		//	if ( this.DeviceDisconnected != null ) {
+		//		this.DeviceDisconnected ( this, e );
+		//	}
+		//}
 
 		/// <summary>
 		/// Starts the debug bridge.
@@ -398,8 +398,8 @@ namespace Managed.Adb {
 			Started = true;
 
 			// now that the bridge is connected, we start the underlying services.
-			DeviceMonitor = new DeviceMonitor ( this );
-			DeviceMonitor.Start ( );
+			//DeviceMonitor = new DeviceMonitor2 ( this );
+			//DeviceMonitor.Start ( );
 
 			return true;
 		}
@@ -447,12 +447,27 @@ namespace Managed.Adb {
 
 				bool restart = StartAdb ( );
 
-				if ( restart && DeviceMonitor == null ) {
-					DeviceMonitor = new DeviceMonitor ( this );
-					DeviceMonitor.Start ( );
-				}
+				//if ( restart && DeviceMonitor == null ) {
+				//	DeviceMonitor = new DeviceMonitor2 ( this );
+				//	DeviceMonitor.Start ( );
+				//}
 
 				return restart;
+			}
+		}
+
+
+		/// <summary>
+		/// Gets the state of the device.
+		/// </summary>
+		/// <param name="device">The device.</param>
+		/// <returns></returns>
+		public DeviceState GetDeviceState ( string device ) {
+			var d = Devices.FirstOrDefault ( m => m.SerialNumber == device );
+			if ( d == null ) {
+				return DeviceState.Unknown;
+			} else {
+				return d.State;
 			}
 		}
 
@@ -468,34 +483,10 @@ namespace Managed.Adb {
 		/// <value>The devices.</value>
 		public IList<Device> Devices {
 			get {
-				//if ( DeviceMonitor != null ) {
-				//	return DeviceMonitor.Devices;
-				//}
-				//return new List<Device> ( );
 				return AdbHelper.Instance.GetDevices(AndroidDebugBridge.SocketAddress);
 			}
 		}
-
-		/// <summary>
-		/// Returns whether the bridge has acquired the initial list from adb after being created.
-		/// </summary>
-		/// <remarks>
-		/// <p/>Calling getDevices() right after createBridge(String, boolean) will
-		/// generally result in an empty list. This is due to the internal asynchronous communication
-		/// mechanism with <code>adb</code> that does not guarantee that the IDevice list has been
-		/// built before the call to getDevices().
-		/// <p/>The recommended way to get the list of IDevice objects is to create a
-		/// IDeviceChangeListener object.
-		/// </remarks>
-		/// <returns>
-		/// 	<c>true</c> if [has initial device list]; otherwise, <c>false</c>.
-		/// </returns>
-		public bool HasInitialDeviceList ( ) {
-			if ( DeviceMonitor != null ) {
-				return DeviceMonitor.HasInitialDeviceList;
-			}
-			return false;
-		}
+	
 
 		/// <summary>
 		/// Gets or sets the client to accept debugger connection on the custom "Selected debug port".
@@ -524,7 +515,7 @@ namespace Managed.Adb {
 			get {
 				//MonitorThread monitorThread = MonitorThread.Instance;
 				if ( DeviceMonitor != null /* && monitorThread != null */ ) {
-					return DeviceMonitor.IsMonitoring /* && monitorThread.State != State.TERMINATED*/;
+					return !DeviceMonitor.HasExited /* && monitorThread.State != State.TERMINATED*/;
 				}
 				return false;
 			}
@@ -536,9 +527,9 @@ namespace Managed.Adb {
 		/// <value>The connection attempt count.</value>
 		public int ConnectionAttemptCount {
 			get {
-				if ( DeviceMonitor != null ) {
-					return DeviceMonitor.ConnectionAttemptCount;
-				}
+				//if ( DeviceMonitor != null ) {
+				//	return DeviceMonitor.ConnectionAttemptCount;
+				//}
 				return -1;
 			}
 		}
@@ -550,9 +541,9 @@ namespace Managed.Adb {
 		/// <value>The restart attempt count.</value>
 		public int RestartAttemptCount {
 			get {
-				if ( DeviceMonitor != null ) {
-					return DeviceMonitor.RestartAttemptCount;
-				}
+				//if ( DeviceMonitor != null ) {
+				//	return DeviceMonitor.RestartAttemptCount;
+				//}
 				return -1;
 			}
 		}
@@ -560,7 +551,7 @@ namespace Managed.Adb {
 		/// <summary>
 		/// Gets the device monitor
 		/// </summary>
-		public DeviceMonitor DeviceMonitor { get; private set; }
+		public IDeviceMonitor DeviceMonitor { get; private set; }
 
 		/// <summary>
 		/// Gets if the adb host has started

@@ -14,15 +14,16 @@ namespace Managed.Adb {
 		/// Initializes a new instance of the <see cref="DeviceEventArgs"/> class.
 		/// </summary>
 		/// <param name="device">The device.</param>
-		public DeviceEventArgs ( IDevice device ) {
+		public DeviceEventArgs ( string device, DeviceState state ) {
 			this.Device = device;
+			this.State = state;
 		}
 
 		/// <summary>
 		/// Gets the device.
 		/// </summary>
 		/// <value>The device.</value>
-		public IDevice Device { get; private set; }
-
+		public string Device { get; private set; }
+		public DeviceState State { get; set; } = DeviceState.Unknown;
 	}
 }

@@ -312,17 +312,18 @@ namespace Managed.Adb {
 		/// </summary>
 		/// <param name="entry">The entry.</param>
 		private void DoLS ( FileEntry entry ) {
+			Console.WriteLine ( $"DoLS: {entry.FullPath}" );
 			// create a list that will receive the list of the entries
-			List<FileEntry> entryList = new List<FileEntry> ( );
+			var entryList = new List<FileEntry> ( );
 
 			// create a list that will receive the link to compute post ls;
-			List<String> linkList = new List<String> ( );
+			var linkList = new List<String> ( );
 
 			try {
 				// create the command
 				var command = string.Format ( ForceBusyBox ? BUSYBOX_LS : TOOLBOX_LS, entry.FullPath );
 				// create the receiver object that will parse the result from ls
-				ListingServiceReceiver receiver = new ListingServiceReceiver ( entry, entryList, linkList );
+				var receiver = new ListingServiceReceiver ( entry, entryList, linkList );
 
 				// call ls.
 				Device.ExecuteShellCommand ( command, receiver );
