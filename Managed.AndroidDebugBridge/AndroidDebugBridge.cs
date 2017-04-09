@@ -323,7 +323,7 @@ namespace Managed.Adb {
 
 			if ( !File.Exists ( osLocation ) ) {
 				Log.w (TAG, "unable to locate adb in the specified location '{0}'", osLocation );
-        throw new FileNotFoundException ( "unable to locate adb in the specified location" );
+				throw new FileNotFoundException ( "unable to locate adb in the specified location" );
 			}
 
 			AdbOsLocation = osLocation;
