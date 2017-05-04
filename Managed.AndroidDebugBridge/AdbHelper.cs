@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -56,7 +56,7 @@ namespace Managed.Adb {
 		/// <summary>
 		/// The default encoding
 		/// </summary>
-		public static String DEFAULT_ENCODING = "ISO-8859-1";
+		public static String DEFAULT_ENCODING = "UTF-8";
 
 		/// <summary>
 		/// Prevents a default instance of the <see cref="AdbHelper"/> class from being created.
@@ -308,16 +308,18 @@ namespace Managed.Adb {
 		/// <param name="req">The req.</param>
 		/// <returns></returns>
 		public byte[] FormAdbRequest ( String req ) {
-			String resultStr = String.Format ( "{0}{1}\n", req.Length.ToString ( "X4" ), req );
+            int reqLengthUTF8 = Encoding.UTF8.GetBytes(req).Length;
+
+            String resultStr = String.Format ( "{0}{1}\n", reqLengthUTF8.ToString ( "X4" ), req );
 			byte[] result;
 			try {
-				result = resultStr.GetBytes ( AdbHelper.DEFAULT_ENCODING );
+                result = Encoding.UTF8.GetBytes(resultStr);
 			} catch ( EncoderFallbackException efe ) {
 				Log.e ( TAG, efe );
 				return null;
 			}
 
-			System.Diagnostics.Debug.Assert ( result.Length == req.Length + 5, String.Format ( "result: {1}{0}\nreq: {3}{2}", result.Length, result.GetString ( AdbHelper.DEFAULT_ENCODING ), req.Length, req ) );
+			System.Diagnostics.Debug.Assert ( result.Length == reqLengthUTF8 + 5, String.Format ( "result: {1}{0}\nreq: {3}{2}", result.Length, result.GetString ( AdbHelper.DEFAULT_ENCODING ), req.Length, req ) );
 			return result;
 		}
 
@@ -1140,4 +1142,3 @@ namespace Managed.Adb {
 		}
 	}
 }
-
