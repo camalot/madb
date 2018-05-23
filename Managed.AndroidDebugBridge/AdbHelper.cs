@@ -681,7 +681,7 @@ namespace Managed.Adb {
 				}
 
 				List<Device> s = new List<Device> ( );
-				string[] data = reply.GetString ( Encoding.Default ).Split ( new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries );
+				string[] data = reply.GetString ( Encoding.Default ).Split ( new string[] { Environment.NewLine  }, StringSplitOptions.RemoveEmptyEntries );
 				data.ForEach ( item => {
 					var device = Device.CreateFromAdbData ( item );
 					if ( device != null ) {
